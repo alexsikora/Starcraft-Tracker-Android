@@ -10,6 +10,7 @@ import java.net.URL;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -106,26 +107,39 @@ public class RegisterActivity extends Activity {
 			return;
 		}
 		
-		InputStream httpResponse = sendAccountCreationRequest(email, password);
-		if(httpResponse == null) {
-			// TODO account creation failure
-		} else {
-			readHttpResponse(httpResponse);
-		}
+		ProgressDialog dialog = ProgressDialog.show(this, "", "Creating account. Please wait...", true);
+		String httpResponse = sendAccountCreationRequest(email, password);
+		dialog.dismiss();
+		
+		processHttpResponse(httpResponse);
 	}
 	
+	/**
+	 * Processes the http response. If account creation failed, return to the
+	 * register new user view. If successful, log in the new user.
+	 * @param httpResponse Http response from the server after attempting to
+	 * 							create a new user
+	 */
+	private void processHttpResponse(String httpResponse) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * Read the httpResponse and display the appropriate success/failure notification
 	 * @param httpResponse InputStream returned from the web server
 	 */
-	private void readHttpResponse(InputStream httpResponse) {
-		// TODO display account creation success
+	private String readHttpResponse(InputStream httpResponse) {
+		// TODO read the http response
+		StringBuilder sb = new StringBuilder();
 		
 		try {
 			httpResponse.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return sb.toString();
 	}
 
 	/**
@@ -135,7 +149,7 @@ public class RegisterActivity extends Activity {
 	 * @param password Password for the new user account
 	 * @return InputStream of the Http response, null if there was an exception
 	 */
-	private InputStream sendAccountCreationRequest(String username, String password) {
+	private String sendAccountCreationRequest(String username, String password) {
 		String urlString = buildAccountCreationURL(username, password);
 		BufferedInputStream in = null;
 		URL url;
@@ -154,7 +168,7 @@ public class RegisterActivity extends Activity {
 			e.printStackTrace();
 		}
 		
-		return in;
+		return readHttpResponse(in);
 	}
 	
 	/**
