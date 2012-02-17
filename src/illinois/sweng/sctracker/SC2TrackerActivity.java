@@ -23,8 +23,8 @@ public class SC2TrackerActivity extends Activity {
         mRegisterButton = (Button) findViewById(R.id.registerButton);
         mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
         
-        mRegisterButton.setOnClickListener(registerButtonHandler);
-        mUnregisterButton.setOnClickListener(unregisterButtonHandler);
+        mRegisterButton.setOnClickListener(new RegisterButtonHandler());
+        mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
     }
    
     
@@ -40,16 +40,14 @@ public class SC2TrackerActivity extends Activity {
     
     
     /* Button click handlers */
-    View.OnClickListener registerButtonHandler = new View.OnClickListener() {
-		
+    private class RegisterButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Reg Button clicked");
             launchRegister();
 		}
 	};
 	
-	View.OnClickListener unregisterButtonHandler = new View.OnClickListener() {
-		
+	private class UnregisterButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Unreg Button clicked");
             launchUnregister();

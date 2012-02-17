@@ -37,7 +37,7 @@ public class RegisterActivity extends Activity {
         mPassword = (EditText) findViewById(R.id.passwordTextEdit);
         mPasswordConfirm = (EditText) findViewById(R.id.passwordConfirmTextEdit);
         
-        mCreateAccountButton.setOnClickListener(createAccountHandler);
+        mCreateAccountButton.setOnClickListener(new CreateAccountHandler());
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class RegisterActivity extends Activity {
 	protected Dialog onCreateDialog(int id) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setCancelable(false);
-		alertDialogBuilder.setPositiveButton("Ok", closeDialog);
+		alertDialogBuilder.setPositiveButton("Ok", new CloseDialogListener());
 		
 		Dialog dialog = alertDialogBuilder.create();
 		
@@ -223,7 +223,7 @@ public class RegisterActivity extends Activity {
 	/**
 	 * Custom handler for the account creation button
 	 */
-	View.OnClickListener createAccountHandler = new View.OnClickListener() {
+	private class CreateAccountHandler implements View.OnClickListener {
 		/**
 		 * Log that the button was pressed, and attempt to create a new account
 		 */
@@ -236,7 +236,7 @@ public class RegisterActivity extends Activity {
 	/**
 	 * Custom handler to close the error dialog
 	 */
-	DialogInterface.OnClickListener closeDialog = new DialogInterface.OnClickListener() {
+	private class CloseDialogListener implements DialogInterface.OnClickListener {
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
 		}
