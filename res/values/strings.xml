@@ -3,5 +3,9 @@
 
     <string name="hello">Hello World, SC2TrackerActivity!</string>
     <string name="app_name">SC2Tracker</string>
-
+    <string name="registerButton">Register</string>
+	<string name="unregisterButton">Unregister</string>
+	<string name="registerActivity">Register</string>
+	<string name="unregisterActivity">Unregister</string>
+	
 </resources>
