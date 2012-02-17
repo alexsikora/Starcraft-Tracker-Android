@@ -11,5 +11,6 @@
 	<string name="registerPasswordLabel">Password:</string>
 	<string name="registerPasswordConfirmLabel">Confirm Password:</string>
 	<string name="registerCreateButton">Create Account!</string>
+	<string name="serverURL">startrack.alexsikora.com</string>
 	
 </resources>
