@@ -30,7 +30,7 @@ public class RegisterActivity extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.register);
         
         mCreateAccountButton = (Button) findViewById(R.id.registerCreateButton);
         mEmail = (EditText) findViewById(R.id.emailEditText);
@@ -110,38 +110,9 @@ public class RegisterActivity extends Activity {
 		ProgressDialog dialog = ProgressDialog.show(this, "", "Creating account. Please wait...", true);
 		String httpResponse = sendAccountCreationRequest(email, password);
 		dialog.dismiss();
-		
-		processHttpResponse(httpResponse);
 	}
+
 	
-	/**
-	 * Processes the http response. If account creation failed, return to the
-	 * register new user view. If successful, log in the new user.
-	 * @param httpResponse Http response from the server after attempting to
-	 * 							create a new user
-	 */
-	private void processHttpResponse(String httpResponse) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * Read the httpResponse and display the appropriate success/failure notification
-	 * @param httpResponse InputStream returned from the web server
-	 */
-	private String readHttpResponse(InputStream httpResponse) {
-		// TODO read the http response
-		StringBuilder sb = new StringBuilder();
-		
-		try {
-			httpResponse.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return sb.toString();
-	}
-
 	/**
 	 * Sends a request to the server to create a new user account with the given
 	 * username and password
@@ -163,6 +134,7 @@ public class RegisterActivity extends Activity {
 		
 		try {
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("GET");
 			in = new BufferedInputStream(urlConnection.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -172,6 +144,24 @@ public class RegisterActivity extends Activity {
 	}
 	
 	/**
+	 * Read the httpResponse and display the appropriate success/failure notification
+	 * @param httpResponse InputStream returned from the web server
+	 */
+	private String readHttpResponse(InputStream httpResponse) {
+		// TODO read the http response
+		if(httpResponse == null) return "";
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			httpResponse.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
+	}
+
+	/**
 	 * Given a username and a password, builds the appropriate url to send a GET to
 	 * in order to create a new account
 	 * @param username User's new account email address/username
@@ -180,9 +170,11 @@ public class RegisterActivity extends Activity {
 	 */
 	private String buildAccountCreationURL(String username, String password) {
 		CharSequence baseURL = getResources().getText(R.string.serverURL);
+		CharSequence registerURL = getResources().getText(R.string.serverRegisterURL);
 		
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
+		sb.append(registerURL);
 		sb.append("?username=");
 		sb.append(username);
 		sb.append("&password=");
