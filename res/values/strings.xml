@@ -12,5 +12,7 @@
 	<string name="registerPasswordConfirmLabel">Confirm Password:</string>
 	<string name="registerCreateButton">Create Account!</string>
 	<string name="serverURL">startrack.alexsikora.com</string>
+	<string name="registerInvalidEmailMessage">The email address you have entered is invalid</string>
+	<string name="registerNonmatchingPasswords">The passwords you entered do not match</string>
 	
 </resources>
