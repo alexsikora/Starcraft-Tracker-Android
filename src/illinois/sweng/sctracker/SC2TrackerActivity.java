@@ -11,7 +11,7 @@ import android.widget.Button;
 public class SC2TrackerActivity extends Activity {
     /** Called when the activity is first created. */
 	
-	static String TAG = "sc2tracker";
+	static String TAG = "sc2trackerMainActivity";
 	private Button mRegisterButton;
 	private Button mUnregisterButton;
 	
@@ -21,33 +21,38 @@ public class SC2TrackerActivity extends Activity {
         setContentView(R.layout.main);
         
         mRegisterButton = (Button) findViewById(R.id.registerButton);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(TAG, "Reg Button clicked");
-               // launchRegister();
-            }
-        });
-        
         mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
-        mUnregisterButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(TAG, "Unreg Button clicked");
-                //launchUnregister();
-            }
-        });
         
+        mRegisterButton.setOnClickListener(registerButtonHandler);
+        mUnregisterButton.setOnClickListener(unregisterButtonHandler);
     }
    
-    /*
-    public void launchRegister() {
-    	Intent i = new Intent(this, RegisterActivity.class);
-		startActivity(i);
+    
+    private void launchRegister() {
+    	//Intent i = new Intent(this, RegisterActivity.class);
+		//startActivity(i);
     }
     
-    public void launchUnregister() {
-    	Intent i = new Intent(this, UnregisterActivity.class);
-		startActivity(i);
+    private void launchUnregister() {
+    	//Intent i = new Intent(this, UnregisterActivity.class);
+		//startActivity(i);
     }
-    */
     
+    
+    /* Button click handlers */
+    View.OnClickListener registerButtonHandler = new View.OnClickListener() {
+		
+		public void onClick(View v) {
+			Log.d(TAG, "Reg Button clicked");
+            launchRegister();
+		}
+	};
+	
+	View.OnClickListener unregisterButtonHandler = new View.OnClickListener() {
+		
+		public void onClick(View v) {
+			Log.d(TAG, "Unreg Button clicked");
+            launchUnregister();
+		}
+	};
 }
