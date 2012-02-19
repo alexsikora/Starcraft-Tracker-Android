@@ -1,18 +1,5 @@
 package illinois.sweng.sctracker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements IDelegate{
 	
 	private static final String TAG = "sc2TrackerRegisterActivity";
 	private static final int DIALOG_INVALID_EMAIL_ID = 1;
@@ -31,6 +18,7 @@ public class RegisterActivity extends Activity {
 	
 	private Button mCreateAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
+	private ServerCommunicator mServerCommunicator;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +29,7 @@ public class RegisterActivity extends Activity {
         mEmail = (EditText) findViewById(R.id.emailEditText);
         mPassword = (EditText) findViewById(R.id.passwordTextEdit);
         mPasswordConfirm = (EditText) findViewById(R.id.passwordConfirmTextEdit);
+        mServerCommunicator = new ServerCommunicator(this);
         
         mCreateAccountButton.setOnClickListener(new CreateAccountHandler());
 	}
@@ -112,70 +101,7 @@ public class RegisterActivity extends Activity {
 			return;
 		}
 		
-		sendAccountCreationRequest(email, password);
-	}
-
-	
-	/**
-	 * Sends a request to the server to create a new user account with the given
-	 * username and password
-	 * @param username Username for the new user account
-	 * @param password Password for the new user account
-	 * @return InputStream of the Http response, null if there was an exception
-	 */
-	private String sendAccountCreationRequest(String username, String password) {
-		String urlString = buildAccountCreationURL(username, password);
-		
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(urlString);
-		
-		try {
-			List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
-			pairs.add(new BasicNameValuePair("username", username));
-			pairs.add(new BasicNameValuePair("password", password));
-			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-			
-			HttpResponse response = httpClient.execute(httpPost);
-			readHttpResponse(response);
-			
-		} catch (ClientProtocolException e) {
-	        // TODO Auto-generated catch block
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	    }
-		
-		return "";
-	}
-
-	/**
-	 * Read the httpResponse and display the appropriate success/failure notification
-	 * @param httpResponse InputStream returned from the web server
-	 */
-	private void readHttpResponse(HttpResponse httpResponse) {
-		// TODO read the response
-	}
-
-	/**
-	 * Given a username and a password, builds the appropriate url to send a GET to
-	 * in order to create a new account
-	 * @param username User's new account email address/username
-	 * @param password User's password
-	 * @return String representing the URL to generate a new user account
-	 */
-	private String buildAccountCreationURL(String username, String password) {
-		CharSequence baseURL = getResources().getText(R.string.serverURL);
-		CharSequence registerURL = getResources().getText(R.string.serverRegisterURL);
-		
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(registerURL);
-		sb.append("?username=");
-		sb.append(username);
-		sb.append("&password=");
-		sb.append(password);
-		String urlString = sb.toString();
-		
-		return urlString;
+		mServerCommunicator.sendAccountCreationRequest(email, password);
 	}
 	
 	/**
@@ -227,5 +153,13 @@ public class RegisterActivity extends Activity {
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
 		}
+	}
+
+	/**
+	 * Handle an error returned from the server
+	 */
+	public void handleError(String message) {
+		// TODO Auto-generated method stub
+		
 	};
 }
