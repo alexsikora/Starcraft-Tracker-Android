@@ -1,16 +1,21 @@
 package illinois.sweng.sctracker;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +27,7 @@ public class RegisterActivity extends Activity {
 	
 	private static final String TAG = "sc2TrackerRegisterActivity";
 	private static final int DIALOG_INVALID_EMAIL_ID = 1;
-	private static final int DIALOG_NONMATCH_PASSWORDS_ID = 2;
+	private static final int DIALOG_INVALID_PASSWORD_ID = 2;
 	
 	private Button mCreateAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
@@ -51,7 +56,7 @@ public class RegisterActivity extends Activity {
 		
 		Dialog dialog = alertDialogBuilder.create();
 		
-		manageInvalidInformationDialog(id, dialog);
+		manageDialog(id, dialog);
 		
 		return dialog;
 	}
@@ -61,7 +66,7 @@ public class RegisterActivity extends Activity {
 	 */
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
-		manageInvalidInformationDialog(id, dialog);
+		manageDialog(id, dialog);
 	}
 	
 	/**
@@ -69,7 +74,7 @@ public class RegisterActivity extends Activity {
 	 * @param id ID of the Dialog
 	 * @param dialog Dialog being opened
 	 */
-	private void manageInvalidInformationDialog(int id, Dialog dialog) {
+	private void manageDialog(int id, Dialog dialog) {
 		clearInputFields();
 		AlertDialog alertDialog = (AlertDialog) dialog;
 		CharSequence message;
@@ -78,7 +83,7 @@ public class RegisterActivity extends Activity {
 		case DIALOG_INVALID_EMAIL_ID:
 			message = getResources().getText(R.string.registerInvalidEmailMessage);
 			break;
-		case DIALOG_NONMATCH_PASSWORDS_ID:
+		case DIALOG_INVALID_PASSWORD_ID:
 			message = getResources().getText(R.string.registerNonmatchingPasswords);
 			break;
 		default:
@@ -102,14 +107,12 @@ public class RegisterActivity extends Activity {
 			return;
 		}
 		
-		if(!confirmPasswordsMatch(password, confirmPassword)) {
-			showDialog(DIALOG_NONMATCH_PASSWORDS_ID);
+		if(!validatePassword(password, confirmPassword)) {
+			showDialog(DIALOG_INVALID_PASSWORD_ID);
 			return;
 		}
 		
-		ProgressDialog dialog = ProgressDialog.show(this, "", "Creating account. Please wait...", true);
-		String httpResponse = sendAccountCreationRequest(email, password);
-		dialog.dismiss();
+		sendAccountCreationRequest(email, password);
 	}
 
 	
@@ -122,43 +125,34 @@ public class RegisterActivity extends Activity {
 	 */
 	private String sendAccountCreationRequest(String username, String password) {
 		String urlString = buildAccountCreationURL(username, password);
-		BufferedInputStream in = null;
-		URL url;
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(urlString);
 		
 		try {
-			url = new URL(urlString);			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		}
+			List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
+			pairs.add(new BasicNameValuePair("username", username));
+			pairs.add(new BasicNameValuePair("password", password));
+			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
+			
+			HttpResponse response = httpClient.execute(httpPost);
+			readHttpResponse(response);
+			
+		} catch (ClientProtocolException e) {
+	        // TODO Auto-generated catch block
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	    }
 		
-		try {
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("GET");
-			in = new BufferedInputStream(urlConnection.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return readHttpResponse(in);
+		return "";
 	}
-	
+
 	/**
 	 * Read the httpResponse and display the appropriate success/failure notification
 	 * @param httpResponse InputStream returned from the web server
 	 */
-	private String readHttpResponse(InputStream httpResponse) {
-		// TODO read the http response
-		if(httpResponse == null) return "";
-		StringBuilder sb = new StringBuilder();
-		
-		try {
-			httpResponse.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return sb.toString();
+	private void readHttpResponse(HttpResponse httpResponse) {
+		// TODO read the response
 	}
 
 	/**
@@ -195,11 +189,12 @@ public class RegisterActivity extends Activity {
 	}
 	
 	/**
-	 * Checks that both the Password and Confirm Password are the same
+	 * Checks that both the Password and Confirm Password are the same and meet any
+	 * constraints on the password
 	 * @return a boolean that is true if and only if the text entered into the Password
 	 * 			and Confirm Password fields match
 	 */
-	private boolean confirmPasswordsMatch(String password, String confirmPassword) {
+	private boolean validatePassword(String password, String confirmPassword) {
 		return confirmPassword.equals(password);
 	}
 	
