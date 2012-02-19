@@ -11,7 +11,7 @@ import android.widget.Button;
 public class SC2TrackerActivity extends Activity {
     /** Called when the activity is first created. */
 	
-	static String TAG = "sc2tracker";
+	static String TAG = "sc2trackerMainActivity";
 	private Button mRegisterButton;
 	private Button mUnregisterButton;
 	
@@ -21,33 +21,36 @@ public class SC2TrackerActivity extends Activity {
         setContentView(R.layout.main);
         
         mRegisterButton = (Button) findViewById(R.id.registerButton);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(TAG, "Reg Button clicked");
-               // launchRegister();
-            }
-        });
-        
         mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
-        mUnregisterButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(TAG, "Unreg Button clicked");
-                //launchUnregister();
-            }
-        });
         
+        mRegisterButton.setOnClickListener(new RegisterButtonHandler());
+        mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
     }
    
-    /*
-    public void launchRegister() {
+    
+    private void launchRegister() {
     	Intent i = new Intent(this, RegisterActivity.class);
 		startActivity(i);
     }
     
-    public void launchUnregister() {
-    	Intent i = new Intent(this, UnregisterActivity.class);
-		startActivity(i);
+    private void launchUnregister() {
+    	//Intent i = new Intent(this, UnregisterActivity.class);
+		//startActivity(i);
     }
-    */
     
+    
+    /* Button click handlers */
+    private class RegisterButtonHandler implements View.OnClickListener {
+		public void onClick(View v) {
+			Log.d(TAG, "Reg Button clicked");
+            launchRegister();
+		}
+	};
+	
+	private class UnregisterButtonHandler implements View.OnClickListener {
+		public void onClick(View v) {
+			Log.d(TAG, "Unreg Button clicked");
+            launchUnregister();
+		}
+	};
 }
