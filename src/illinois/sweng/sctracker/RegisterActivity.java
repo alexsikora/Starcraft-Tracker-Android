@@ -9,8 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-public class RegisterActivity extends Activity implements IDelegate{
+public class RegisterActivity extends Activity implements IDelegate {
 	
 	private static final String TAG = "sc2TrackerRegisterActivity";
 	private static final int DIALOG_INVALID_EMAIL_ID = 1;
@@ -64,16 +65,18 @@ public class RegisterActivity extends Activity implements IDelegate{
 	 * @param dialog Dialog being opened
 	 */
 	private void manageDialog(int id, Dialog dialog) {
-		clearInputFields();
 		AlertDialog alertDialog = (AlertDialog) dialog;
 		CharSequence message;
 		
 		switch (id) {
 		case DIALOG_INVALID_EMAIL_ID:
 			message = getResources().getText(R.string.registerInvalidEmailMessage);
+			mEmail.setText("");
 			break;
 		case DIALOG_INVALID_PASSWORD_ID:
 			message = getResources().getText(R.string.registerNonmatchingPasswords);
+			mPassword.setText("");
+			mPasswordConfirm.setText("");
 			break;
 		default:
 			message = "Please reenter your information";
@@ -125,21 +128,9 @@ public class RegisterActivity extends Activity implements IDelegate{
 	}
 	
 	/**
-	 * Clear all input fields, forcing the user to start over
-	 */
-	private void clearInputFields() {
-		mEmail.setText("");
-		mPassword.setText("");
-		mPasswordConfirm.setText("");
-	}
-	
-	/**
 	 * Custom handler for the account creation button
 	 */
 	private class CreateAccountHandler implements View.OnClickListener {
-		/**
-		 * Log that the button was pressed, and attempt to create a new account
-		 */
 		public void onClick(View v) {
 			Log.d(TAG, "Create Account Button clicked");
             createAccount();
@@ -159,7 +150,7 @@ public class RegisterActivity extends Activity implements IDelegate{
 	 * Handle an error returned from the server
 	 */
 	public void handleError(String message) {
-		// TODO Auto-generated method stub
-		
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
 	};
 }
