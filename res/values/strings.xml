@@ -15,5 +15,8 @@
 	<string name="registerInvalidEmailMessage">The email address you have entered is invalid</string>
 	<string name="registerNonmatchingPasswords">The passwords you entered do not match</string>
 	<string name="serverRegisterURL">/users/register/</string>
+	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when communicating with the server</string>
+	<string name="serverIOExceptionMessage">The server failed to send a valid HTTP response</string>
+	<string name="serverJSONError">There was an error with the JSON returned by the server</string>
 	
 </resources>
