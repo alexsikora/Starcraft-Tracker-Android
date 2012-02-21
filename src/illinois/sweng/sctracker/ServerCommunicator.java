@@ -1,9 +1,11 @@
 package illinois.sweng.sctracker;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -14,6 +16,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -56,24 +60,39 @@ public class ServerCommunicator {
 			String message = mDelegate.getResources().getString(R.string.serverProtocolErrorMessage);
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
+			e.printStackTrace();
 	    } catch (IOException e) {
 	    	String message = mDelegate.getResources().getString(R.string.serverIOExceptionMessage);
 	    	mDelegate.handleServerError(message);
 	        Log.e(TAG, message, e);
-	    }
+	        e.printStackTrace();
+	    }  catch (JSONException e) {
+			String message = mDelegate.getResources().getString(R.string.serverJSONError);
+	    	mDelegate.handleServerError(message);
+	        Log.e(TAG, message, e);
+	        e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Read the httpResponse and display the appropriate success/failure notification
 	 * @param httpResponse InputStream returned from the web server
+	 * @throws IOException 
+	 * @throws JSONException 
 	 */
-	private void readHttpResponse(HttpResponse httpResponse) {
-		// TODO read the response
+	private void readHttpResponse(HttpResponse httpResponse) throws IOException, JSONException {
 		StatusLine statusLine = httpResponse.getStatusLine();
 		int statusCode = statusLine.getStatusCode();
 		
 		if (statusCode == HttpStatus.SC_OK) {
+			HttpEntity httpEntity = httpResponse.getEntity();
+			InputStream in = httpEntity.getContent();	
+			
+			// TODO Read the JSON
+			JSONObject json = new JSONObject(in.toString());
+			
 			List<NameValuePair> values = new ArrayList<NameValuePair>();
+			
 			mDelegate.handleServerResponse(values);
 		} else {
 			// TODO Process the error
