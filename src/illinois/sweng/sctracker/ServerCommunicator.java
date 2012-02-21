@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -13,17 +15,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.content.Context;
+import android.util.Log;
 
 public class ServerCommunicator {
-	Context mContext;
+	private final String TAG;
+	DelegateActivity mDelegate;
 	
 	/**
 	 * Creates a new ServerCommunicator with the given context
-	 * @param context Context of the owner of the ServerCommunicator
+	 * @param delegate Context of the owner of the ServerCommunicator
+	 * @param delegateTag String identifying the owner of this ServerCommunicator
 	 */
-	public ServerCommunicator(Context context) {
-		mContext = context;
+	public ServerCommunicator(DelegateActivity delegate, String delegateTag) {
+		mDelegate = delegate;
+		TAG = "sc2TrackerServerCommunicator-" + delegateTag;
 	}
 	
 	/**
@@ -48,9 +53,13 @@ public class ServerCommunicator {
 			readHttpResponse(response);
 			
 		} catch (ClientProtocolException e) {
-	        // TODO Auto-generated catch block
+			String message = mDelegate.getResources().getString(R.string.serverProtocolErrorMessage);
+			mDelegate.handleServerError(message);
+			Log.e(TAG, message, e);
 	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
+	    	String message = mDelegate.getResources().getString(R.string.serverIOExceptionMessage);
+	    	mDelegate.handleServerError(message);
+	        Log.e(TAG, message, e);
 	    }
 	}
 
@@ -60,6 +69,17 @@ public class ServerCommunicator {
 	 */
 	private void readHttpResponse(HttpResponse httpResponse) {
 		// TODO read the response
+		StatusLine statusLine = httpResponse.getStatusLine();
+		int statusCode = statusLine.getStatusCode();
+		
+		if (statusCode == HttpStatus.SC_OK) {
+			List<NameValuePair> values = new ArrayList<NameValuePair>();
+			mDelegate.handleServerResponse(values);
+		} else {
+			// TODO Process the error
+			String message = "An error occurred on the server";
+			mDelegate.handleServerError(message);
+		}
 	}
 
 	/**
@@ -70,8 +90,8 @@ public class ServerCommunicator {
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAccountCreationURL(String username, String password) {
-		CharSequence baseURL = mContext.getResources().getText(R.string.serverURL);
-		CharSequence registerURL = mContext.getResources().getText(R.string.serverRegisterURL);
+		CharSequence baseURL = mDelegate.getResources().getText(R.string.serverURL);
+		CharSequence registerURL = mDelegate.getResources().getText(R.string.serverRegisterURL);
 		
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);

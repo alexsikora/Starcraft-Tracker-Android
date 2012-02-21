@@ -1,6 +1,9 @@
 package illinois.sweng.sctracker;
 
-import android.app.Activity;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -11,9 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class RegisterActivity extends Activity implements IDelegate {
+public class RegisterActivity extends DelegateActivity {
 	
-	private static final String TAG = "sc2TrackerRegisterActivity";
+	private static final String TAG = "RegisterActivity";
 	private static final int DIALOG_INVALID_EMAIL_ID = 1;
 	private static final int DIALOG_INVALID_PASSWORD_ID = 2;
 	
@@ -30,7 +33,7 @@ public class RegisterActivity extends Activity implements IDelegate {
         mEmail = (EditText) findViewById(R.id.emailEditText);
         mPassword = (EditText) findViewById(R.id.passwordTextEdit);
         mPasswordConfirm = (EditText) findViewById(R.id.passwordConfirmTextEdit);
-        mServerCommunicator = new ServerCommunicator(this);
+        mServerCommunicator = new ServerCommunicator(this, TAG);
         
         mCreateAccountButton.setOnClickListener(new CreateAccountHandler());
 	}
@@ -126,6 +129,22 @@ public class RegisterActivity extends Activity implements IDelegate {
 	private boolean validatePassword(String password, String confirmPassword) {
 		return confirmPassword.equals(password);
 	}
+
+	/**
+	 * Handle an error returned from the server
+	 */
+	public void handleServerError(String message) {
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+	}
+	
+	/**
+	 * Handle a successful response from the server
+	 * @param values List of key-value pairs containing data from the server
+	 */
+	public void handleServerResponse(List<NameValuePair> values) {
+		// TODO determine what will be returned and what to do with it
+	}
 	
 	/**
 	 * Custom handler for the account creation button
@@ -135,7 +154,7 @@ public class RegisterActivity extends Activity implements IDelegate {
 			Log.d(TAG, "Create Account Button clicked");
             createAccount();
 		}
-	};
+	}
 	
 	/**
 	 * Custom handler to close the error dialog
@@ -145,12 +164,4 @@ public class RegisterActivity extends Activity implements IDelegate {
 			dialog.dismiss();
 		}
 	}
-
-	/**
-	 * Handle an error returned from the server
-	 */
-	public void handleError(String message) {
-		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-		errorToast.show();
-	};
 }
