@@ -1,31 +1,28 @@
 package illinois.sweng.sctracker;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.List;
 
-import android.app.Activity;
+import org.apache.http.NameValuePair;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends DelegateActivity {
 	
-	private static final String TAG = "sc2TrackerRegisterActivity";
-	private static final int DIALOG_INVALID_EMAIL_ID = 1;
-	private static final int DIALOG_NONMATCH_PASSWORDS_ID = 2;
+	private static final String TAG = "RegisterActivity";
+	public static final int DIALOG_INVALID_EMAIL_ID = 1;
+	public static final int DIALOG_INVALID_PASSWORD_ID = 2;
 	
 	private Button mCreateAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
+	private ServerCommunicator mServerCommunicator;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +33,7 @@ public class RegisterActivity extends Activity {
         mEmail = (EditText) findViewById(R.id.emailEditText);
         mPassword = (EditText) findViewById(R.id.passwordTextEdit);
         mPasswordConfirm = (EditText) findViewById(R.id.passwordConfirmTextEdit);
+        mServerCommunicator = new ServerCommunicator(this, TAG);
         
         mCreateAccountButton.setOnClickListener(new CreateAccountHandler());
 	}
@@ -51,7 +49,7 @@ public class RegisterActivity extends Activity {
 		
 		Dialog dialog = alertDialogBuilder.create();
 		
-		manageInvalidInformationDialog(id, dialog);
+		manageDialog(id, dialog);
 		
 		return dialog;
 	}
@@ -61,7 +59,7 @@ public class RegisterActivity extends Activity {
 	 */
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
-		manageInvalidInformationDialog(id, dialog);
+		manageDialog(id, dialog);
 	}
 	
 	/**
@@ -69,17 +67,19 @@ public class RegisterActivity extends Activity {
 	 * @param id ID of the Dialog
 	 * @param dialog Dialog being opened
 	 */
-	private void manageInvalidInformationDialog(int id, Dialog dialog) {
-		clearInputFields();
+	private void manageDialog(int id, Dialog dialog) {
 		AlertDialog alertDialog = (AlertDialog) dialog;
 		CharSequence message;
 		
 		switch (id) {
 		case DIALOG_INVALID_EMAIL_ID:
 			message = getResources().getText(R.string.registerInvalidEmailMessage);
+			mEmail.setText("");
 			break;
-		case DIALOG_NONMATCH_PASSWORDS_ID:
+		case DIALOG_INVALID_PASSWORD_ID:
 			message = getResources().getText(R.string.registerNonmatchingPasswords);
+			mPassword.setText("");
+			mPasswordConfirm.setText("");
 			break;
 		default:
 			message = "Please reenter your information";
@@ -102,86 +102,12 @@ public class RegisterActivity extends Activity {
 			return;
 		}
 		
-		if(!confirmPasswordsMatch(password, confirmPassword)) {
-			showDialog(DIALOG_NONMATCH_PASSWORDS_ID);
+		if(!validatePassword(password, confirmPassword)) {
+			showDialog(DIALOG_INVALID_PASSWORD_ID);
 			return;
 		}
 		
-		ProgressDialog dialog = ProgressDialog.show(this, "", "Creating account. Please wait...", true);
-		String httpResponse = sendAccountCreationRequest(email, password);
-		dialog.dismiss();
-	}
-
-	
-	/**
-	 * Sends a request to the server to create a new user account with the given
-	 * username and password
-	 * @param username Username for the new user account
-	 * @param password Password for the new user account
-	 * @return InputStream of the Http response, null if there was an exception
-	 */
-	private String sendAccountCreationRequest(String username, String password) {
-		String urlString = buildAccountCreationURL(username, password);
-		BufferedInputStream in = null;
-		URL url;
-		
-		try {
-			url = new URL(urlString);			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-		try {
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("GET");
-			in = new BufferedInputStream(urlConnection.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return readHttpResponse(in);
-	}
-	
-	/**
-	 * Read the httpResponse and display the appropriate success/failure notification
-	 * @param httpResponse InputStream returned from the web server
-	 */
-	private String readHttpResponse(InputStream httpResponse) {
-		// TODO read the http response
-		if(httpResponse == null) return "";
-		StringBuilder sb = new StringBuilder();
-		
-		try {
-			httpResponse.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return sb.toString();
-	}
-
-	/**
-	 * Given a username and a password, builds the appropriate url to send a GET to
-	 * in order to create a new account
-	 * @param username User's new account email address/username
-	 * @param password User's password
-	 * @return String representing the URL to generate a new user account
-	 */
-	private String buildAccountCreationURL(String username, String password) {
-		CharSequence baseURL = getResources().getText(R.string.serverURL);
-		CharSequence registerURL = getResources().getText(R.string.serverRegisterURL);
-		
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(registerURL);
-		sb.append("?username=");
-		sb.append(username);
-		sb.append("&password=");
-		sb.append(password);
-		String urlString = sb.toString();
-		
-		return urlString;
+		mServerCommunicator.sendAccountCreationRequest(email, password);
 	}
 	
 	/**
@@ -195,35 +121,41 @@ public class RegisterActivity extends Activity {
 	}
 	
 	/**
-	 * Checks that both the Password and Confirm Password are the same
+	 * Checks that both the Password and Confirm Password are the same and meet any
+	 * constraints on the password
 	 * @return a boolean that is true if and only if the text entered into the Password
 	 * 			and Confirm Password fields match
 	 */
-	private boolean confirmPasswordsMatch(String password, String confirmPassword) {
+	private boolean validatePassword(String password, String confirmPassword) {
 		return confirmPassword.equals(password);
+	}
+
+	/**
+	 * Handle an error returned from the server
+	 */
+	public void handleServerError(String message) {
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
 	}
 	
 	/**
-	 * Clear all input fields, forcing the user to start over
+	 * Handle a successful response from the server
+	 * @param values List of key-value pairs containing data from the server
 	 */
-	private void clearInputFields() {
-		mEmail.setText("");
-		mPassword.setText("");
-		mPasswordConfirm.setText("");
+	public void handleServerResponse(List<NameValuePair> values) {
+		// TODO determine what will be returned and what to do with it
+		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
 	}
 	
 	/**
 	 * Custom handler for the account creation button
 	 */
 	private class CreateAccountHandler implements View.OnClickListener {
-		/**
-		 * Log that the button was pressed, and attempt to create a new account
-		 */
 		public void onClick(View v) {
 			Log.d(TAG, "Create Account Button clicked");
             createAccount();
 		}
-	};
+	}
 	
 	/**
 	 * Custom handler to close the error dialog
@@ -232,5 +164,5 @@ public class RegisterActivity extends Activity {
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
 		}
-	};
+	}
 }
