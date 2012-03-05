@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, SC2TrackerActivity!</string>
     <string name="app_name">SC2Tracker</string>
     <string name="registerButton">Register</string>
 	<string name="unregisterButton">Unregister</string>
+	
 	<string name="registerActivity">Register</string>
-	<string name="unregisterActivity">Unregister</string>
 	<string name="registerEmailLabel">Email Address:</string>
 	<string name="registerPasswordLabel">Password:</string>
 	<string name="registerPasswordConfirmLabel">Confirm Password:</string>
@@ -18,6 +17,10 @@
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when communicating with the server</string>
 	<string name="serverIOExceptionMessage">The server failed to send a valid HTTP response</string>
 	<string name="serverJSONError">There was an error with the JSON returned by the server</string>
-	<string name="registerNewAccountSuccess">Account Created!</string>
+	<string name="registerNewAccountSuccess">Account Created</string>
+	
+	<string name="unregisterActivity">Unregister</string>
+	<string name="serverUnregisterURL">/users/remove/</string>
+	<string name="unregisterDeleteButton">Delete Account :(</string>
 	
 </resources>
