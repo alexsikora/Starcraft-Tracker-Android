@@ -37,7 +37,7 @@ public class UnregisterActivity extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.unregister);
         
         mDeleteAccountButton = (Button) findViewById(R.id.unregisterDeleteButton);
         mEmail = (EditText) findViewById(R.id.emailEditText);
@@ -196,7 +196,7 @@ public class UnregisterActivity extends Activity {
 		 * Log that the button was pressed, and attempt to create a new account
 		 */
 		public void onClick(View v) {
-			Log.d(TAG, "Create Account Button clicked");
+			Log.d(TAG, "Delete Account Button clicked");
             deleteAccount();
 		}
 	};
