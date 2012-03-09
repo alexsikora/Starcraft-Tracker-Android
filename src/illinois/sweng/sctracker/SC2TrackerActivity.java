@@ -34,8 +34,8 @@ public class SC2TrackerActivity extends Activity {
     }
     
     private void launchUnregister() {
-    	//Intent i = new Intent(this, UnregisterActivity.class);
-		//startActivity(i);
+    	Intent i = new Intent(this, UnregisterActivity.class);
+		startActivity(i);
     }
     
     
