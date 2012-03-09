@@ -17,8 +17,8 @@ import android.widget.Toast;
 public class RegisterActivity extends DelegateActivity {
 	
 	private static final String TAG = "RegisterActivity";
-	private static final int DIALOG_INVALID_EMAIL_ID = 1;
-	private static final int DIALOG_INVALID_PASSWORD_ID = 2;
+	public static final int DIALOG_INVALID_EMAIL_ID = 1;
+	public static final int DIALOG_INVALID_PASSWORD_ID = 2;
 	
 	private Button mCreateAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
@@ -144,6 +144,7 @@ public class RegisterActivity extends DelegateActivity {
 	 */
 	public void handleServerResponse(List<NameValuePair> values) {
 		// TODO determine what will be returned and what to do with it
+		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
 	}
 	
 	/**
