@@ -1,9 +1,12 @@
 package illinois.sweng.sctracker;
 
 
+import org.apache.http.client.methods.HttpGet;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +59,12 @@ public class SC2TrackerActivity extends Activity {
 			Log.d(TAG, "Unreg Button clicked");
             launchUnregister();
 		}
+	};
+	
+	public void loginRequest() {
+		HttpGet request = new HttpGet();
+		String username = "";
+		request.setHeader("Authorization", "Basic " + Base64.encodeToString("user:password".getBytes(), Base64.NO_WRAP));
 	}
 	
 	private class LoginButtonHandler implements View.OnClickListener {
