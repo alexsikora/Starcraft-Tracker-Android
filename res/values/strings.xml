@@ -24,4 +24,6 @@
 	<string name="unregisterDeleteButton">Delete Account :(</string>
 	<string name="loginButton">Log in</string>
 	
+	<string name="serverAuthenticateURL">/users/authenticate/</string>
+	
 </resources>
