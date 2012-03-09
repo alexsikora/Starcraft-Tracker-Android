@@ -90,8 +90,7 @@ public class ServerCommunicator {
 			
 			// TODO Read the JSON
 			JSONObject json = new JSONObject(in.toString());
-			
-			List<NameValuePair> values = new ArrayList<NameValuePair>();
+			List<NameValuePair> values = new ArrayList<NameValuePair>(json.length());
 			
 			mDelegate.handleServerResponse(values);
 		} else {

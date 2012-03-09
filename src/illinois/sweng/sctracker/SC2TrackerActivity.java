@@ -15,8 +15,7 @@ public class SC2TrackerActivity extends Activity {
     /** Called when the activity is first created. */
 	
 	static String TAG = "sc2trackerMainActivity";
-	private Button mRegisterButton;
-	private Button mUnregisterButton;
+	private Button mRegisterButton, mLoginButton, mUnregisterButton;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,9 +24,11 @@ public class SC2TrackerActivity extends Activity {
         
         mRegisterButton = (Button) findViewById(R.id.registerButton);
         mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
+        mLoginButton = (Button) findViewById(R.id.LoginButton);
         
         mRegisterButton.setOnClickListener(new RegisterButtonHandler());
         mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
+        mLoginButton.setOnClickListener(new LoginButtonHandler());
     }
    
     
@@ -41,6 +42,9 @@ public class SC2TrackerActivity extends Activity {
 		startActivity(i);
     }
     
+    private void loginUser() {
+    	// TODO send login request
+    }
     
     /* Button click handlers */
     private class RegisterButtonHandler implements View.OnClickListener {
@@ -48,7 +52,7 @@ public class SC2TrackerActivity extends Activity {
 			Log.d(TAG, "Reg Button clicked");
             launchRegister();
 		}
-	};
+	}
 	
 	private class UnregisterButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
@@ -57,12 +61,16 @@ public class SC2TrackerActivity extends Activity {
 		}
 	};
 	
-	public void login() {
+	public void loginRequest() {
 		HttpGet request = new HttpGet();
 		String username = "";
 		request.setHeader("Authorization", "Basic " + Base64.encodeToString("user:password".getBytes(), Base64.NO_WRAP));
-		
-		
-		
+	}
+	
+	private class LoginButtonHandler implements View.OnClickListener {
+		public void onClick(View v) {
+			Log.d(TAG, "Login Button clicked");
+			loginUser();
+		}
 	}
 }
