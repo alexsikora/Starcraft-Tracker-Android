@@ -6,7 +6,7 @@
 
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/mainEmailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -17,7 +17,7 @@
     </EditText>
 
     <TextView
-        android:id="@+id/emailLabel"
+        android:id="@+id/mainEmailLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/passwordTextEdit"
+        android:id="@+id/mainPasswordTextEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -35,7 +35,7 @@
         android:layout_marginLeft="5dp"
         android:inputType="textPassword" />
     <TextView
-        android:id="@+id/passwordLabel"
+        android:id="@+id/mainPasswordLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
