@@ -119,4 +119,71 @@ public class ServerCommunicator {
 		
 		return urlString;
 	}
+	
+	/**
+	 * Sends a request to the server to create a new user account with the given
+	 * username and password
+	 * @param username Username for the new user account
+	 * @param password Password for the new user account
+	 * @return InputStream of the Http response, null if there was an exception
+	 */
+	public String sendAccountDeletionRequest(String username, String password) {
+		//TODO
+		String urlString = buildAccountDeletionURL(username, password);
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(urlString);
+		
+		try {
+			List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
+			pairs.add(new BasicNameValuePair("username", username));
+			pairs.add(new BasicNameValuePair("password", password));
+			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
+			
+			HttpResponse response = httpClient.execute(httpPost);
+			readHttpResponse(response);
+			
+		} catch (ClientProtocolException e) {
+			String message = mDelegate.getResources().getString(R.string.serverProtocolErrorMessage);
+			mDelegate.handleServerError(message);
+			Log.e(TAG, message, e);
+			e.printStackTrace();
+	    } catch (IOException e) {
+	    	String message = mDelegate.getResources().getString(R.string.serverIOExceptionMessage);
+	    	mDelegate.handleServerError(message);
+	        Log.e(TAG, message, e);
+	        e.printStackTrace();
+	    } catch (JSONException e) {
+			String message = mDelegate.getResources().getString(R.string.serverJSONError);
+	    	mDelegate.handleServerError(message);
+	        Log.e(TAG, message, e);
+	        e.printStackTrace();
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * Given a username and a password, builds the appropriate url to send a GET to
+	 * in order to create a new account
+	 * @param username User's new account email address/username
+	 * @param password User's password
+	 * @return String representing the URL to generate a new user account
+	 */
+	private String buildAccountDeletionURL(String username, String password) {
+		CharSequence baseURL = mDelegate.getResources().getText(R.string.serverURL);
+		CharSequence registerURL = mDelegate.getResources().getText(R.string.serverUnregisterURL);
+		
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(registerURL);
+		sb.append("?username=");
+		sb.append(username);
+		sb.append("&password=");
+		sb.append(password);
+		String urlString = sb.toString();
+		
+		return urlString;
+	}
+	
 }
