@@ -1,7 +1,11 @@
 package illinois.sweng.sctracker;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,20 +104,29 @@ public class ServerCommunicator {
 		StatusLine statusLine = httpResponse.getStatusLine();
 		int statusCode = statusLine.getStatusCode();
 
+		Log.d("XX", "Entering statuscode");
 		if (statusCode == HttpStatus.SC_OK) {
 			HttpEntity httpEntity = httpResponse.getEntity();
 			InputStream in = httpEntity.getContent();
 
 			// TODO Read the JSON
-			Log.d("XXXXXXXX", in.toString());
-			JSONObject json = new JSONObject(in.toString());
+			BufferedReader r = new BufferedReader(new InputStreamReader(in));
+			StringBuilder total = new StringBuilder();
+			String line;
+			while ((line = r.readLine()) != null) {
+				total.append(line);
+			}
+			
+			Log.d("XX", total.toString());
+			JSONObject json = new JSONObject(total.toString());
 			List<NameValuePair> values = new ArrayList<NameValuePair>(
 					json.length());
 
 			mDelegate.handleServerResponse(values);
 		} else {
 			// TODO Process the error
-			
+			String response = "" + httpResponse.getStatusLine().getStatusCode();
+			Log.d("XX", response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
 		}
@@ -273,7 +286,6 @@ public class ServerCommunicator {
 			readHttpResponse(response);
 			
 			
-
 		} catch (ClientProtocolException e) {
 			String message = mDelegate.getResources().getString(
 					R.string.serverProtocolErrorMessage);
