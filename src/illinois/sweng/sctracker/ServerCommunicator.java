@@ -12,7 +12,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -28,7 +27,7 @@ import android.util.Log;
 
 public class ServerCommunicator {
 	private final String TAG;
-	DelegateActivity mDelegate;
+	private DelegateActivity mDelegate;
 
 	/**
 	 * Creates a new ServerCommunicator with the given context
@@ -51,12 +50,11 @@ public class ServerCommunicator {
 	 *            Username for the new user account
 	 * @param password
 	 *            Password for the new user account
+	 * @return 
+	 * 
 	 */
-	public String sendAccountCreationRequest(String username, String password) {
+	public void sendAccountCreationRequest(String username, String password) {
 		String urlString = buildAccountCreationURL(username, password);
-
-		//HttpClient httpClient = new DefaultHttpClient();
-		
 		HttpPost httpPost = new HttpPost(urlString);
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
 		pairs.add(new BasicNameValuePair("username", username));
@@ -64,9 +62,6 @@ public class ServerCommunicator {
 
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-
-			/*HttpResponse response = httpClient.execute(httpPost);
-			readHttpResponse(response);*/
 
 		} catch (IOException e) {
 			String message = mDelegate.getResources().getString(
@@ -77,21 +72,7 @@ public class ServerCommunicator {
 		} 
 		
 		Log.d(TAG, "Sending account creation request");
-		return executeHttpRequest(httpPost);
-		
-		/*catch (ClientProtocolException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverProtocolErrorMessage);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		} catch (JSONException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverJSONError);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		}*/
+		executeHttpRequest(httpPost);
 	}
 
 
@@ -106,21 +87,16 @@ public class ServerCommunicator {
 	 *            Password for the new user account
 	 * @return InputStream of the Http response, null if there was an exception
 	 */
-	public String sendAccountDeletionRequest(String username, String password) {
+	public void sendAccountDeletionRequest(String username, String password) {
 		// TODO figure out return value
 		String urlString = buildAccountDeletionURL(username, password);
-
-		/*HttpClient httpClient = new DefaultHttpClient();*/
 		HttpPost httpPost = new HttpPost(urlString);
-
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
 		pairs.add(new BasicNameValuePair("username", username));
 		pairs.add(new BasicNameValuePair("password", password));
 		
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-			/*HttpResponse response = httpClient.execute(httpPost);
-			readHttpResponse(response);*/
 
 		} catch (IOException e) {
 			String message = mDelegate.getResources().getString(
@@ -128,22 +104,10 @@ public class ServerCommunicator {
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
 			e.printStackTrace();
-		} /*catch (ClientProtocolException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverProtocolErrorMessage);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		} catch (JSONException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverJSONError);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		}*/
+		} 
 
 		Log.d(TAG, "Sending account deletion request");
-		return executeHttpRequest(httpPost);
+		executeHttpRequest(httpPost);
 	}
 	
 	/**
@@ -156,10 +120,8 @@ public class ServerCommunicator {
 	 *            Password for the new user account
 	 * @return InputStream of the Http response, null if there was an exception
 	 */
-	public String sendAuthenticationRequest(String userpass) {
+	public void sendAuthenticationRequest(String userpass) {
 		String urlString = buildAuthenticateURL();
-
-		/*HttpClient httpClient = new DefaultHttpClient();*/
 		HttpGet request = new HttpGet(urlString);
 		request.setHeader(
 				"Authorization",
@@ -167,39 +129,16 @@ public class ServerCommunicator {
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
 
-		/*try {
-
-			Log.d(TAG, "Sending authentication request");
-			
-			HttpResponse response = httpClient.execute(request);
-			readHttpResponse(response);
-			
-			
-		} catch (ClientProtocolException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverProtocolErrorMessage);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		} catch (IOException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverIOExceptionMessage);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		} catch (JSONException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverJSONError);
-			mDelegate.handleServerError(message);
-			Log.e(TAG, message, e);
-			e.printStackTrace();
-		}*/
 		Log.d(TAG, "Sending authentication request");
-		return executeHttpRequest(request);
-
+		executeHttpRequest(request);
 	}
 	
-	private String executeHttpRequest(HttpUriRequest request) {
+	/**
+	 * Sends an Http request and handles the response from the server 
+	 * @param request HttpUriRequest to be executed
+	 * @return
+	 */
+	private void executeHttpRequest(HttpUriRequest request) {
 		HttpClient httpClient = new DefaultHttpClient();
 		
 		try {
@@ -219,8 +158,6 @@ public class ServerCommunicator {
 			Log.e(TAG, message, e);
 			e.printStackTrace();
 		}
-		
-		return "";
 	}
 
 	/**
@@ -309,10 +246,6 @@ public class ServerCommunicator {
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
 		sb.append(registerURL);
-		sb.append("?username=");
-		sb.append(username);
-		sb.append("&password=");
-		sb.append(password);
 		String urlString = sb.toString();
 
 		return urlString;
@@ -328,15 +261,14 @@ public class ServerCommunicator {
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAuthenticateURL() {
-
 		CharSequence baseURL = mDelegate.getResources().getText(
 				R.string.serverURL);
-		CharSequence registerURL = mDelegate.getResources().getText(
+		CharSequence authURL = mDelegate.getResources().getText(
 				R.string.serverAuthenticateURL);
 
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
-		sb.append(registerURL);
+		sb.append(authURL);
 		String urlString = sb.toString();
 
 		return urlString;
