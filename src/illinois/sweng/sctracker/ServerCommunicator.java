@@ -131,10 +131,19 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendGetAllPlayersRequest() {
+		String urlString = buildGetAllPlayersURL();
+		HttpPost request = new HttpPost(urlString);
+		
+		
+		
+		Log.d(TAG, "Sending get all players request");
+		executeHttpRequest(request);
+	}
+	
 	/**
 	 * Sends an Http request and handles the response from the server 
 	 * @param request HttpUriRequest to be executed
-	 * @return
 	 */
 	private void executeHttpRequest(HttpUriRequest request) {
 		HttpClient httpClient = new DefaultHttpClient();
@@ -179,28 +188,25 @@ public class ServerCommunicator {
 			InputStream in = httpEntity.getContent();			
 			String responseString = readStream(in);
 			
-			Log.d("XX", responseString);
+			Log.d("YY", responseString);
 			JSONObject json = new JSONObject(responseString);
 			
 			int responseCode = json.getInt("status_code");
-			if(responseCode == R.integer.server_OK) {
-				JSONArray array = json.getJSONArray("response");
-				ArrayList<JSONObject> dataObjects = new ArrayList<JSONObject>(array.length());
-				
-				for(int i = 0; i < array.length(); i++) {
-					JSONObject object = array.getJSONObject(i);
-					JSONObject dataObject = object.getJSONObject("fields");
-					dataObjects.add(dataObject);
+			if(responseCode == mDelegate.getResources().getInteger(R.integer.server_OK)) {
+				JSONArray array = json.optJSONArray("response");
+				if(array == null) {
+					String message = json.optString("response");
+				} else {
+					mDelegate.handleServerResponseData(array);
 				}
-				
-				mDelegate.handleServerResponse(dataObjects);
 			} else {
 				String errorMessage = json.getString("response");
+				Log.d("OOOOO", errorMessage);
 				mDelegate.handleServerError(errorMessage);
 			}			
 		} else {
 			String response = "" + httpResponse.getStatusLine().getStatusCode();
-			Log.d("XX", response);
+			Log.d("ZZ", response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
 		}
@@ -260,12 +266,12 @@ public class ServerCommunicator {
 	private String buildAccountDeletionURL(String username, String password) {
 		CharSequence baseURL = mDelegate.getResources().getText(
 				R.string.serverURL);
-		CharSequence registerURL = mDelegate.getResources().getText(
+		CharSequence unregisterURL = mDelegate.getResources().getText(
 				R.string.serverUnregisterURL);
 
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
-		sb.append(registerURL);
+		sb.append(unregisterURL);
 		String urlString = sb.toString();
 
 		return urlString;
@@ -289,7 +295,18 @@ public class ServerCommunicator {
 
 		return urlString;
 	}
-
 	
+	private String buildGetAllPlayersURL() {
+		CharSequence baseURL = mDelegate.getResources().getText(
+				R.string.serverURL);
+		CharSequence getPlayersURL = mDelegate.getResources().getText(
+				R.string.serverGetAllPlayersURL);
 
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getPlayersURL);
+		String urlString = sb.toString();
+
+		return urlString;
+	}
 }

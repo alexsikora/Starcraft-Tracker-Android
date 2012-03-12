@@ -1,8 +1,7 @@
 package illinois.sweng.sctracker;
 
-import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONArray;
 
 import android.os.Bundle;
 
@@ -22,9 +21,13 @@ public class PlayerStatusActivity extends DelegateActivity {
 	}
 
 	@Override
-	public void handleServerResponse(List<NameValuePair> values) {
+	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
+	}
 }

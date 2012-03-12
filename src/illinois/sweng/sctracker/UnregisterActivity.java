@@ -1,8 +1,7 @@
 package illinois.sweng.sctracker;
 
-import java.util.List;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 
 import android.app.AlertDialog;
@@ -138,9 +137,14 @@ public class UnregisterActivity extends DelegateActivity {
 	}
 
 	@Override
-	public void handleServerResponse(List<JSONObject> values) {
+	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
-	};
+	}
+	
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
+	}
 
 	/**
 	 * Checks whether the email field contains a valid Email address

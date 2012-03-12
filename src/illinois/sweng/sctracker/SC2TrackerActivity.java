@@ -1,9 +1,8 @@
 package illinois.sweng.sctracker;
 
 
-import java.util.List;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 
 import android.content.Intent;
@@ -98,8 +97,13 @@ public class SC2TrackerActivity extends DelegateActivity {
 
 
 	@Override
-	public void handleServerResponse(List<JSONObject> values) {
+	public void handleServerResponseData(JSONArray values) {
 		mLoginButton.setText(R.string.registerNewAccountSuccess);
 		
+	}
+	
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
 	}
 }

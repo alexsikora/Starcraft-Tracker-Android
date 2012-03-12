@@ -1,8 +1,7 @@
 package illinois.sweng.sctracker;
 
-import java.util.List;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 
 import android.app.Activity;
@@ -24,7 +23,14 @@ public abstract class DelegateActivity extends Activity {
 	/**
 	 * Handle and process the data returned by the server on a successful request,
 	 * already having been separated into key-value pairs by an intermediary
-	 * @param values NameValuePairs containing the data returned by the server
+	 * @param values JSONArray containing the data returned by the server
 	 */
-	public abstract void handleServerResponse(List<JSONObject> values);
+	public abstract void handleServerResponseData(JSONArray values);
+	
+	/**
+	 * Handle a success message returned by the server for a successful request
+	 * that does not include data.
+	 * @param message String success message returned by the server
+	 */
+	public abstract void handleServerResponseMessage(String message);
 }
