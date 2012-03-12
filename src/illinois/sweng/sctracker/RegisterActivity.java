@@ -2,7 +2,8 @@ package illinois.sweng.sctracker;
 
 import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONObject;
+
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -142,7 +143,7 @@ public class RegisterActivity extends DelegateActivity {
 	 * Handle a successful response from the server
 	 * @param values List of key-value pairs containing data from the server
 	 */
-	public void handleServerResponse(List<NameValuePair> values) {
+	public void handleServerResponse(List<JSONObject> values) {
 		// TODO determine what will be returned and what to do with it
 		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
 	}

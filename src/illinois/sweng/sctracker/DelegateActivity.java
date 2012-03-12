@@ -2,7 +2,8 @@ package illinois.sweng.sctracker;
 
 import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONObject;
+
 
 import android.app.Activity;
 
@@ -25,5 +26,5 @@ public abstract class DelegateActivity extends Activity {
 	 * already having been separated into key-value pairs by an intermediary
 	 * @param values NameValuePairs containing the data returned by the server
 	 */
-	public abstract void handleServerResponse(List<NameValuePair> values);
+	public abstract void handleServerResponse(List<JSONObject> values);
 }

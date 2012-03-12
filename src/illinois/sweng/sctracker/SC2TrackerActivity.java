@@ -3,7 +3,8 @@ package illinois.sweng.sctracker;
 
 import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONObject;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -97,7 +98,7 @@ public class SC2TrackerActivity extends DelegateActivity {
 
 
 	@Override
-	public void handleServerResponse(List<NameValuePair> values) {
+	public void handleServerResponse(List<JSONObject> values) {
 		mLoginButton.setText(R.string.registerNewAccountSuccess);
 		
 	}

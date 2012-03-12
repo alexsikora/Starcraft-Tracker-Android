@@ -2,7 +2,8 @@ package illinois.sweng.sctracker;
 
 import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONObject;
+
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -137,7 +138,7 @@ public class UnregisterActivity extends DelegateActivity {
 	}
 
 	@Override
-	public void handleServerResponse(List<NameValuePair> values) {
+	public void handleServerResponse(List<JSONObject> values) {
 		// TODO Auto-generated method stub
 	};
 

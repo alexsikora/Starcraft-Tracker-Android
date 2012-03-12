@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,7 +89,6 @@ public class ServerCommunicator {
 	 * @return InputStream of the Http response, null if there was an exception
 	 */
 	public void sendAccountDeletionRequest(String username, String password) {
-		// TODO figure out return value
 		String urlString = buildAccountDeletionURL(username, password);
 		HttpPost httpPost = new HttpPost(urlString);
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
@@ -178,29 +178,51 @@ public class ServerCommunicator {
 		Log.d("XX", "Entering statuscode");
 		if (statusCode == HttpStatus.SC_OK) {
 			HttpEntity httpEntity = httpResponse.getEntity();
-			InputStream in = httpEntity.getContent();
+			InputStream in = httpEntity.getContent();			
+			String responseString = readStream(in);
 			
-			// TODO Read the JSON
-			BufferedReader r = new BufferedReader(new InputStreamReader(in));
-			StringBuilder total = new StringBuilder();
-			String line;
-			while ((line = r.readLine()) != null) {
-				total.append(line);
-			}
+			Log.d("XX", responseString);
+			JSONObject json = new JSONObject(responseString);
 			
-			Log.d("XX", total.toString());
-			JSONObject json = new JSONObject(total.toString());
-			List<NameValuePair> values = new ArrayList<NameValuePair>(
-					json.length());
-			
-			mDelegate.handleServerResponse(values);
+			int responseCode = json.getInt("status_code");
+			if(responseCode == R.integer.server_OK) {
+				JSONArray array = json.getJSONArray("response");
+				ArrayList<JSONObject> dataObjects = new ArrayList<JSONObject>(array.length());
+				
+				for(int i = 0; i < array.length(); i++) {
+					JSONObject object = array.getJSONObject(i);
+					JSONObject dataObject = object.getJSONObject("fields");
+					dataObjects.add(dataObject);
+				}
+				
+				mDelegate.handleServerResponse(dataObjects);
+			} else {
+				String errorMessage = json.getString("response");
+				mDelegate.handleServerError(errorMessage);
+			}			
 		} else {
-			// TODO Process the error
 			String response = "" + httpResponse.getStatusLine().getStatusCode();
 			Log.d("XX", response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
 		}
+	}
+
+	/**
+	 * Reads an InputStream into a String
+	 * @param in InputStream to be read
+	 * @return String containing the data from the InputStream
+	 * @throws IOException
+	 */
+	private String readStream(InputStream in) throws IOException {
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		StringBuilder total = new StringBuilder();
+		String line;
+		while ((line = r.readLine()) != null) {
+			total.append(line);
+		}
+		
+		return total.toString();
 	}
 
 	/**
