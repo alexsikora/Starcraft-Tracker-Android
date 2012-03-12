@@ -53,7 +53,6 @@ public class ServerCommunicator {
 	 *            Username for the new user account
 	 * @param password
 	 *            Password for the new user account
-	 * @return 
 	 * 
 	 */
 	public void sendAccountCreationRequest(String username, String password) {
@@ -87,7 +86,6 @@ public class ServerCommunicator {
 	 *            Username for the user account
 	 * @param password
 	 *            Password for the user account
-	 * @return InputStream of the Http response, null if there was an exception
 	 */
 	public void sendAccountDeletionRequest(String username, String password) {
 		String urlString = buildAccountDeletionURL(username, password);
