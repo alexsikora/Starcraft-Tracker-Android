@@ -23,13 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
 
 public class ServerCommunicator {
 	private final String TAG;
 	private DelegateActivity mDelegate;
-
+	private Resources mResources;
 	/**
 	 * Creates a new ServerCommunicator with the given context
 	 * 
@@ -40,6 +41,7 @@ public class ServerCommunicator {
 	 */
 	public ServerCommunicator(DelegateActivity delegate, String delegateTag) {
 		mDelegate = delegate;
+		mResources = mDelegate.getResources();
 		TAG = "sc2TrackerServerCommunicator-" + delegateTag;
 	}
 
@@ -65,8 +67,7 @@ public class ServerCommunicator {
 			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
 
 		} catch (IOException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverIOExceptionMessage);
+			String message = mResources.getString(R.string.serverIOExceptionMessage);
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
 			e.printStackTrace();
@@ -99,8 +100,7 @@ public class ServerCommunicator {
 			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
 
 		} catch (IOException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverIOExceptionMessage);
+			String message = mResources.getString(R.string.serverIOExceptionMessage);
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
 			e.printStackTrace();
@@ -159,14 +159,12 @@ public class ServerCommunicator {
 			readHttpResponse(response);
 
 		} catch (IOException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverIOExceptionMessage);
+			String message = mResources.getString(R.string.serverIOExceptionMessage);
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
 			e.printStackTrace();
 		} catch (JSONException e) {
-			String message = mDelegate.getResources().getString(
-					R.string.serverJSONError);
+			String message = mResources.getString(R.string.serverJSONError);
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
 			e.printStackTrace();
@@ -197,14 +195,14 @@ public class ServerCommunicator {
 			JSONObject json = new JSONObject(responseString);
 			
 			int responseCode = json.getInt("status_code");
-			if(responseCode == mDelegate.getResources().getInteger(R.integer.server_OK)) {
+			if(responseCode == mResources.getInteger(R.integer.server_OK)) {
 				sendSuccessCallback(json);
 			} else {
 				String errorMessage = json.getString("response");
 				mDelegate.handleServerError(errorMessage);
 			}			
 		} else {
-			String response = "" + httpResponse.getStatusLine().getStatusCode();
+			String response = "" + statusCode;
 			Log.d("ZZ", response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
@@ -254,10 +252,8 @@ public class ServerCommunicator {
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAccountCreationURL(String username, String password) {
-		CharSequence baseURL = mDelegate.getResources().getText(
-				R.string.serverURL);
-		CharSequence registerURL = mDelegate.getResources().getText(
-				R.string.serverRegisterURL);
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence registerURL = mResources.getText(R.string.serverRegisterURL);
 		
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
@@ -278,10 +274,8 @@ public class ServerCommunicator {
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAccountDeletionURL(String username, String password) {
-		CharSequence baseURL = mDelegate.getResources().getText(
-				R.string.serverURL);
-		CharSequence unregisterURL = mDelegate.getResources().getText(
-				R.string.serverUnregisterURL);
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence unregisterURL = mResources.getText(R.string.serverUnregisterURL);
 
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
@@ -297,10 +291,8 @@ public class ServerCommunicator {
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAuthenticateURL() {
-		CharSequence baseURL = mDelegate.getResources().getText(
-				R.string.serverURL);
-		CharSequence authURL = mDelegate.getResources().getText(
-				R.string.serverAuthenticateURL);
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence authURL = mResources.getText(R.string.serverAuthenticateURL);
 
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
@@ -315,10 +307,8 @@ public class ServerCommunicator {
 	 * @return String representing the URL to get all player data
 	 */
 	private String buildGetAllPlayersURL() {
-		CharSequence baseURL = mDelegate.getResources().getText(
-				R.string.serverURL);
-		CharSequence getPlayersURL = mDelegate.getResources().getText(
-				R.string.serverGetAllPlayersURL);
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getPlayersURL = mResources.getText(R.string.serverGetAllPlayersURL);
 
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
