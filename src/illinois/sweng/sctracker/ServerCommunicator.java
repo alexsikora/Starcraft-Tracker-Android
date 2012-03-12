@@ -193,6 +193,7 @@ public class ServerCommunicator {
 			JSONObject json = new JSONObject(responseString);
 			
 			int responseCode = json.getInt("status_code");
+			Log.d("Status code" + TAG, "" + responseCode);
 			if(responseCode == mResources.getInteger(R.integer.server_OK)) {
 				sendSuccessCallback(json);
 			} else {
@@ -213,7 +214,15 @@ public class ServerCommunicator {
 	 * @param json JSONObject returned from the server
 	 */
 	private void sendSuccessCallback(JSONObject json) {
-		JSONArray array = json.optJSONArray("response");
+		// TODO figure out serialization for array
+		String response = json.optString("response");
+		JSONArray array = null;
+		try {
+			array = new JSONArray(response);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(array != null) {
 			mDelegate.handleServerResponseData(array);
 		} else {

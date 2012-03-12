@@ -77,6 +77,7 @@ public class HomeActivity extends DelegateActivity {
 	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
 		try {
+			Log.d("TAG", "attempting to display");
 			JSONObject player1 = (JSONObject) values.get(0);
 			Intent i = new Intent(this, PlayerStatusActivity.class);
 			i.putExtra("player", player1.toString());
