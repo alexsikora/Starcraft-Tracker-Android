@@ -1,13 +1,16 @@
 package illinois.sweng.sctracker;
 
-import android.app.Activity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends DelegateActivity {
 	static String TAG = "homeActivity";
 	private Button mSearchButton;
 	private Button mUnregisterButton;
@@ -55,6 +58,39 @@ public class HomeActivity extends Activity {
 		public void onClick(View v) {
 			Log.d(TAG, "Search Button Clicked");
 			onSearchRequested();
+			doStuff();
 		}
+	}
+
+	public void doStuff() {
+		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
+		comm.sendGetAllPlayersRequest("test@account.com:test");
+	}
+
+	@Override
+	public void handleServerError(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleServerResponseData(JSONArray values) {
+		// TODO Auto-generated method stub
+		try {
+			JSONObject player1 = (JSONObject) values.get(0);
+			Intent i = new Intent(this, PlayerStatusActivity.class);
+			i.putExtra("player", player1.toString());
+			startActivity(i);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 }
