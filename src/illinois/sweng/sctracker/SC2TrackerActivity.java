@@ -58,12 +58,8 @@ public class SC2TrackerActivity extends DelegateActivity {
 		
 		mServerCommunicator.sendAuthenticationRequest(userpass);
 		
-		
-		
-//		HttpClient client = new HttpClient();
-//		client.getParams().setAuthenticationPreemptive(true);
-//		Credentials defaultcreds = new UsernamePasswordCredentials("username", "password");
-//		client.getState().setCredentials(new AuthScope("myhost", 80, AuthScope.ANY_REALM), defaultcreds);
+		Intent i = new Intent(this, HomeActivity.class);
+		startActivity(i);
 		
     }
     

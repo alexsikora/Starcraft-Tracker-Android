@@ -20,12 +20,15 @@ public class HomeActivity extends Activity {
 		
 		mSearchButton = (Button) findViewById(R.id.searchButton);
 		mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
+		mLogOutButton = (Button) findViewById(R.id.logoutButton);
 		
 		mSearchButton.setOnClickListener(new SearchButtonHandler());
+		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
+		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 	}
 	
 	private void launchLogOut(){
-		Intent i = new Intent(this, HomeActivity.class);
+		Intent i = new Intent(this, SC2TrackerActivity.class);
 		startActivity(i);
 	}
 	
