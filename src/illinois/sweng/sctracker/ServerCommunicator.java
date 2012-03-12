@@ -116,7 +116,6 @@ public class ServerCommunicator {
 	 * 
 	 * @param userpass
 	 *            String of the form username:password
-	 * @return InputStream of the Http response, null if there was an exception
 	 */
 	public void sendAuthenticationRequest(String userpass) {
 		String urlString = buildAuthenticateURL();
@@ -131,12 +130,19 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
-	public void sendGetAllPlayersRequest() {
+	/**
+	 * Sends a GET request to retrieve all player data from the server
+	 * @param userpass
+	 *            String of the form username:password
+	 */
+	public void sendGetAllPlayersRequest(String userpass) {
 		String urlString = buildGetAllPlayersURL();
-		HttpPost request = new HttpPost(urlString);
-		
-		
-		
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
 		Log.d(TAG, "Sending get all players request");
 		executeHttpRequest(request);
 	}
@@ -182,7 +188,6 @@ public class ServerCommunicator {
 		StatusLine statusLine = httpResponse.getStatusLine();
 		int statusCode = statusLine.getStatusCode();
 		
-		Log.d("XX", "Entering statuscode");
 		if (statusCode == HttpStatus.SC_OK) {
 			HttpEntity httpEntity = httpResponse.getEntity();
 			InputStream in = httpEntity.getContent();			
@@ -193,15 +198,9 @@ public class ServerCommunicator {
 			
 			int responseCode = json.getInt("status_code");
 			if(responseCode == mDelegate.getResources().getInteger(R.integer.server_OK)) {
-				JSONArray array = json.optJSONArray("response");
-				if(array == null) {
-					String message = json.optString("response");
-				} else {
-					mDelegate.handleServerResponseData(array);
-				}
+				sendSuccessCallback(json);
 			} else {
 				String errorMessage = json.getString("response");
-				Log.d("OOOOO", errorMessage);
 				mDelegate.handleServerError(errorMessage);
 			}			
 		} else {
@@ -209,6 +208,21 @@ public class ServerCommunicator {
 			Log.d("ZZ", response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
+		}
+	}
+
+	/**
+	 * When a request is successfully completed, call back to the delegate
+	 * that made the request with the response from the server
+	 * @param json JSONObject returned from the server
+	 */
+	private void sendSuccessCallback(JSONObject json) {
+		JSONArray array = json.optJSONArray("response");
+		if(array != null) {
+			mDelegate.handleServerResponseData(array);
+		} else {
+			String message = json.optString("response");
+			mDelegate.handleServerResponseMessage(message);
 		}
 	}
 
@@ -296,6 +310,10 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds URL for getting all player data
+	 * @return String representing the URL to get all player data
+	 */
 	private String buildGetAllPlayersURL() {
 		CharSequence baseURL = mDelegate.getResources().getText(
 				R.string.serverURL);
