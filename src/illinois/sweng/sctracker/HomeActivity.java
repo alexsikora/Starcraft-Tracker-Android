@@ -9,6 +9,7 @@ import android.widget.Button;
 
 public class HomeActivity extends Activity {
 	static String TAG = "homeActivity";
+	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
 	
@@ -16,6 +17,11 @@ public class HomeActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
+		
+		mSearchButton = (Button) findViewById(R.id.searchButton);
+		mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
+		
+		mSearchButton.setOnClickListener(new SearchButtonHandler());
 	}
 	
 	private void launchLogOut(){
@@ -41,4 +47,11 @@ public class HomeActivity extends Activity {
             launchUnregister();
 		}
 	};
+	
+	private class SearchButtonHandler implements View.OnClickListener {
+		public void onClick(View v) {
+			Log.d(TAG, "Search Button Clicked");
+			onSearchRequested();
+		}
+	}
 }
