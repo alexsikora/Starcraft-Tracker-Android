@@ -79,13 +79,13 @@ public class ServerCommunicator {
 
 
 	/**
-	 * Sends a request to the server to create a new user account with the given
+	 * Sends a request to the server to delete a user account with the given
 	 * username and password
 	 * 
 	 * @param username
-	 *            Username for the new user account
+	 *            Username for the user account
 	 * @param password
-	 *            Password for the new user account
+	 *            Password for the user account
 	 * @return InputStream of the Http response, null if there was an exception
 	 */
 	public void sendAccountDeletionRequest(String username, String password) {
@@ -114,10 +114,8 @@ public class ServerCommunicator {
 	 * Sends a GET request for authentication to the server with String userpass
 	 * as username:password
 	 * 
-	 * @param username
-	 *            Username for the new user account
-	 * @param password
-	 *            Password for the new user account
+	 * @param userpass
+	 *            String of the form username:password
 	 * @return InputStream of the Http response, null if there was an exception
 	 */
 	public void sendAuthenticationRequest(String userpass) {
@@ -251,7 +249,7 @@ public class ServerCommunicator {
 
 	/**
 	 * Given a username and a password, builds the appropriate url to send a GET
-	 * to in order to create a new account
+	 * to in order to delete an account
 	 * 
 	 * @param username
 	 *            User's new account email address/username
@@ -274,12 +272,8 @@ public class ServerCommunicator {
 	}
 
 	/**
-	 * Sends a GET to do authentication
+	 * Builds URL for authentication
 	 * 
-	 * @param username
-	 *            User's new account email address/username
-	 * @param password
-	 *            User's password
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAuthenticateURL() {

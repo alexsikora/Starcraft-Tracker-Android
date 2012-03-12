@@ -86,7 +86,7 @@ public class UnregisterActivity extends DelegateActivity {
 	
 	/**
 	 * Validate the user-entered data fields, and send the info to the server
-	 * to create a new user account if it is allowable.
+	 * to delete a user account if it is allowable.
 	 */
 	private void deleteAccount() {
 		String email = mEmail.getText().toString();
@@ -110,7 +110,7 @@ public class UnregisterActivity extends DelegateActivity {
 	}
 	
 	/**
-	 * Custom handler for the account creation button
+	 * Custom handler for the account deletion button
 	 */
 	private class DeleteAccountHandler implements View.OnClickListener {
 		/**
