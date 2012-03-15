@@ -1,9 +1,9 @@
 package illinois.sweng.sctracker;
 
 
-import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,12 +58,8 @@ public class SC2TrackerActivity extends DelegateActivity {
 		
 		mServerCommunicator.sendAuthenticationRequest(userpass);
 		
-		
-		
-//		HttpClient client = new HttpClient();
-//		client.getParams().setAuthenticationPreemptive(true);
-//		Credentials defaultcreds = new UsernamePasswordCredentials("username", "password");
-//		client.getState().setCredentials(new AuthScope("myhost", 80, AuthScope.ANY_REALM), defaultcreds);
+		Intent i = new Intent(this, HomeActivity.class);
+		startActivity(i);
 		
     }
     
@@ -97,8 +93,13 @@ public class SC2TrackerActivity extends DelegateActivity {
 
 
 	@Override
-	public void handleServerResponse(List<NameValuePair> values) {
+	public void handleServerResponseData(JSONArray values) {
 		mLoginButton.setText(R.string.registerNewAccountSuccess);
 		
+	}
+	
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
 	}
 }

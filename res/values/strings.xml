@@ -30,5 +30,9 @@
 	<string name="serverRegisterURL">/users/register/</string>
 	<string name="serverUnregisterURL">/users/remove/</string>
 	<string name="serverAuthenticateURL">/users/authenticate/</string>
+	<string name="serverGetAllPlayersURL">/players/getall/</string>
+	<string name="homeSearchButtonText">Search</string>
+	<string name="homeLogoutButtonText">Log out</string>
+	<string name="homeUnregisterButtonText">Deactivate Account</string>
 	
 </resources>
