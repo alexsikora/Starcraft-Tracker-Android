@@ -40,13 +40,14 @@ public class PlayerStatusActivity extends Activity {
 	        	player = new JSONObject(data);
 	        	playerData = player.getJSONObject("fields");
 	        	
-	        	handle = playerData.getJSONObject("handle").toString();
+	        	handle = playerData.getString("handle").toString();
 	        	//picture = playerData.getJSONObject("picture").toString();
-	        	name = playerData.getJSONObject("name").toString();
-	        	race = playerData.getJSONObject("race").toString();
-	        	team = playerData.getJSONObject("team").toString();
-	        	nationality = playerData.getJSONObject("nationality").toString();
-	        	elo = playerData.getJSONObject("elo").toString();
+	        	name = playerData.getString("name").toString();
+	        	race = playerData.getString("race").toString();
+	        	team = playerData.getString("team").toString();
+	        	nationality = playerData.getString("nationality").toString();
+	        	elo = playerData.getInt("elo") + "";
+
 	        	
 	        } catch (JSONException e){
 	        	e.printStackTrace();

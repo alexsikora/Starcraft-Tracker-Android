@@ -1,38 +1,29 @@
 package illinois.sweng.sctracker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import android.app.Activity;
+import org.json.JSONArray;
+
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-public class UnregisterActivity extends Activity {
+public class UnregisterActivity extends DelegateActivity {
 	
-	private static final String TAG = "sc2TrackerUnregisterActivity";
+	private static final String TAG = "UnregisterActivity";
 	//TODO establish proper ids when handling possible errors; can't validate the information on own
 	// so have to wait for server
-//	private static final int DIALOG_INVALID_EMAIL_ID = 1;
-//	private static final int DIALOG_INVALID_PASSWORD_ID = 2;
+	private static final int DIALOG_INVALID_EMAIL_ID = 1;
 	
 	private Button mDeleteAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
+	private ServerCommunicator mServerCommunicator;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +33,7 @@ public class UnregisterActivity extends Activity {
         mDeleteAccountButton = (Button) findViewById(R.id.unregisterDeleteButton);
         mEmail = (EditText) findViewById(R.id.emailEditText);
         mPassword = (EditText) findViewById(R.id.passwordTextEdit);
+        mServerCommunicator = new ServerCommunicator(this, TAG);
         
         mDeleteAccountButton.setOnClickListener(new DeleteAccountHandler());
 	}
@@ -81,12 +73,9 @@ public class UnregisterActivity extends Activity {
 		CharSequence message;
 		
 		switch (id) {
-//		case DIALOG_INVALID_EMAIL_ID:
-//			message = getResources().getText(R.string.registerInvalidEmailMessage);
-//			break;
-//		case DIALOG_INVALID_PASSWORD_ID:
-//			message = getResources().getText(R.string.registerNonmatchingPasswords);
-//			break;
+		case DIALOG_INVALID_EMAIL_ID:
+			message = getResources().getText(R.string.registerInvalidEmailMessage);
+			break;
 		default:
 			message = "Please reenter your information";
 		}
@@ -96,87 +85,18 @@ public class UnregisterActivity extends Activity {
 	
 	/**
 	 * Validate the user-entered data fields, and send the info to the server
-	 * to create a new user account if it is allowable.
+	 * to delete a user account if it is allowable.
 	 */
 	private void deleteAccount() {
 		String email = mEmail.getText().toString();
 		String password = mPassword.getText().toString();
 		
-//		if(!validateEmailAddress(email)) {		
-//			showDialog(DIALOG_INVALID_EMAIL_ID);
-//			return;
-//		}
-//		
-//		if(!validatePassword(password, confirmPassword)) {
-//			showDialog(DIALOG_INVALID_PASSWORD_ID);
-//			return;
-//		}
+		if(!validateEmailAddress(email)) {		
+			showDialog(DIALOG_INVALID_EMAIL_ID);
+			return;
+		}
 		
-		sendAccountDeletionRequest(email, password);
-	}
-
-	
-	/**
-	 * Sends a request to the server to create a new user account with the given
-	 * username and password
-	 * @param username Username for the new user account
-	 * @param password Password for the new user account
-	 * @return InputStream of the Http response, null if there was an exception
-	 */
-	private String sendAccountDeletionRequest(String username, String password) {
-		//TODO
-		String urlString = buildAccountDeletionURL(username, password);
-		
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(urlString);
-		
-		try {
-			List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
-			pairs.add(new BasicNameValuePair("username", username));
-			pairs.add(new BasicNameValuePair("password", password));
-			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-			
-			HttpResponse response = httpClient.execute(httpPost);
-			readHttpResponse(response);
-			
-		} catch (ClientProtocolException e) {
-	        // TODO Auto-generated catch block
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	    }
-		
-		return "";
-	}
-
-	/**
-	 * Read the httpResponse and display the appropriate success/failure notification
-	 * @param httpResponse InputStream returned from the web server
-	 */
-	private void readHttpResponse(HttpResponse httpResponse) {
-		// TODO read the response
-	}
-
-	/**
-	 * Given a username and a password, builds the appropriate url to send a GET to
-	 * in order to create a new account
-	 * @param username User's new account email address/username
-	 * @param password User's password
-	 * @return String representing the URL to generate a new user account
-	 */
-	private String buildAccountDeletionURL(String username, String password) {
-		CharSequence baseURL = getResources().getText(R.string.serverURL);
-		CharSequence registerURL = getResources().getText(R.string.serverUnregisterURL);
-		
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(registerURL);
-		sb.append("?username=");
-		sb.append(username);
-		sb.append("&password=");
-		sb.append(password);
-		String urlString = sb.toString();
-		
-		return urlString;
+		mServerCommunicator.sendAccountDeletionRequest(email, password);
 	}
 	
 	/**
@@ -189,7 +109,7 @@ public class UnregisterActivity extends Activity {
 	}
 	
 	/**
-	 * Custom handler for the account creation button
+	 * Custom handler for the account deletion button
 	 */
 	private class DeleteAccountHandler implements View.OnClickListener {
 		/**
@@ -208,6 +128,32 @@ public class UnregisterActivity extends Activity {
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
 		}
-	};
+	}
 
+	@Override
+	public void handleServerError(String message) {
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+	}
+
+	@Override
+	public void handleServerResponseData(JSONArray values) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * Checks whether the email field contains a valid Email address
+	 * @return a boolean that is true if and only if the Email field contains
+	 * 			a valid email address
+	 */
+	private boolean validateEmailAddress(String email) {
+		// This is (obviously) not strong validation, but we aren't too focused on it at the moment
+		return  email.matches(".+@.+");
+	}
+	
 }

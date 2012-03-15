@@ -1,8 +1,8 @@
 package illinois.sweng.sctracker;
 
-import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 public class RegisterActivity extends DelegateActivity {
 	
 	private static final String TAG = "RegisterActivity";
-	private static final int DIALOG_INVALID_EMAIL_ID = 1;
-	private static final int DIALOG_INVALID_PASSWORD_ID = 2;
+	public static final int DIALOG_INVALID_EMAIL_ID = 1;
+	public static final int DIALOG_INVALID_PASSWORD_ID = 2;
 	
 	private Button mCreateAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
@@ -133,6 +133,7 @@ public class RegisterActivity extends DelegateActivity {
 	/**
 	 * Handle an error returned from the server
 	 */
+	@Override
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
@@ -142,8 +143,15 @@ public class RegisterActivity extends DelegateActivity {
 	 * Handle a successful response from the server
 	 * @param values List of key-value pairs containing data from the server
 	 */
-	public void handleServerResponse(List<NameValuePair> values) {
+	@Override
+	public void handleServerResponseData(JSONArray values) {
 		// TODO determine what will be returned and what to do with it
+		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
+	}
+	
+	@Override
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
 	}
 	
 	/**
@@ -164,4 +172,5 @@ public class RegisterActivity extends DelegateActivity {
 			dialog.dismiss();
 		}
 	}
+	
 }

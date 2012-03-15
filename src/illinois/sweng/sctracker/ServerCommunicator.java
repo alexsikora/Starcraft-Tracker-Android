@@ -1,7 +1,9 @@
 package illinois.sweng.sctracker;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,113 +12,316 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.Resources;
+import android.util.Base64;
 import android.util.Log;
 
 public class ServerCommunicator {
 	private final String TAG;
-	DelegateActivity mDelegate;
-	
+	private DelegateActivity mDelegate;
+	private Resources mResources;
 	/**
 	 * Creates a new ServerCommunicator with the given context
-	 * @param delegate Context of the owner of the ServerCommunicator
-	 * @param delegateTag String identifying the owner of this ServerCommunicator
+	 * 
+	 * @param delegate
+	 *            Context of the owner of the ServerCommunicator
+	 * @param delegateTag
+	 *            String identifying the owner of this ServerCommunicator
 	 */
 	public ServerCommunicator(DelegateActivity delegate, String delegateTag) {
 		mDelegate = delegate;
+		mResources = mDelegate.getResources();
 		TAG = "sc2TrackerServerCommunicator-" + delegateTag;
 	}
-	
+
 	/**
 	 * Sends a request to the server to create a new user account with the given
 	 * username and password
-	 * @param username Username for the new user account
-	 * @param password Password for the new user account
+	 * 
+	 * @param username
+	 *            Username for the new user account
+	 * @param password
+	 *            Password for the new user account
+	 * 
 	 */
 	public void sendAccountCreationRequest(String username, String password) {
 		String urlString = buildAccountCreationURL(username, password);
-		
-		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(urlString);
-		
+		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
+		pairs.add(new BasicNameValuePair("username", username));
+		pairs.add(new BasicNameValuePair("password", password));
+
 		try {
-			List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
-			pairs.add(new BasicNameValuePair("username", username));
-			pairs.add(new BasicNameValuePair("password", password));
 			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-			
-			HttpResponse response = httpClient.execute(httpPost);
-			readHttpResponse(response);
-			
-		} catch (ClientProtocolException e) {
-			String message = mDelegate.getResources().getString(R.string.serverProtocolErrorMessage);
+
+		} catch (IOException e) {
+			String message = mResources.getString(R.string.serverIOExceptionMessage);
 			mDelegate.handleServerError(message);
 			Log.e(TAG, message, e);
 			e.printStackTrace();
-	    } catch (IOException e) {
-	    	String message = mDelegate.getResources().getString(R.string.serverIOExceptionMessage);
-	    	mDelegate.handleServerError(message);
-	        Log.e(TAG, message, e);
-	        e.printStackTrace();
-	    }  catch (JSONException e) {
-			String message = mDelegate.getResources().getString(R.string.serverJSONError);
-	    	mDelegate.handleServerError(message);
-	        Log.e(TAG, message, e);
-	        e.printStackTrace();
+		} 
+		
+		Log.d(TAG, "Sending account creation request");
+		executeHttpRequest(httpPost);
+	}
+
+
+
+	/**
+	 * Sends a request to the server to delete a user account with the given
+	 * username and password
+	 * 
+	 * @param username
+	 *            Username for the user account
+	 * @param password
+	 *            Password for the user account
+	 */
+	public void sendAccountDeletionRequest(String username, String password) {
+		String urlString = buildAccountDeletionURL(username, password);
+		HttpPost httpPost = new HttpPost(urlString);
+		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
+		pairs.add(new BasicNameValuePair("username", username));
+		pairs.add(new BasicNameValuePair("password", password));
+		
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(pairs));
+
+		} catch (IOException e) {
+			String message = mResources.getString(R.string.serverIOExceptionMessage);
+			mDelegate.handleServerError(message);
+			Log.e(TAG, message, e);
+			e.printStackTrace();
+		} 
+
+		Log.d(TAG, "Sending account deletion request");
+		executeHttpRequest(httpPost);
+	}
+	
+	/**
+	 * Sends a GET request for authentication to the server with String userpass
+	 * as username:password
+	 * 
+	 * @param userpass
+	 *            String of the form username:password
+	 */
+	public void sendAuthenticationRequest(String userpass) {
+		String urlString = buildAuthenticateURL();
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+
+		Log.d(TAG, "Sending authentication request");
+		executeHttpRequest(request);
+	}
+	
+	/**
+	 * Sends a GET request to retrieve all player data from the server
+	 * @param userpass
+	 *            String of the form username:password
+	 */
+	public void sendGetAllPlayersRequest(String userpass) {
+		String urlString = buildGetAllPlayersURL();
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all players request");
+		executeHttpRequest(request);
+	}
+	
+	/**
+	 * Sends an Http request and handles the response from the server 
+	 * @param request HttpUriRequest to be executed
+	 */
+	private void executeHttpRequest(HttpUriRequest request) {
+		HttpClient httpClient = new DefaultHttpClient();
+		
+		try {
+			HttpResponse response = httpClient.execute(request);
+			readHttpResponse(response);
+
+		} catch (IOException e) {
+			String message = mResources.getString(R.string.serverIOExceptionMessage);
+			mDelegate.handleServerError(message);
+			Log.e(TAG, message, e);
+			e.printStackTrace();
+		} catch (JSONException e) {
+			String message = mResources.getString(R.string.serverJSONError);
+			mDelegate.handleServerError(message);
+			Log.e(TAG, message, e);
+			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Read the httpResponse and display the appropriate success/failure notification
-	 * @param httpResponse InputStream returned from the web server
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * Read the httpResponse and display the appropriate success/failure
+	 * notification
+	 * 
+	 * @param httpResponse
+	 *            InputStream returned from the web server
+	 * @throws IOException
+	 * @throws JSONException
 	 */
-	private void readHttpResponse(HttpResponse httpResponse) throws IOException, JSONException {
+	private void readHttpResponse(HttpResponse httpResponse)
+			throws IOException, JSONException {
+		
 		StatusLine statusLine = httpResponse.getStatusLine();
 		int statusCode = statusLine.getStatusCode();
 		
 		if (statusCode == HttpStatus.SC_OK) {
 			HttpEntity httpEntity = httpResponse.getEntity();
-			InputStream in = httpEntity.getContent();	
+			InputStream in = httpEntity.getContent();			
+			String responseString = readStream(in);
 			
-			// TODO Read the JSON
-			JSONObject json = new JSONObject(in.toString());
+			Log.d("YY", responseString);
+			JSONObject json = new JSONObject(responseString);
 			
-			List<NameValuePair> values = new ArrayList<NameValuePair>();
-			
-			mDelegate.handleServerResponse(values);
+			int responseCode = json.getInt("status_code");
+			Log.d("Status code" + TAG, "" + responseCode);
+			if(responseCode == mResources.getInteger(R.integer.server_OK)) {
+				sendSuccessCallback(json);
+			} else {
+				String errorMessage = json.getString("response");
+				mDelegate.handleServerError(errorMessage);
+			}			
 		} else {
-			// TODO Process the error
+			String response = "" + statusCode;
+			Log.d("ZZ", response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
 		}
 	}
 
 	/**
-	 * Given a username and a password, builds the appropriate url to send a GET to
-	 * in order to create a new account
-	 * @param username User's new account email address/username
-	 * @param password User's password
+	 * When a request is successfully completed, call back to the delegate
+	 * that made the request with the response from the server
+	 * @param json JSONObject returned from the server
+	 */
+	private void sendSuccessCallback(JSONObject json) {
+		// TODO figure out serialization for array
+		String response = json.optString("response");
+		JSONArray array = null;
+		try {
+			array = new JSONArray(response);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(array != null) {
+			mDelegate.handleServerResponseData(array);
+		} else {
+			String message = json.optString("response");
+			mDelegate.handleServerResponseMessage(message);
+		}
+	}
+
+	/**
+	 * Reads an InputStream into a String
+	 * @param in InputStream to be read
+	 * @return String containing the data from the InputStream
+	 * @throws IOException
+	 */
+	private String readStream(InputStream in) throws IOException {
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		StringBuilder total = new StringBuilder();
+		String line;
+		while ((line = r.readLine()) != null) {
+			total.append(line);
+		}
+		
+		return total.toString();
+	}
+
+	/**
+	 * Given a username and a password, builds the appropriate url to send a GET
+	 * to in order to create a new account
+	 * 
+	 * @param username
+	 *            User's new account email address/username
+	 * @param password
+	 *            User's password
 	 * @return String representing the URL to generate a new user account
 	 */
 	private String buildAccountCreationURL(String username, String password) {
-		CharSequence baseURL = mDelegate.getResources().getText(R.string.serverURL);
-		CharSequence registerURL = mDelegate.getResources().getText(R.string.serverRegisterURL);
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence registerURL = mResources.getText(R.string.serverRegisterURL);
 		
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
 		sb.append(registerURL);
 		String urlString = sb.toString();
 		
+		return urlString;
+	}
+
+	/**
+	 * Given a username and a password, builds the appropriate url to send a GET
+	 * to in order to delete an account
+	 * 
+	 * @param username
+	 *            User's new account email address/username
+	 * @param password
+	 *            User's password
+	 * @return String representing the URL to generate a new user account
+	 */
+	private String buildAccountDeletionURL(String username, String password) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence unregisterURL = mResources.getText(R.string.serverUnregisterURL);
+
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(unregisterURL);
+		String urlString = sb.toString();
+
+		return urlString;
+	}
+
+	/**
+	 * Builds URL for authentication
+	 * 
+	 * @return String representing the URL to generate a new user account
+	 */
+	private String buildAuthenticateURL() {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence authURL = mResources.getText(R.string.serverAuthenticateURL);
+
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(authURL);
+		String urlString = sb.toString();
+
+		return urlString;
+	}
+	
+	/**
+	 * Builds URL for getting all player data
+	 * @return String representing the URL to get all player data
+	 */
+	private String buildGetAllPlayersURL() {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getPlayersURL = mResources.getText(R.string.serverGetAllPlayersURL);
+
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getPlayersURL);
+		String urlString = sb.toString();
+
 		return urlString;
 	}
 }
