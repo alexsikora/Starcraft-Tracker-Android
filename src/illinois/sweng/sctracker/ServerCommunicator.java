@@ -214,15 +214,7 @@ public class ServerCommunicator {
 	 * @param json JSONObject returned from the server
 	 */
 	private void sendSuccessCallback(JSONObject json) {
-		// TODO figure out serialization for array
-		String response = json.optString("response");
-		JSONArray array = null;
-		try {
-			array = new JSONArray(response);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JSONArray array = json.optJSONArray("response");
 		if(array != null) {
 			mDelegate.handleServerResponseData(array);
 		} else {

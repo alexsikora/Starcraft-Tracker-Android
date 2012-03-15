@@ -14,6 +14,7 @@ import android.widget.Button;
 
 public class HomeActivity extends DelegateActivity {
 	static String TAG = "homeActivity";
+	static final String PREFS_FILE = "sc2prefs";
 	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
@@ -59,15 +60,19 @@ public class HomeActivity extends DelegateActivity {
 	private class SearchButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Search Button Clicked");
-			onSearchRequested();
+			//onSearchRequested();
 			doStuff();
 		}
 	}
 
 	public void doStuff() {
+		Log.d(TAG, "IN DOSTUFF");
 		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-		String userpass = preferences.getString("userpass", "");
+		String key = getResources().getString(R.string.preferencesUserpass);
+		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
+		Log.d(TAG, "GETTING USERPASS");
+		String userpass = preferences.getString(key, "");
+		Log.d(TAG, userpass+ "!!!!");
 		comm.sendGetAllPlayersRequest(userpass);
 	}
 
