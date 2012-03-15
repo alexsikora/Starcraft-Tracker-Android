@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -64,7 +66,9 @@ public class HomeActivity extends DelegateActivity {
 
 	public void doStuff() {
 		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		comm.sendGetAllPlayersRequest("test@account.com:test");
+		SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+		String userpass = preferences.getString("userpass", "");
+		comm.sendGetAllPlayersRequest(userpass);
 	}
 
 	@Override
