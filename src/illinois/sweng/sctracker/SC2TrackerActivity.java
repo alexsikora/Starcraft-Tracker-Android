@@ -7,6 +7,7 @@ import org.json.JSONArray;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ public class SC2TrackerActivity extends DelegateActivity {
     /** Called when the activity is first created. */
 	
 	static String TAG = "sc2trackerMainActivity";
+	static final String PREFS_FILE = "sc2prefs";
 	private Button mRegisterButton, mLoginButton, mUnregisterButton;
 	private EditText mEmail, mPassword;
 	private ServerCommunicator mServerCommunicator;
@@ -60,9 +62,12 @@ public class SC2TrackerActivity extends DelegateActivity {
 		
 		mServerCommunicator.sendAuthenticationRequest(userpass);
 		
-		Editor e = this.getPreferences(Context.MODE_PRIVATE).edit();
-		e.putString("userpass", userpass);
-		e.commit();
+		String key = getResources().getString(R.string.preferencesUserpass);
+		Log.d(TAG, userpass);
+		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_FILE, 0);
+		Editor editor = sharedPreferences.edit(); 
+		editor.putString(key, userpass);
+		editor.commit();
 		
 		Intent i = new Intent(this, HomeActivity.class);
 		startActivity(i);
