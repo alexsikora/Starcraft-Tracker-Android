@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 
 public class HomeActivity extends DelegateActivity {
 	static String TAG = "homeActivity";
+	static final String PREFS_FILE = "sc2prefs";
 	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
@@ -57,14 +60,20 @@ public class HomeActivity extends DelegateActivity {
 	private class SearchButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Search Button Clicked");
-			onSearchRequested();
+			//onSearchRequested();
 			doStuff();
 		}
 	}
 
 	public void doStuff() {
+		Log.d(TAG, "IN DOSTUFF");
 		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		comm.sendGetAllPlayersRequest("test@account.com:test");
+		String key = getResources().getString(R.string.preferencesUserpass);
+		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
+		Log.d(TAG, "GETTING USERPASS");
+		String userpass = preferences.getString(key, "");
+		Log.d(TAG, userpass+ "!!!!");
+		comm.sendGetAllPlayersRequest(userpass);
 	}
 
 	@Override
