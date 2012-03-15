@@ -5,7 +5,9 @@ package illinois.sweng.sctracker;
 import org.json.JSONArray;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -57,6 +59,10 @@ public class SC2TrackerActivity extends DelegateActivity {
 		String userpass = username + ":" + password;
 		
 		mServerCommunicator.sendAuthenticationRequest(userpass);
+		
+		Editor e = this.getPreferences(Context.MODE_PRIVATE).edit();
+		e.putString("userpass", userpass);
+		e.commit();
 		
 		Intent i = new Intent(this, HomeActivity.class);
 		startActivity(i);
