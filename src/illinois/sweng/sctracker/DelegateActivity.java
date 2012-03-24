@@ -12,7 +12,7 @@ import android.app.Activity;
  * @author Joel Ferm
  *
  */
-public abstract class DelegateActivity extends Activity {
+public interface DelegateActivity {
 	/**
 	 * Handle the error response given by the server, already processed into 
 	 * a single String for display to the user
