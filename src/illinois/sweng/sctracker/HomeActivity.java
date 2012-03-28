@@ -19,6 +19,7 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
+	TrackerDatabaseAdapter mDBAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -32,6 +33,8 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		mSearchButton.setOnClickListener(new SearchButtonHandler());
 		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
+		
+		mDBAdapter = new TrackerDatabaseAdapter(this);
 	}
 	
 	private void launchLogOut(){
@@ -83,16 +86,20 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	@Override
 	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
-		try {
+//		try {
 			Log.d("TAG", "attempting to display");
-			JSONObject player1 = (JSONObject) values.get(0);
+			mDBAdapter.open();
+			mDBAdapter.updateDatabase(values);
+			mDBAdapter.close();
+			
+//			JSONObject player1 = (JSONObject) values.get(0);
 			Intent i = new Intent(this, PlayerStatusActivity.class);
-			i.putExtra("player", player1.toString());
+//			i.putExtra("player", player1.toString());
 			startActivity(i);
-		} catch (JSONException e) {
+//		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			e.printStackTrace();
+//		}
 		
 	}
 
