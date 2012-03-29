@@ -75,13 +75,11 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		comm.sendGetAllPlayersRequest(userpass);
 	}
 
-	@Override
 	public void handleServerError(String message) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		Log.d("TAG", "attempting to display");
 		mDBAdapter.open();
@@ -92,7 +90,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 
 	}
 
-	@Override
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 
