@@ -3,9 +3,6 @@ package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
 
-
-import android.app.Activity;
-
 /**
  * Subclass of Activity that allows for delegate-style callbacks to the Activity
  * 
