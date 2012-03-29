@@ -5,7 +5,7 @@ package illinois.sweng.sctracker;
 import org.json.JSONArray;
 
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SC2TrackerActivity extends DelegateActivity {
+public class SC2TrackerActivity extends Activity implements DelegateActivity {
     /** Called when the activity is first created. */
 	
 	static String TAG = "sc2trackerMainActivity";

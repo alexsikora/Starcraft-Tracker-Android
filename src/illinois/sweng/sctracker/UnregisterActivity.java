@@ -4,6 +4,7 @@ package illinois.sweng.sctracker;
 import org.json.JSONArray;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class UnregisterActivity extends DelegateActivity {
+public class UnregisterActivity extends Activity implements DelegateActivity {
 	
 	private static final String TAG = "UnregisterActivity";
 	//TODO establish proper ids when handling possible errors; can't validate the information on own
