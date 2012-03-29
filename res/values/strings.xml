@@ -34,5 +34,6 @@
 	<string name="homeSearchButtonText">Search</string>
 	<string name="homeLogoutButtonText">Log out</string>
 	<string name="homeUnregisterButtonText">Deactivate Account</string>
+	<string name="preferencesUserpass">userpass</string>
 	
 </resources>

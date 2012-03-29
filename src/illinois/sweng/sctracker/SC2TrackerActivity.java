@@ -5,7 +5,10 @@ package illinois.sweng.sctracker;
 import org.json.JSONArray;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SC2TrackerActivity extends DelegateActivity {
+public class SC2TrackerActivity extends Activity implements DelegateActivity {
     /** Called when the activity is first created. */
 	
 	static String TAG = "sc2trackerMainActivity";
+	static final String PREFS_FILE = "sc2prefs";
 	private Button mRegisterButton, mLoginButton, mUnregisterButton;
 	private EditText mEmail, mPassword;
 	private ServerCommunicator mServerCommunicator;
@@ -57,6 +61,13 @@ public class SC2TrackerActivity extends DelegateActivity {
 		String userpass = username + ":" + password;
 		
 		mServerCommunicator.sendAuthenticationRequest(userpass);
+		
+		String key = getResources().getString(R.string.preferencesUserpass);
+		Log.d(TAG, userpass);
+		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_FILE, 0);
+		Editor editor = sharedPreferences.edit(); 
+		editor.putString(key, userpass);
+		editor.commit();
 		
 		Intent i = new Intent(this, HomeActivity.class);
 		startActivity(i);

@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
@@ -41,7 +42,7 @@ public class ServerCommunicator {
 	 */
 	public ServerCommunicator(DelegateActivity delegate, String delegateTag) {
 		mDelegate = delegate;
-		mResources = mDelegate.getResources();
+		mResources = ((Activity) mDelegate).getResources();
 		TAG = "sc2TrackerServerCommunicator-" + delegateTag;
 	}
 
@@ -214,15 +215,7 @@ public class ServerCommunicator {
 	 * @param json JSONObject returned from the server
 	 */
 	private void sendSuccessCallback(JSONObject json) {
-		// TODO figure out serialization for array
-		String response = json.optString("response");
-		JSONArray array = null;
-		try {
-			array = new JSONArray(response);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JSONArray array = json.optJSONArray("response");
 		if(array != null) {
 			mDelegate.handleServerResponseData(array);
 		} else {
