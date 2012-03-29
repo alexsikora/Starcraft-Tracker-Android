@@ -35,5 +35,11 @@
 	<string name="homeLogoutButtonText">Log out</string>
 	<string name="homeUnregisterButtonText">Deactivate Account</string>
 	<string name="preferencesUserpass">userpass</string>
+	<string name="playerStatusHandle">Handle: </string>
+	<string name="playerStatusName">Name: </string>
+	<string name="playerStatusRace">Race: </string>
+	<string name="playerStatusTeam">Team: </string>
+	<string name="playerStatusNationality">Nationality: </string>
+	<string name="playerStatusElo">Elo: </string>
 	
 </resources>
