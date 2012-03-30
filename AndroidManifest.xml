@@ -44,6 +44,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name="PlayerStatusActivity"></activity>
+        <activity android:name="PlayerListActivity"></activity>
        
     </application>
 
