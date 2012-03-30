@@ -19,7 +19,7 @@ public class HostTabsActivity extends TabActivity{
 		Intent intent; // Reusable Intent for each Tab
 		
 		// Create an Intent to launch an Activity for the tab
-		intent = new Intent().setClass(this, EventsActivity.class);
+		intent = new Intent().setClass(this, HomeActivity.class);
 		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost.newTabSpec("home").setIndicator("Home").setContent(intent);
 		tabHost.addTab(spec);

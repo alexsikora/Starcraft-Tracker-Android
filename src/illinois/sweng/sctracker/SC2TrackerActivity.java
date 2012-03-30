@@ -69,7 +69,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		editor.putString(key, userpass);
 		editor.commit();
 		
-		Intent i = new Intent(this, HomeActivity.class);
+		Intent i = new Intent(this, HostTabsActivity.class);
 		startActivity(i);
 		
     }
