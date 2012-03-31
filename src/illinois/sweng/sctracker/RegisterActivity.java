@@ -133,7 +133,6 @@ public class RegisterActivity extends Activity implements DelegateActivity {
 	/**
 	 * Handle an error returned from the server
 	 */
-	@Override
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
@@ -143,13 +142,11 @@ public class RegisterActivity extends Activity implements DelegateActivity {
 	 * Handle a successful response from the server
 	 * @param values List of key-value pairs containing data from the server
 	 */
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		// TODO determine what will be returned and what to do with it
 		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
 	}
 	
-	@Override
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 	}

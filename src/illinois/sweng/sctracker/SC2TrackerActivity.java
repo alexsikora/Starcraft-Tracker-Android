@@ -69,7 +69,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		editor.putString(key, userpass);
 		editor.commit();
 		
-		Intent i = new Intent(this, HomeActivity.class);
+		Intent i = new Intent(this, HostTabsActivity.class);
 		startActivity(i);
 		
     }
@@ -96,20 +96,17 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		}
 	}
 
-	@Override
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
 	}
 
 
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		mLoginButton.setText(R.string.registerNewAccountSuccess);
 		
 	}
 	
-	@Override
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 	}
