@@ -24,7 +24,7 @@
 	<string name="serverRegisterURL">/users/register/</string>
 	<string name="serverUnregisterURL">/users/remove/</string>
 	<string name="serverAuthenticateURL">/users/authenticate/</string>
-	<string name="serverGetAllPlayersURL">/players/getall/</string>
+	<string name="serverGetAllPlayersURL">/players/allplayers/</string>
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
 		communicating with the server
 	</string>

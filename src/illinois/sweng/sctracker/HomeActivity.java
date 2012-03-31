@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Home activity for the application. Gives access to multiple functions for user. 
+ */
 public class HomeActivity extends Activity implements DelegateActivity {
 	static String TAG = "homeActivity";
 	static final String PREFS_FILE = "sc2prefs";
@@ -33,23 +36,35 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		mDBAdapter = new TrackerDatabaseAdapter(this);
 	}
 
+	/**
+	 * Log the user out; launches the main activity.
+	 */
 	private void launchLogOut() {
 		Intent i = new Intent(this, SC2TrackerActivity.class);
 		startActivity(i);
 	}
 
+	/**
+	 * Launches the unregister activity.
+	 */
 	private void launchUnregister() {
 		Intent i = new Intent(this, UnregisterActivity.class);
 		startActivity(i);
 	}
 
+	/**
+	 * Handler for the logout button. 
+	 */
 	private class LogOutButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "LogOut Button clicked.");
 			launchLogOut();
 		}
 	}
-
+	
+	/**
+	 * Handler for the unregister button. 
+	 */
 	private class UnregisterButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Unreg Button clicked");
@@ -63,11 +78,16 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	private class SearchButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Search Button Clicked");
-			updatePlayersAndViewFirst();
+			updatePlayers();
 		}
 	}
 
-	public void updatePlayersAndViewFirst() {
+	/**
+	 * Makes a request to the server communicator to get all the players.
+	 * In the handleServerResponse, the database will be updated with the result.
+	 */
+	//TODO
+	public void updatePlayers() {
 		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
 		String key = getResources().getString(R.string.preferencesUserpass);
 		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
@@ -81,6 +101,9 @@ public class HomeActivity extends Activity implements DelegateActivity {
 
 	}
 
+	/**
+	 * Handles the response data by launching the player status activity.
+	 */
 	@Override
 	public void handleServerResponseData(JSONArray values) {
 		Log.d("TAG", "attempting to display");
