@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class TrackerDatabaseAdapter {
 	
@@ -97,6 +98,7 @@ public class TrackerDatabaseAdapter {
 	 */
 	public TrackerDatabaseAdapter open() {
 		mDatabase = mDatabaseHelper.getWritableDatabase();
+		Log.d(TAG, "TrackerDatabase opened");
 		return this;
 	}
 	
@@ -105,6 +107,7 @@ public class TrackerDatabaseAdapter {
 	 */
 	public void close() {
 		mDatabaseHelper.close();
+		Log.d(TAG, "TrackerDatabase closed");
 	}
 	
 	/**
@@ -112,9 +115,11 @@ public class TrackerDatabaseAdapter {
 	 * @return A cursor across all players in the database.
 	 */
 	public Cursor getAllPlayers() {
-		return mDatabase.query(DATABASE_PLAYER_TABLE, 
-				new String[] {KEY_ROWID, KEY_NAME, KEY_RACE},
-				null, null, null, null, KEY_NAME+" ASC");
+		String[] columns = new String[] { KEY_ROWID, KEY_PK, KEY_PICTURE,
+				KEY_HANDLE, KEY_NAME, KEY_RACE, KEY_TEAM, KEY_NATIONALITY,
+				KEY_ELO };
+		return mDatabase.query(DATABASE_PLAYER_TABLE, columns, null, null,
+				null, null, KEY_NAME + " ASC");
 	}
 	
 	/**

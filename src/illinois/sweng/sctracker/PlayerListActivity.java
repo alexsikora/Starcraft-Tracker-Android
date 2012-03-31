@@ -31,12 +31,12 @@ public class PlayerListActivity extends ListActivity {
 		startManagingCursor(mPlayerCursor);
 		
 		String fields[] = 	{
+				TrackerDatabaseAdapter.KEY_HANDLE,
+				TrackerDatabaseAdapter.KEY_RACE,
 				TrackerDatabaseAdapter.KEY_ROWID,
 				TrackerDatabaseAdapter.KEY_PK,
 				TrackerDatabaseAdapter.KEY_PICTURE,
-				TrackerDatabaseAdapter.KEY_HANDLE,
 				TrackerDatabaseAdapter.KEY_NAME,
-				TrackerDatabaseAdapter.KEY_RACE,
 				TrackerDatabaseAdapter.KEY_TEAM,
 				TrackerDatabaseAdapter.KEY_NATIONALITY,
 				TrackerDatabaseAdapter.KEY_ELO
