@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 public class PlayerStatusActivity extends Activity {
 	static String TAG = "playerStatusActivity";
-	// String data;
-	// JSONObject player;
-	// JSONObject playerData;
 	TrackerDatabaseAdapter mDBAdapter;
 
 	String handle = "";
