@@ -96,20 +96,17 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		}
 	}
 
-	@Override
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
 	}
 
 
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		mLoginButton.setText(R.string.registerNewAccountSuccess);
 		
 	}
 	
-	@Override
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 	}
