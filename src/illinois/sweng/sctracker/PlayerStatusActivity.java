@@ -60,17 +60,17 @@ public class PlayerStatusActivity extends Activity {
 			nationality = player.getString(6);
 			elo = player.getString(7);
 
-			TextView t = (TextView) findViewById(R.id.textView1);
+			TextView t = (TextView) findViewById(R.id.playerStatusHandleTextView);
 			t.append(handle);
-			t = (TextView) findViewById(R.id.textView2);
+			t = (TextView) findViewById(R.id.playerStatusNameTextView);
 			t.append(name);
-			t = (TextView) findViewById(R.id.textView3);
+			t = (TextView) findViewById(R.id.playerStatusRaceTextView);
 			t.append(race);
-			t = (TextView) findViewById(R.id.textView4);
+			t = (TextView) findViewById(R.id.playerStatusTeamTextView);
 			t.append(team);
-			t = (TextView) findViewById(R.id.textView5);
+			t = (TextView) findViewById(R.id.playerStatusNationalityTextView);
 			t.append(nationality);
-			t = (TextView) findViewById(R.id.textView6);
+			t = (TextView) findViewById(R.id.playerStatusEloTextView);
 			t.append(elo);
 		} else {
 			Log.d("TAG", "OH GOD EMPTY CURSOR");

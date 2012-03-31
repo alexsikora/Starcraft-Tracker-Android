@@ -47,6 +47,7 @@ public class PlayerListActivity extends ListActivity {
 				R.layout.playerlistrow, mPlayerCursor, fields, textViews);
 		
 		setListAdapter(cursorAdapter);
+		// TODO close cursor and db adapter
 	}
 	
 	private void showPlayerStatus(Intent i) {

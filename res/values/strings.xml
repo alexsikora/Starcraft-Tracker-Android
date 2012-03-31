@@ -58,4 +58,10 @@
 	<string name="keyNationality">nationality</string>
 	<string name="keyELO">elo</string>
 	<string name="keyTeam">team</string>
+	<string name="playerStatusHandle">Handle: </string>
+	<string name="playerStatusName">Name: </string>
+	<string name="playerStatusRace">Race: </string>
+	<string name="playerStatusTeam">Team: </string>
+	<string name="playerStatusNationality">Nationality: </string>
+	<string name="playerStatusElo">ELO: </string>
 </resources>
