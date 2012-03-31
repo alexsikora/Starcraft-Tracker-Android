@@ -39,6 +39,10 @@
             android:name="PlayerStatusActivity"
             android:label="@string/playerStatusActivity">
         </activity>
+        <activity
+            android:name="EventStatusActivity"
+            android:label="@string/eventStatusActivity">
+        </activity>
         <activity 
             android:name="PlayersActivity"
             android:label="@string/playersActivity">
@@ -54,6 +58,7 @@
         
         <activity android:name="PlayerStatusActivity"></activity>
         <activity android:name="PlayerListActivity"></activity>
+        <activity android:name="EventListActivity"></activity>
        
     </application>
 
