@@ -11,7 +11,7 @@ public class PlayerStatusActivity extends Activity {
 	// String data;
 	// JSONObject player;
 	// JSONObject playerData;
-	TrackerDatabaseAdapter mDBAdapter;
+	PlayersDBAdapter mDBAdapter;
 
 	String handle = "";
 	Object picture = "";
@@ -48,7 +48,7 @@ public class PlayerStatusActivity extends Activity {
 		// } catch (JSONException e){
 		// e.printStackTrace();
 		// }
-		mDBAdapter = new TrackerDatabaseAdapter(this);
+		mDBAdapter = new PlayersDBAdapter(this);
 		mDBAdapter.open();
 		Cursor player = mDBAdapter.getPlayer(1);
 

@@ -131,18 +131,15 @@ public class UnregisterActivity extends Activity implements DelegateActivity {
 		}
 	}
 
-	@Override
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
 	}
 
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
 	}
-	
-	@Override
+
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 	}

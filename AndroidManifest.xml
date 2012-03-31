@@ -40,18 +40,18 @@
             android:label="@string/playerStatusActivity">
         </activity>
         <activity 
-            android:name="PlayersActivity"
-            android:label="@string/playersActivity">
+            android:name="PlayerListActivity"
+            android:label="@string/playerListActivity">
         </activity>
         <activity 
-            android:name="EventsActivity"
-            android:label="@string/eventsActivity">
+            android:name="EventListActivity"
+            android:label="@string/eventListActivity">
         </activity>
         <activity 
-            android:name="TeamsActivity"
-            android:label="@string/teamsActivity">
+            android:name="TeamListActivity"
+            android:label="@string/teamListActivity">
         </activity>
-       
+        
     </application>
 
 </manifest>

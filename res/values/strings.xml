@@ -46,7 +46,7 @@
 
 	<string name="playerStatusActivity">Player Status</string>
 
-	<string name="playersActivity">Players</string>
-	<string name="teamsActivity">Teams</string>
-	<string name="eventsActivity">Events</string>
+	<string name="playerListActivity">Players</string>
+	<string name="teamListActivity">Teams</string>
+	<string name="eventListActivity">Events</string>
 </resources>

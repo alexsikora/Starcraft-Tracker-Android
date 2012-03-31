@@ -18,7 +18,7 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
-	TrackerDatabaseAdapter mDBAdapter;
+	PlayersDBAdapter mDBAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 
-		mDBAdapter = new TrackerDatabaseAdapter(this);
+		mDBAdapter = new PlayersDBAdapter(this);
 	}
 
 	/**
@@ -95,7 +95,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		comm.sendGetAllPlayersRequest(userpass);
 	}
 
-	@Override
 	public void handleServerError(String message) {
 		// TODO Auto-generated method stub
 
@@ -104,7 +103,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	/**
 	 * Handles the response data by launching the player status activity.
 	 */
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		Log.d("TAG", "attempting to display");
 		mDBAdapter.open();
@@ -115,7 +113,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 
 	}
 
-	@Override
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 
