@@ -1,9 +1,9 @@
 package illinois.sweng.sctracker;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 public class PlayerStatusActivity extends Activity {
@@ -26,56 +26,45 @@ public class PlayerStatusActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.playerstatus);
 
-		// Bundle extras = getIntent().getExtras();
-		// if(extras == null)
-		// return; // might want to log here - indicate extras was never
-		// assigned any data
+		getDataFromIntent();
+		
+		TextView t = (TextView) findViewById(R.id.playerStatusHandleTextView);
+		t.append(handle);
+		t = (TextView) findViewById(R.id.playerStatusNameTextView);
+		t.append(name);
+		t = (TextView) findViewById(R.id.playerStatusRaceTextView);
+		t.append(race);
+		t = (TextView) findViewById(R.id.playerStatusTeamTextView);
+		t.append(team);
+		t = (TextView) findViewById(R.id.playerStatusNationalityTextView);
+		t.append(nationality);
+		t = (TextView) findViewById(R.id.playerStatusEloTextView);
+		t.append(elo);
+	}
 
-		// else {
-		// data = extras.getString("player");
-		// try{
-		// player = new JSONObject(data);
-		// playerData = player.getJSONObject("fields");
-		//
-		// handle = playerData.getString("handle").toString();
-		// //picture = playerData.getJSONObject("picture").toString();
-		// name = playerData.getString("name").toString();
-		// race = playerData.getString("race").toString();
-		// team = playerData.getString("team").toString();
-		// nationality = playerData.getString("nationality").toString();
-		// elo = playerData.getInt("elo") + "";
-		//
-		// } catch (JSONException e){
-		// e.printStackTrace();
-		// }
-		mDBAdapter = new TrackerDatabaseAdapter(this);
-		mDBAdapter.open();
-		Cursor player = mDBAdapter.getPlayer(1);
-
-		if (player.moveToFirst()) {
-			handle = player.getString(2);
-			name = player.getString(3);
-			race = player.getString(4);
-			team = player.getString(5);
-			nationality = player.getString(6);
-			elo = player.getString(7);
-
-			TextView t = (TextView) findViewById(R.id.playerStatusHandleTextView);
-			t.append(handle);
-			t = (TextView) findViewById(R.id.playerStatusNameTextView);
-			t.append(name);
-			t = (TextView) findViewById(R.id.playerStatusRaceTextView);
-			t.append(race);
-			t = (TextView) findViewById(R.id.playerStatusTeamTextView);
-			t.append(team);
-			t = (TextView) findViewById(R.id.playerStatusNationalityTextView);
-			t.append(nationality);
-			t = (TextView) findViewById(R.id.playerStatusEloTextView);
-			t.append(elo);
-		} else {
-			Log.d("TAG", "OH GOD EMPTY CURSOR");
-		}
-
-		mDBAdapter.close();
+	/**
+	 * Retrieve field data from the intent used to start this activity
+	 */
+	private void getDataFromIntent() {
+		Intent intent = getIntent();
+		Resources res = getResources();
+		
+		String handleKey = res.getString(R.string.keyHandle);
+		handle = intent.getStringExtra(handleKey);
+		
+		String nameKey = res.getString(R.string.keyName);
+		name = intent.getStringExtra(nameKey);
+		
+		String raceKey = res.getString(R.string.keyRace);
+		race = intent.getStringExtra(raceKey);
+		
+		String teamKey = res.getString(R.string.keyTeam);
+		team = intent.getStringExtra(teamKey);
+		
+		String nationalityKey = res.getString(R.string.keyNationality);
+		nationality = intent.getStringExtra(nationalityKey);
+		
+		String eloKey = res.getString(R.string.keyELO);
+		elo = intent.getIntExtra(eloKey, 0) + "";
 	}
 }
