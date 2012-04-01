@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class EventListActivity extends ListActivity{
-	private EventDatabaseAdapter mEventDBAdapter;
+	private DBAdapter mDBAdapter;
 	private Cursor mEventCursor;
 	
 	@Override
@@ -21,16 +21,16 @@ public class EventListActivity extends ListActivity{
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new EventListClickListener());
 		
-		mEventDBAdapter = new EventDatabaseAdapter(this);
-		mEventDBAdapter.open();
+		mDBAdapter = new DBAdapter(this);
+		mDBAdapter.open();
 		
-		mEventCursor = mEventDBAdapter.getAllEvents();
+		mEventCursor = mDBAdapter.getAllEvents();
 		startManagingCursor(mEventCursor);
 		
 		String fields[] = 	{
-								EventDatabaseAdapter.KEY_NAME, 
-								EventDatabaseAdapter.KEY_STARTDATE,
-								EventDatabaseAdapter.KEY_ENDDATE
+								DBAdapter.KEY_NAME, 
+								DBAdapter.KEY_STARTDATE,
+								DBAdapter.KEY_ENDDATE
 							};
 		
 		int textViews[] = {R.id.eventListName, R.id.eventListStartDate, R.id.eventListEndDate};

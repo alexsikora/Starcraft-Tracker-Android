@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class EventStatusActivity extends Activity {
 	static String TAG = "eventStatusActivity";
-	EventDatabaseAdapter mEventDBAdapter;
+	DBAdapter mDBAdapter;
 
 	Object picture = "";
 	String name = "";
@@ -22,16 +22,16 @@ public class EventStatusActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.eventstatus);
-		mEventDBAdapter = new EventDatabaseAdapter(this);
-		mEventDBAdapter.open();
-		Cursor event = mEventDBAdapter.getEvent(1);
+		mDBAdapter = new DBAdapter(this);
+		mDBAdapter.open();
+		Cursor event = mDBAdapter.getEvent(1);
 
 		if(event.moveToFirst()) {
 			name = event.getString(2);
 			startdate = event.getString(3);
 			enddate = event.getString(4);
 
-			mEventDBAdapter.close();
+			mDBAdapter.close();
 
 			TextView t = (TextView)findViewById(R.id.textView1);
 			t.append(name);

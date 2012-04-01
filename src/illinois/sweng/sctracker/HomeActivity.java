@@ -37,6 +37,8 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 
+		this.deleteDatabase("TrackerDatabase");
+		
 		mDBAdapter = new DBAdapter(this);
 		
 		//Update the database
@@ -88,6 +90,7 @@ public class HomeActivity extends Activity implements DelegateActivity {
 			Log.d(TAG, "Search Button Clicked");
 			updatePlayers();
 			updateTeams();
+			updateEvents();
 		}
 	}
 
@@ -113,6 +116,15 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		comm.sendGetAllTeamsRequest(userpass);
 	}
 
+	//TODO: updateEvents()
+	public void updateEvents() {
+		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
+		String key = getResources().getString(R.string.preferencesUserpass);
+		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
+		String userpass = preferences.getString(key, "");
+		comm.sendGetAllEventsRequest(userpass);
+	}
+	
 	public void handleServerError(String message) {
 		// TODO Auto-generated method stub
 
@@ -133,6 +145,11 @@ public class HomeActivity extends Activity implements DelegateActivity {
 			if (firstEntry.getString("model").equals("players.team")) {
 				mDBAdapter.open();
 				mDBAdapter.updateTeamTable(values);
+				mDBAdapter.close();
+			}
+			if (firstEntry.getString("model").equals("events.event")) {
+				mDBAdapter.open();
+				mDBAdapter.updateEventTable(values);
 				mDBAdapter.close();
 			}
 		} catch (JSONException e) {
