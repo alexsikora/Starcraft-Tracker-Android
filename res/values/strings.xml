@@ -24,7 +24,8 @@
 	<string name="serverRegisterURL">/users/register/</string>
 	<string name="serverUnregisterURL">/users/remove/</string>
 	<string name="serverAuthenticateURL">/users/authenticate/</string>
-	<string name="serverGetAllPlayersURL">/players/getall/</string>
+	<string name="serverGetAllPlayersURL">/players/allplayers/</string>
+	<string name="serverGetAllTeamsURL">/players/allteams/</string>
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
 		communicating with the server
 	</string>
@@ -53,9 +54,13 @@
 
 	<string name="playerStatusActivity">Player Status</string>
 
-	<string name="playersActivity">Players</string>
-	<string name="teamsActivity">Teams</string>
-	<string name="eventsActivity">Events</string>
+
+	
 	<string name="eventStatusActivity">EventStatusActivity</string>
+
+
+	<string name="playerListActivity">Players</string>
+	<string name="teamListActivity">Teams</string>
+	<string name="eventListActivity">Events</string>
 
 </resources>

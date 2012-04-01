@@ -25,20 +25,19 @@ public class HostTabsActivity extends TabActivity{
 		tabHost.addTab(spec);
 		
 		// Rinse and Repeat
-		intent = new Intent().setClass(this, EventsActivity.class);
-		spec = tabHost.newTabSpec("events").setIndicator("Events").setContent(intent);
-		tabHost.addTab(spec);
-
-		intent = new Intent().setClass(this, TeamsActivity.class);
-		spec = tabHost.newTabSpec("teams").setIndicator("Teams").setContent(intent);
-		tabHost.addTab(spec);
-		
 		intent = new Intent().setClass(this, PlayerListActivity.class);
 		spec = tabHost.newTabSpec("players").setIndicator("Players").setContent(intent);
 		tabHost.addTab(spec);
+
+		intent = new Intent().setClass(this, TeamListActivity.class);
+		spec = tabHost.newTabSpec("teams").setIndicator("Teams").setContent(intent);
+		tabHost.addTab(spec);
+		
+		intent = new Intent().setClass(this, EventListActivity.class);
+		spec = tabHost.newTabSpec("events").setIndicator("Events").setContent(intent);
+		tabHost.addTab(spec);
 		
 		// This should set the tab, upon opening, to the home screen. 
-		// Not sure if it's 1 to n or 0 to n
 		tabHost.setCurrentTab(0);
 	}
 

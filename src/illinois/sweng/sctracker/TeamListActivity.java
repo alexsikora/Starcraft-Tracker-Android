@@ -1,5 +1,6 @@
 package illinois.sweng.sctracker;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,10 +10,12 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class PlayerListActivity extends ListActivity {
 
-	private DBAdapter mDatabaseAdapter;
-	private Cursor mPlayerCursor;
+public class TeamListActivity extends ListActivity {
+	static String TAG = "teamsActivity";
+
+	private DBAdapter mDBAdapter;
+	private Cursor mTeamCursor;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -20,35 +23,37 @@ public class PlayerListActivity extends ListActivity {
 		
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
-		listView.setOnItemClickListener(new PlayerListClickListener());
+		listView.setOnItemClickListener(new TeamListClickListener());
 		
-		mDatabaseAdapter = new DBAdapter(this);
-		mDatabaseAdapter.open();
+		mDBAdapter = new DBAdapter(this);
+		mDBAdapter.open();
 		
-		mPlayerCursor = mDatabaseAdapter.getAllPlayers();
-		startManagingCursor(mPlayerCursor);
+		mTeamCursor = mDBAdapter.getAllTeams();
+		startManagingCursor(mTeamCursor);
 		
 		String fields[] = 	{
 								DBAdapter.KEY_NAME, 
-								DBAdapter.KEY_RACE
+								DBAdapter.KEY_TAG
 							};
-		int textViews[] = {R.id.playerListName, R.id.playerListRace};
+		int textViews[] = {R.id.teamListName, R.id.teamListTag};
 		
 		CursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
-				R.layout.playerlistrow, mPlayerCursor, fields, textViews);
+				R.layout.teamlistrow, mTeamCursor, fields, textViews);
 		
 		setListAdapter(cursorAdapter);
 	}
 	
-	private class PlayerListClickListener implements AdapterView.OnItemClickListener {
+	private class TeamListClickListener implements AdapterView.OnItemClickListener {
 
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			// TODO move cursor to this position and send data to player status activity
 			// pack data into an intent to send
-			mPlayerCursor.moveToPosition(position);
+			mTeamCursor.moveToPosition(position);
 			
 			
 		}
 		
 	}
+
+
 }

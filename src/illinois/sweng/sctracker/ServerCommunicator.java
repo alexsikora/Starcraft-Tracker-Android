@@ -146,6 +146,18 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendGetAllTeamsRequest(String userpass) {
+		String urlString = buildGetAllTeamsURL();
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all teams request");
+		executeHttpRequest(request);
+	}
+	
 	/**
 	 * Sends an Http request and handles the response from the server 
 	 * @param request HttpUriRequest to be executed
@@ -315,6 +327,16 @@ public class ServerCommunicator {
 		sb.append(getPlayersURL);
 		String urlString = sb.toString();
 
+		return urlString;
+	}
+	
+	private String buildGetAllTeamsURL() {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getTeamsURL = mResources.getText(R.string.serverGetAllTeamsURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getTeamsURL);
+		String urlString = sb.toString();
 		return urlString;
 	}
 }
