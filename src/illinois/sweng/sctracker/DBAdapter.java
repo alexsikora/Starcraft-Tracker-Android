@@ -25,11 +25,14 @@ public class DBAdapter {
 	public static final String KEY_NATIONALITY = "nationality";
 	public static final String KEY_ELO = "elo";
 	public static final String KEY_TAG = "tag";
+	public static final String KEY_STARTDATE = "startdate";
+	public static final String KEY_ENDDATE = "enddate";
 	
 	//DATABASE INFORMATION
 	private static final String DATABASE_NAME = "TrackerDatabase";
 	public static final String DATABASE_PLAYER_TABLE = "players";
 	public static final String DATABASE_TEAM_TABLE = "teams";
+	private static final String DATABASE_EVENT_TABLE = "events";
 	private static final int DATABASE_VERSION = 1;
 
 	//TABLE CREATION STRINGS
@@ -50,6 +53,15 @@ public class DBAdapter {
 			+ KEY_ROWID + " integer primary key autoincrement, "
 			+ KEY_PK + " integer, " + KEY_NAME
 			+ " text not null, " + KEY_TAG + " text not null);";
+	
+	private static final String CREATE_EVENT_TABLE =
+			"create table " + DATABASE_EVENT_TABLE + " ( " 
+			+ KEY_ROWID + " integer primary key autoincrement, "
+			+ KEY_PK + " integer, "
+			+ KEY_PICTURE + " text, "
+			+ KEY_NAME + " text not null, "
+			+ KEY_STARTDATE + " text not null, "
+			+ KEY_ENDDATE + " text not null);";
 
 	private final Context mContext;
 	private DatabaseHelper mDatabaseHelper;
@@ -69,6 +81,7 @@ public class DBAdapter {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_PLAYER_TABLE);
 			db.execSQL(CREATE_TEAM_TABLE);
+			db.execSQL(CREATE_EVENT_TABLE);
 		}
 
 		@Override
@@ -282,4 +295,127 @@ public class DBAdapter {
 			return false;
 		}
 	}
+	
+
+	/**
+	 * Retrieves a cursor across all the events in the database.
+	 * @return A cursor across all events in the database.
+	 */
+	public Cursor getAllEvents() {
+		return mDatabase.query(DATABASE_EVENT_TABLE, 
+				new String[] {KEY_ROWID, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
+				null, null, null, null, KEY_NAME+" ASC");
+	}
+
+	/**
+	 * getEvent returns a event from the database based upon the supplied rowid.
+	 * @param rowid Integer specifying the rowid of the event in the database.
+	 * @return A cursor over the event returned from the database.
+	 */
+	public Cursor getEvent(int rowid) {
+		return mDatabase.query(DATABASE_EVENT_TABLE,
+				new String[] {KEY_ROWID, KEY_PICTURE, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
+				KEY_ROWID + "=" + rowid, null, null, null, null);
+	}
+
+	/**
+	 * getEventByEK finds an event based upon their (as guaranteed by the server)
+	 * unique EK.
+	 * @param pk The integer PK that uniquely identifies events (As used in serverside database).
+	 * @return A cursor over the event found.
+	 */
+	public Cursor getEventByEK(int pk) {
+		return mDatabase.query(DATABASE_EVENT_TABLE,
+				new String[] {KEY_ROWID, KEY_PICTURE, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
+				KEY_PK + "=" + pk, null, null, null, null);
+	}
+
+	/**
+	 * Updates an individual event's data with the database.
+	 * @param pk The integer PK that can be used to uniquely identify events (as guaranteed by server).
+	 * @param eventData The JSONObject containing the data about the events.
+	 * @return Boolean; true if the operation has succeeded, false otherwise.
+	 */
+	public boolean updateEvent(int pk, JSONObject eventData) {
+		ContentValues data = new ContentValues();
+		try{
+			//TODO: update with actual picture
+//			data.put(KEY_PICTURE, eventData.getString("picture").toString());
+			data.put(KEY_PICTURE, "picture");
+			data.put(KEY_NAME, eventData.getString("name").toString());
+			data.put(KEY_STARTDATE, eventData.getString("start_date").toString());
+			data.put(KEY_ENDDATE, eventData.getString("end_date").toString());
+
+			return mDatabase.update(DATABASE_EVENT_TABLE, data, 
+					KEY_PK + "=" + pk, null) > 0;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Updates the data in the database based upon the events supplied by the server.
+	 * @param events A JSONArray containing the JSONObjects for each event.
+	 * @return True if the operation succeeded, false otherwise.
+	 */
+	public boolean updateEventTable(JSONArray events) {
+		int numEvents = events.length();
+		try{
+			for(int i = 0; i < numEvents; i++) {
+				JSONObject event = (JSONObject) events.get(i);
+				int pk = event.getInt("pk");
+				if (hasEvent(pk)) {
+					updateEvent(pk, event);
+				} else {
+					insertEvent(pk, event);
+				}
+			}
+			return true;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	/**
+	 * Checks to see whether an event with the supplied ek exists in the database.
+	 * @param ek An integer that uniquely identifies a player (as guaranteed by the server).
+	 * @return True if the database contains the player; false otherwise.
+	 */
+	public boolean hasEvent(int pk) {
+		Cursor eventCursor = mDatabase.query(DATABASE_EVENT_TABLE,
+				new String[] {KEY_ROWID, KEY_PICTURE, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
+				KEY_PK + "=" + pk, null, null, null, null);
+		return (eventCursor.getCount() == 1);
+	}
+
+	/**
+	 * Inserts an event into the database.
+	 * @param pk Integer that uniquely identifies an event (as guaranteed by the server).
+	 * @param eventData The JSONObject containing the information about the event to insert.
+	 * @return True if the operation succeeds; false otherwise.
+	 */
+	public boolean insertEvent(int pk, JSONObject eventData) {
+		ContentValues data = new ContentValues();
+		try{
+			data.put(KEY_PK, pk);
+			//TODO: use actual picture
+//			data.put(KEY_PICTURE, eventData.getString("picture").toString());
+			data.put(KEY_PICTURE, "picture");
+			data.put(KEY_NAME, eventData.getString("name").toString());
+			data.put(KEY_STARTDATE, eventData.getString("start_date").toString());
+			data.put(KEY_ENDDATE, eventData.getString("end_date").toString());
+
+			return mDatabase.insert(DATABASE_EVENT_TABLE, null, data) > 0; 
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
+	
+	
 }

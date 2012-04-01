@@ -158,6 +158,18 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendGetAllEventsRequest(String userpass) {
+		String urlString = buildGetAllEventsURL();
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
 	/**
 	 * Sends an Http request and handles the response from the server 
 	 * @param request HttpUriRequest to be executed
@@ -336,6 +348,16 @@ public class ServerCommunicator {
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
 		sb.append(getTeamsURL);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildGetAllEventsURL() {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getEventsURL = mResources.getText(R.string.serverGetAllEventsURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getEventsURL);
 		String urlString = sb.toString();
 		return urlString;
 	}
