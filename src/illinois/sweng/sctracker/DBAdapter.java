@@ -229,8 +229,6 @@ public class DBAdapter {
 		}
 	}
 	
-	
-	
 	public Cursor getTeam(int rowid) {
 		return mDatabase.query(DATABASE_TEAM_TABLE,
 				new String[] {KEY_ROWID, KEY_PK, KEY_NAME,
