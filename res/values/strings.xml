@@ -65,4 +65,5 @@
 	<string name="playerStatusNationality">Nationality: </string>
 	<string name="playerStatusElo">ELO: </string>
 	<string name="playerStatusFavorite">Player Favorited</string>
+	<string name="playerStatusImageContentDescription">Portrait of the selected player</string>
 </resources>

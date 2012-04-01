@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/playerStatusPortrait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher" 
+        android:contentDescription="@string/playerStatusImageContentDescription"/>
+
     <TextView
         android:id="@+id/playerStatusHandleTextView"
         android:layout_width="wrap_content"

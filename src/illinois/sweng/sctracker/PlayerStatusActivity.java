@@ -4,19 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PlayerStatusActivity extends Activity {
-	static String TAG = "playerStatusActivity";
-	TrackerDatabaseAdapter mDBAdapter;
+	private static String TAG = "playerStatusActivity";
 
-	String handle = "";
-	Object picture = "";
-	String name = "";
-	String race = "";
-	String team = "";
-	String nationality = "";
-	String elo;
+	private String handle = "";
+	private String picture = "";
+	private String name = "";
+	private String race = "";
+	private String team = "";
+	private String nationality = "";
+	private String elo;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,9 @@ public class PlayerStatusActivity extends Activity {
 		t.append(nationality);
 		t = (TextView) findViewById(R.id.playerStatusEloTextView);
 		t.append(elo);
+		
+		ImageView portraitView = (ImageView) findViewById(R.id.playerStatusPortrait);
+		Uri imageUri = new Uri();
 	}
 
 	/**
