@@ -42,12 +42,25 @@
 	<string name="search_hint">Search players, teams, events</string>
 
 	<string name="preferencesUserpass">userpass</string>
+	<string name="playerStatusHandle">Handle: </string>
+	<string name="playerStatusName">Name: </string>
+	<string name="playerStatusRace">Race: </string>
+	<string name="playerStatusTeam">Team: </string>
+	<string name="playerStatusNationality">Nationality: </string>
+	<string name="playerStatusElo">Elo: </string>
+	
 
 	<string name="hostTabsActivity">SC2Tracker</string>
 
 	<string name="playerStatusActivity">Player Status</string>
 
+
+	
+	<string name="eventStatusActivity">EventStatusActivity</string>
+
+
 	<string name="playerListActivity">Players</string>
 	<string name="teamListActivity">Teams</string>
 	<string name="eventListActivity">Events</string>
+
 </resources>
