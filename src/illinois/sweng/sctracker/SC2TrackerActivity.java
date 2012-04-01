@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * Main activity for the application; first activity launched. 
+ */
 public class SC2TrackerActivity extends Activity implements DelegateActivity {
     /** Called when the activity is first created. */
 	
@@ -44,17 +47,25 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         mServerCommunicator = new ServerCommunicator(this, TAG);
     }
    
-    
+    /**
+     * Launches the registration activity.
+     */
     private void launchRegister() {
     	Intent i = new Intent(this, RegisterActivity.class);
 		startActivity(i);
     }
     
+    /**
+     * Launches the unregister activity
+     */
     private void launchUnregister() {
     	Intent i = new Intent(this, UnregisterActivity.class);
 		startActivity(i);
     }
     
+    /**
+     * Attempts to login the user.
+     */
     private void loginUser() {
 		String username = mEmail.getText().toString();
 		String password = mPassword.getText().toString();
@@ -69,7 +80,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		editor.putString(key, userpass);
 		editor.commit();
 		
-		Intent i = new Intent(this, HomeActivity.class);
+		Intent i = new Intent(this, HostTabsActivity.class);
 		startActivity(i);
 		
     }
@@ -96,20 +107,17 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		}
 	}
 
-	@Override
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
 	}
 
 
-	@Override
 	public void handleServerResponseData(JSONArray values) {
 		mLoginButton.setText(R.string.registerNewAccountSuccess);
 		
 	}
 	
-	@Override
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 	}

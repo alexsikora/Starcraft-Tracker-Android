@@ -30,21 +30,32 @@
         <activity
             android:name="HomeActivity" 
             android:label="@string/homeActivity" >
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="SearchActivity" />
         </activity>
         <activity 
-            android:name="SearchActivity" >
-            <intent-filter >
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+            android:name="HostTabsActivity" 
+            android:label="@string/hostTabsActivity">
         </activity>
-        <activity android:name="PlayerStatusActivity"></activity>
-       
+        <activity 
+            android:name="PlayerStatusActivity"
+            android:label="@string/playerStatusActivity">
+        </activity>
+        <activity
+            android:name="EventStatusActivity"
+            android:label="@string/eventStatusActivity">
+        </activity>
+        <activity 
+            android:name="PlayerListActivity"
+            android:label="@string/playerListActivity">
+        </activity>
+        <activity 
+            android:name="EventListActivity"
+            android:label="@string/eventListActivity">
+        </activity>
+        <activity 
+            android:name="TeamListActivity"
+            android:label="@string/teamListActivity">
+        </activity>
+        
     </application>
 
 </manifest>
