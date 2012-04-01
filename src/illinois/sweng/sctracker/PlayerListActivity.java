@@ -119,4 +119,10 @@ public class PlayerListActivity extends ListActivity {
 			i.putExtra(key, pk);
 		}
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mDatabaseAdapter.close();
+	}
 }
