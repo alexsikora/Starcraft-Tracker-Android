@@ -27,6 +27,12 @@
 	<string name="serverGetAllPlayersURL">/players/allplayers/</string>
 	<string name="serverGetAllTeamsURL">/players/allteams/</string>
 	<string name="serverGetAllEventsURL">/events/allevents/</string>
+	<string name="serverFavoritePlayerURL">/users/addfavoriteplayer/?id=</string>
+	<string name="serverFavoriteTeamURL">/users/addfavoriteteam/?id=</string>
+	<string name="serverFavoriteEventURL">/users/addfavoriteevent/?id=</string>
+	<string name="serverUnfavoritePlayerURL">/users/removefavoriteplayer/?id=</string>
+	<string name="serverUnfavoriteTeamURL">/users/removefavoriteteam/?id=</string>
+	<string name="serverUnfavoriteEventURL">/users/removefavoriteevent/?id=</string>
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
 		communicating with the server
 	</string>

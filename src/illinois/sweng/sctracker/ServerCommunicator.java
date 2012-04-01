@@ -170,6 +170,78 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendFavoritePlayerRequest(String userpass, String playerPK) {
+		String urlString = buildFavoritePlayerURL(playerPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
+	public void sendFavoriteTeamRequest(String userpass, String teamPK) {
+		String urlString = buildFavoriteTeamURL(teamPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
+	public void sendFavoriteEventRequest(String userpass, String eventPK) {
+		String urlString = buildFavoriteEventURL(eventPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
+	public void sendUnfavoritePlayerRequest(String userpass, String playerPK) {
+		String urlString = buildUnfavoritePlayerURL(playerPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
+	public void sendUnfavoriteTeamRequest(String userpass, String teamPK) {
+		String urlString = buildUnfavoriteTeamURL(teamPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
+	public void sendUnfavoriteEventRequest(String userpass, String eventPK) {
+		String urlString = buildUnfavoriteEventURL(eventPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+
 	/**
 	 * Sends an Http request and handles the response from the server 
 	 * @param request HttpUriRequest to be executed
@@ -361,4 +433,71 @@ public class ServerCommunicator {
 		String urlString = sb.toString();
 		return urlString;
 	}
+	
+	private String buildFavoritePlayerURL(String playerPK) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence favoritePlayerURL = mResources.getText(R.string.serverFavoritePlayerURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(favoritePlayerURL);
+		sb.append(playerPK);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildFavoriteTeamURL(String teamPK) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence favoriteTeamURL = mResources.getText(R.string.serverFavoriteTeamURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(favoriteTeamURL);
+		sb.append(teamPK);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildFavoriteEventURL(String eventPK) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence favoriteEventURL = mResources.getText(R.string.serverFavoriteEventURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(favoriteEventURL);
+		sb.append(eventPK);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildUnfavoritePlayerURL(String playerPK) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence unfavoritePlayerURL = mResources.getText(R.string.serverUnfavoritePlayerURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(unfavoritePlayerURL);
+		sb.append(playerPK);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildUnfavoriteTeamURL(String teamPK) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence unfavoriteTeamURL = mResources.getText(R.string.serverUnfavoriteTeamURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(unfavoriteTeamURL);
+		sb.append(teamPK);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildUnfavoriteEventURL(String eventPK) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverUnfavoriteEventURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(unfavoriteEventURL);
+		sb.append(eventPK);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
 }
