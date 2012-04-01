@@ -1,6 +1,5 @@
 package illinois.sweng.sctracker;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
