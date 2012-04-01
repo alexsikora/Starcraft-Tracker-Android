@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -13,7 +14,7 @@ import android.widget.SimpleCursorAdapter;
 
 public class PlayerListActivity extends ListActivity {
 
-	private TrackerDatabaseAdapter mDatabaseAdapter;
+	private DBAdapter mDatabaseAdapter;
 	private Cursor mPlayerCursor;
 	
 	@Override
@@ -24,7 +25,7 @@ public class PlayerListActivity extends ListActivity {
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new PlayerListClickListener());
 		
-		mDatabaseAdapter = new TrackerDatabaseAdapter(this);
+		mDatabaseAdapter = new DBAdapter(this);
 		mDatabaseAdapter.open();
 		
 		mPlayerCursor = mDatabaseAdapter.getAllPlayers();
@@ -104,6 +105,7 @@ public class PlayerListActivity extends ListActivity {
 		private void putStringExtra(String key, Intent i) {
 			int index = mPlayerCursor.getColumnIndexOrThrow(key);
 			String name = mPlayerCursor.getString(index);
+			Log.d("String Extra", name);
 			i.putExtra(key, name);
 		}
 		
