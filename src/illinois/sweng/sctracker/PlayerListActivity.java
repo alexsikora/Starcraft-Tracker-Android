@@ -109,7 +109,6 @@ public class PlayerListActivity extends ListActivity {
 		private void putStringExtra(String key, Intent i) {
 			int index = mPlayerCursor.getColumnIndexOrThrow(key);
 			String name = mPlayerCursor.getString(index);
-			Log.d("String Extra", name);
 			i.putExtra(key, name);
 		}
 		
