@@ -3,7 +3,9 @@ package illinois.sweng.sctracker;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,8 +40,9 @@ public class PlayerStatusActivity extends Activity {
 		t = (TextView) findViewById(R.id.playerStatusEloTextView);
 		t.append(elo);
 		
+		Log.d(TAG, "image uri: " + picture);
 		ImageView portraitView = (ImageView) findViewById(R.id.playerStatusPortrait);
-		Uri imageUri = new Uri();
+		portraitView.setImageURI(Uri.parse(picture));
 	}
 
 	/**
