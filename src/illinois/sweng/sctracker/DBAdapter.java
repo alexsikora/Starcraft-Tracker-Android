@@ -196,7 +196,10 @@ public class DBAdapter {
 				new String[] {KEY_ROWID, KEY_PICTURE, KEY_HANDLE, KEY_NAME,
 				KEY_RACE, KEY_TEAM, KEY_NATIONALITY, KEY_ELO},
 			KEY_PK + "=" + pk, null, null, null, null);
-		return (playerCursor.getCount() == 1);
+		
+		int playerCount = playerCursor.getCount();
+		playerCursor.close();
+		return (playerCount == 1);
 	}
 	
 	/**
@@ -269,7 +272,10 @@ public class DBAdapter {
 		Cursor teamCursor = mDatabase.query(DATABASE_TEAM_TABLE,
 				new String[] {KEY_ROWID, KEY_PK, KEY_NAME, KEY_TAG},
 			KEY_PK + "=" + pk, null, null, null, null);
-		return (teamCursor.getCount() == 1);
+		
+		int teamCount = teamCursor.getCount();
+		teamCursor.close();
+		return (teamCount == 1);
 	}
 	
 	public boolean updateTeam(int pk, JSONObject teamData) {
@@ -390,7 +396,10 @@ public class DBAdapter {
 		Cursor eventCursor = mDatabase.query(DATABASE_EVENT_TABLE,
 				new String[] {KEY_ROWID, KEY_PICTURE, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
 				KEY_PK + "=" + pk, null, null, null, null);
-		return (eventCursor.getCount() == 1);
+		int eventCount = eventCursor.getCount();
+		eventCursor.close();
+
+		return eventCount == 1;
 	}
 
 	/**

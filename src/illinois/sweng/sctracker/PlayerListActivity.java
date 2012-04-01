@@ -14,12 +14,16 @@ import android.widget.SimpleCursorAdapter;
 
 public class PlayerListActivity extends ListActivity {
 
+	private static final String TAG = "PlayeListActivity";
+	
 	private DBAdapter mDatabaseAdapter;
 	private Cursor mPlayerCursor;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d(TAG, "view created");
 		
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
