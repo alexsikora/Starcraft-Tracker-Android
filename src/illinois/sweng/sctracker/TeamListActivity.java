@@ -14,7 +14,7 @@ import android.widget.SimpleCursorAdapter;
 public class TeamListActivity extends ListActivity {
 	static String TAG = "teamsActivity";
 
-	private TeamsDBAdapter mDBAdapter;
+	private DBAdapter mDBAdapter;
 	private Cursor mTeamCursor;
 	
 	@Override
@@ -25,15 +25,15 @@ public class TeamListActivity extends ListActivity {
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new TeamListClickListener());
 		
-		mDBAdapter = new TeamsDBAdapter(this);
+		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
 		
 		mTeamCursor = mDBAdapter.getAllTeams();
 		startManagingCursor(mTeamCursor);
 		
 		String fields[] = 	{
-								TeamsDBAdapter.KEY_NAME, 
-								TeamsDBAdapter.KEY_TAG
+								DBAdapter.KEY_NAME, 
+								DBAdapter.KEY_TAG
 							};
 		int textViews[] = {R.id.teamListName, R.id.teamListTag};
 		

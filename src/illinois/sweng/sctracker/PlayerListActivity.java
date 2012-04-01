@@ -11,7 +11,7 @@ import android.widget.SimpleCursorAdapter;
 
 public class PlayerListActivity extends ListActivity {
 
-	private PlayersDBAdapter mDatabaseAdapter;
+	private DBAdapter mDatabaseAdapter;
 	private Cursor mPlayerCursor;
 	
 	@Override
@@ -22,15 +22,15 @@ public class PlayerListActivity extends ListActivity {
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new PlayerListClickListener());
 		
-		mDatabaseAdapter = new PlayersDBAdapter(this);
+		mDatabaseAdapter = new DBAdapter(this);
 		mDatabaseAdapter.open();
 		
 		mPlayerCursor = mDatabaseAdapter.getAllPlayers();
 		startManagingCursor(mPlayerCursor);
 		
 		String fields[] = 	{
-								PlayersDBAdapter.KEY_NAME, 
-								PlayersDBAdapter.KEY_RACE
+								DBAdapter.KEY_NAME, 
+								DBAdapter.KEY_RACE
 							};
 		int textViews[] = {R.id.playerListName, R.id.playerListRace};
 		

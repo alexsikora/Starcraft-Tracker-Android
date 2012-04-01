@@ -34,22 +34,22 @@ public class DBAdapter {
 
 	//TABLE CREATION STRINGS
 	private static final String CREATE_PLAYER_TABLE = "create table "
-			+ PlayersDBAdapter.DATABASE_PLAYER_TABLE + " ( "
-			+ PlayersDBAdapter.KEY_ROWID
-			+ " integer primary key autoincrement, " + PlayersDBAdapter.KEY_PK
-			+ " integer, " + PlayersDBAdapter.KEY_PICTURE + " text, "
-			+ PlayersDBAdapter.KEY_HANDLE + " text not null, "
-			+ PlayersDBAdapter.KEY_NAME + " text not null, "
-			+ PlayersDBAdapter.KEY_RACE + " text not null, "
-			+ PlayersDBAdapter.KEY_TEAM + " text, "
-			+ PlayersDBAdapter.KEY_NATIONALITY + " text not null, "
-			+ PlayersDBAdapter.KEY_ELO + " text not null);";
+			+ DATABASE_PLAYER_TABLE + " ( "
+			+ KEY_ROWID
+			+ " integer primary key autoincrement, " + KEY_PK
+			+ " integer, " + KEY_PICTURE + " text, "
+			+ KEY_HANDLE + " text not null, "
+			+ KEY_NAME + " text not null, "
+			+ KEY_RACE + " text not null, "
+			+ KEY_TEAM + " text, "
+			+ KEY_NATIONALITY + " text not null, "
+			+ KEY_ELO + " text not null);";
 
 	private static final String CREATE_TEAM_TABLE = "create table "
-			+ TeamsDBAdapter.DATABASE_TEAM_TABLE + " ( "
-			+ TeamsDBAdapter.KEY_ROWID + " integer primary key autoincrement, "
-			+ TeamsDBAdapter.KEY_PK + " integer, " + TeamsDBAdapter.KEY_NAME
-			+ " text not null, " + TeamsDBAdapter.KEY_TAG + " text not null);";
+			+ DATABASE_TEAM_TABLE + " ( "
+			+ KEY_ROWID + " integer primary key autoincrement, "
+			+ KEY_PK + " integer, " + KEY_NAME
+			+ " text not null, " + KEY_TAG + " text not null);";
 
 	private final Context mContext;
 	private DatabaseHelper mDatabaseHelper;

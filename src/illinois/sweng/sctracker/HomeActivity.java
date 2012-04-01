@@ -22,8 +22,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
-	PlayersDBAdapter mPlayerDBAdapter;
-	TeamsDBAdapter mTeamDBAdapter;
 	DBAdapter mDBAdapter;
 
 	@Override
@@ -40,9 +38,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 
 		mDBAdapter = new DBAdapter(this);
-		
-//		mPlayerDBAdapter = new PlayersDBAdapter(this);
-//		mTeamDBAdapter = new TeamsDBAdapter(this);
 		
 		//Update the database
 //		updatePlayers();
