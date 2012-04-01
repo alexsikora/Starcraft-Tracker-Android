@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DBAdapter {
 
@@ -104,9 +105,12 @@ public class DBAdapter {
 	 * @return A cursor across all players in the database.
 	 */
 	public Cursor getAllPlayers() {
-		return mDatabase.query(DATABASE_PLAYER_TABLE, 
-				new String[] {KEY_ROWID, KEY_NAME, KEY_RACE},
-				null, null, null, null, KEY_NAME+" ASC");
+		Log.d(TAG, "Get all players query");
+		String[] columns = new String[] { KEY_ROWID, KEY_PK, KEY_PICTURE,
+				KEY_HANDLE, KEY_NAME, KEY_RACE, KEY_TEAM, KEY_NATIONALITY,
+				KEY_ELO };
+		return mDatabase.query(DATABASE_PLAYER_TABLE, columns, null, null,
+				null, null, KEY_NAME + " ASC");
 	}
 	
 	/**
@@ -194,7 +198,10 @@ public class DBAdapter {
 				new String[] {KEY_ROWID, KEY_PICTURE, KEY_HANDLE, KEY_NAME,
 				KEY_RACE, KEY_TEAM, KEY_NATIONALITY, KEY_ELO},
 			KEY_PK + "=" + pk, null, null, null, null);
-		return (playerCursor.getCount() == 1);
+		
+		int playerCount = playerCursor.getCount();
+		playerCursor.close();
+		return (playerCount == 1);
 	}
 	
 	/**
@@ -267,7 +274,10 @@ public class DBAdapter {
 		Cursor teamCursor = mDatabase.query(DATABASE_TEAM_TABLE,
 				new String[] {KEY_ROWID, KEY_PK, KEY_NAME, KEY_TAG},
 			KEY_PK + "=" + pk, null, null, null, null);
-		return (teamCursor.getCount() == 1);
+		
+		int teamCount = teamCursor.getCount();
+		teamCursor.close();
+		return (teamCount == 1);
 	}
 	
 	public boolean updateTeam(int pk, JSONObject teamData) {
@@ -388,7 +398,10 @@ public class DBAdapter {
 		Cursor eventCursor = mDatabase.query(DATABASE_EVENT_TABLE,
 				new String[] {KEY_ROWID, KEY_PICTURE, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
 				KEY_PK + "=" + pk, null, null, null, null);
-		return (eventCursor.getCount() == 1);
+		int eventCount = eventCursor.getCount();
+		eventCursor.close();
+
+		return eventCount == 1;
 	}
 
 	/**
