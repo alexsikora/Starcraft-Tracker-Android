@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 public class EventStatusActivity extends Activity {
 	static String TAG = "eventStatusActivity";

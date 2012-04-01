@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DBAdapter {
 
@@ -104,6 +105,7 @@ public class DBAdapter {
 	 * @return A cursor across all players in the database.
 	 */
 	public Cursor getAllPlayers() {
+		Log.d(TAG, "Get all players query");
 		String[] columns = new String[] { KEY_ROWID, KEY_PK, KEY_PICTURE,
 				KEY_HANDLE, KEY_NAME, KEY_RACE, KEY_TEAM, KEY_NATIONALITY,
 				KEY_ELO };

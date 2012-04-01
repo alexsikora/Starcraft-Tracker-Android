@@ -1,9 +1,11 @@
 package illinois.sweng.sctracker;
 
+import java.net.URL;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -42,7 +44,15 @@ public class PlayerStatusActivity extends Activity {
 		
 		Log.d(TAG, "image uri: " + picture);
 		ImageView portraitView = (ImageView) findViewById(R.id.playerStatusPortrait);
-		portraitView.setImageURI(Uri.parse(picture));
+				
+		try {
+		    URL thumb_u = new URL(picture);
+		    Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
+		    portraitView.setImageDrawable(thumb_d);
+		}
+		catch (Exception e) {
+		    Log.d(TAG, "Error opening player portrait");
+		}
 	}
 
 	/**
@@ -54,6 +64,10 @@ public class PlayerStatusActivity extends Activity {
 		
 		String handleKey = res.getString(R.string.keyHandle);
 		handle = intent.getStringExtra(handleKey);
+		
+		String pictureKey = res.getString(R.string.keyPicture);
+		String baseUrl = "http://" + res.getString(R.string.serverURL) + "/media/";
+		picture = baseUrl + intent.getStringExtra(pictureKey);
 		
 		String nameKey = res.getString(R.string.keyName);
 		name = intent.getStringExtra(nameKey);
