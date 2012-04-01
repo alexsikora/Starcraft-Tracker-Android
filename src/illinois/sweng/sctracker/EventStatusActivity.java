@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 public class EventStatusActivity extends Activity {
 	static String TAG = "eventStatusActivity";
@@ -33,12 +32,12 @@ public class EventStatusActivity extends Activity {
 
 			mDBAdapter.close();
 
-			TextView t = (TextView)findViewById(R.id.textView1);
+			/*TextView t = (TextView)findViewById(R.id.textView1);
 			t.append(name);
 			t = (TextView)findViewById(R.id.textView2);
 			t.append(startdate);
 			t = (TextView)findViewById(R.id.textView3);
-			t.append(enddate);
+			t.append(enddate);*/
 	
 		} else {
 			Log.d("TAG", "EMPTY EVENT CURSOR - ALL HOPE IS LOST");

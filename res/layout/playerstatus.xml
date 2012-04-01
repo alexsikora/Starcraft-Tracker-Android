@@ -4,46 +4,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/playerStatusPortrait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher" 
+        android:contentDescription="@string/playerStatusImageContentDescription"/>
+
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/playerStatusHandleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerStatusHandle"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/playerStatusNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerStatusName"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/playerStatusRaceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerStatusRace"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/playerStatusTeamTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerStatusTeam"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/playerStatusNationalityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerStatusNationality"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/playerStatusEloTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/playerStatusElo"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/playerStatusFavoriteCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/playerStatusFavorite" />
 
 </LinearLayout>
