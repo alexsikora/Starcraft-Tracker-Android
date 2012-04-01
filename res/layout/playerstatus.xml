@@ -46,4 +46,10 @@
         android:text="@string/playerStatusElo"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <CheckBox
+        android:id="@+id/playerStatusFavoriteCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/playerStatusFavorite" />
+
 </LinearLayout>
