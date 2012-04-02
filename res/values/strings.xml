@@ -73,6 +73,7 @@
 	<string name="keyNationality">nationality</string>
 	<string name="keyELO">elo</string>
 	<string name="keyTeam">team</string>
+	<string name="keyTag">tag</string>
 	<string name="playerStatusFavorite">Player Favorited</string>
 	<string name="playerStatusImageContentDescription">Portrait of the selected player</string>
 
