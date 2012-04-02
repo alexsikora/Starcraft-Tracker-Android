@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 public class TeamStatusActivity extends ListActivity{
 	static String TAG = "teamStatusActivity";
