@@ -9,7 +9,7 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class TeamStatusActivity extends ListActivity{
+public class TeamStatusActivity extends ListActivity {
 	static String TAG = "teamStatusActivity";
 	DBAdapter mDBAdapter;
 	
