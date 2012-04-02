@@ -88,8 +88,15 @@ public class PlayerListActivity extends ListActivity {
 			String teamKey = res.getString(R.string.keyTeam);
 			int teamIndex = mPlayerCursor.getColumnIndexOrThrow(teamKey);
 			int team = mPlayerCursor.getInt(teamIndex);
-			// TODO look up the team, not just send the team ID
-			i.putExtra(teamKey, team + "");
+			
+			Cursor teamCursor = mDatabaseAdapter.getTeamByPK(team);
+			teamCursor.moveToFirst();
+			int teamNameIndex = teamCursor.getColumnIndexOrThrow(DBAdapter.KEY_NAME);
+			Log.d(TAG, teamNameIndex + "");
+			String teamName = teamCursor.getString(teamNameIndex);
+			teamCursor.close();
+			
+			i.putExtra(teamKey, teamName);
 			
 			String nationalityKey = res.getString(R.string.keyNationality);
 			putStringExtra(nationalityKey, i);
