@@ -1,6 +1,8 @@
 package illinois.sweng.sctracker;
 
 import android.app.ListActivity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +17,14 @@ public class TeamStatusActivity extends ListActivity{
 	
 	String name = "";
 	String teamTag = "";
-	//player list of some sort?
+	int rowID = -1;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.teamstatus);
+		
+		getDataFromIntent();
 		
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
@@ -27,37 +32,52 @@ public class TeamStatusActivity extends ListActivity{
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
-		Cursor team = mDBAdapter.getTeam(1); //TODO: Find way to pull in rowID
+		
+		
 
-		if(team.moveToFirst()){
-			name = team.getString(2);
-			teamTag = team.getString(3);
-			Cursor players = mDBAdapter.getPlayersByTeam(name);
+			Cursor players = mDBAdapter.getPlayersByTeam(rowID);
 			
-			TextView t = (TextView)findViewById(R.id.textView1);
-			t.append(name);
-			t = (TextView)findViewById(R.id.textView2);
-			t.append(teamTag);
+//			TextView t = (TextView)findViewById(R.id.textView1);
+//			t.append("Team Name: " + name);
+//			t = (TextView)findViewById(R.id.textView2);
+//			t.append("Tag: " + teamTag);
 			
 			startManagingCursor(players);
 			String fields[] = 	{
-					DBAdapter.KEY_NAME, 
-					DBAdapter.KEY_RACE
-				};
+					TrackerDatabaseAdapter.KEY_HANDLE,
+					TrackerDatabaseAdapter.KEY_RACE,
+					TrackerDatabaseAdapter.KEY_ROWID,
+					TrackerDatabaseAdapter.KEY_PK,
+					TrackerDatabaseAdapter.KEY_PICTURE,
+					TrackerDatabaseAdapter.KEY_NAME,
+					TrackerDatabaseAdapter.KEY_TEAM,
+					TrackerDatabaseAdapter.KEY_NATIONALITY,
+					TrackerDatabaseAdapter.KEY_ELO
+								};
 			int textViews[] = {R.id.playerListName, R.id.playerListRace};
 			
 			CursorAdapter cursorAdapter = new SimpleCursorAdapter(this, 
-					R.layout.teamlistrow, players, fields, textViews);
-			//TODO: make layout for this
+					R.layout.playerlistrow, players, fields, textViews);
 			
 			setListAdapter(cursorAdapter);
 			
-			
-		} else{
-			Log.d("TAG", "OH WE GONE DONE FUCKED UP THE CURSOR");
-		}
-		
+					
 		mDBAdapter.close();
+	}
+	
+	private void getDataFromIntent(){
+		Intent intent = getIntent();
+		Resources res = getResources();
+		
+		String tagKey = res.getString(R.string.keyTag);
+		teamTag = intent.getStringExtra(tagKey);
+		
+		String nameKey = res.getString(R.string.keyName);
+		name = intent.getStringExtra(nameKey);
+		
+		String rowIDKey = res.getString(R.string.keyRowID);
+		rowID = intent.getIntExtra(rowIDKey, -1);
+		
 	}
 
 }

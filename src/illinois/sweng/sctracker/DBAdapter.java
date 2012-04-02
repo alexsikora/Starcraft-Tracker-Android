@@ -230,11 +230,11 @@ public class DBAdapter {
 	}
 	
 	
-	public Cursor getPlayersByTeam(String teamname){
+	public Cursor getPlayersByTeam(int teamname){
 		return mDatabase.query(DATABASE_PLAYER_TABLE,
 				new String[] {KEY_ROWID, KEY_ROWID, KEY_PICTURE, KEY_HANDLE, KEY_NAME,
 				KEY_RACE, KEY_TEAM, KEY_NATIONALITY, KEY_ELO}, 
-				KEY_TEAM + "=" + teamname, null, null, null, null);
+				KEY_TEAM + "=" + "1", null, null, null, null);
 	}
 	
 	public Cursor getTeam(int rowid) {
