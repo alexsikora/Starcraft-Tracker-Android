@@ -83,5 +83,7 @@
 	<string name="playerListActivity">Players</string>
 	<string name="teamListActivity">Teams</string>
 	<string name="eventListActivity">Events</string>
+	<string name="favoriteSharedPrefs">favorites</string>
+	<string name="favoritePlayers">players</string>
 
 </resources>
