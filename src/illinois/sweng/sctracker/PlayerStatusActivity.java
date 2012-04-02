@@ -49,9 +49,7 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		t = (TextView) findViewById(R.id.playerStatusEloTextView);
 		t.append(elo);
 		
-		Log.d(TAG, "image uri: " + picture);
 		ImageView portraitView = (ImageView) findViewById(R.id.playerStatusPortrait);
-				
 		try {
 		    URL thumb_u = new URL(picture);
 		    Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
@@ -75,11 +73,12 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
 		
-		String favoriteKey = getResources().getString(R.string.favoritePlayers);
+		// String favoriteKey = getResources().getString(R.string.favoritePlayerKey);
 		JSONArray def = new JSONArray();
 		
 		try {
-			JSONArray favorites = new JSONArray(prefs.getString(favoriteKey, def.toString()));
+			String playersKey = getResources().getString(R.string.favoritePlayerKey);
+			JSONArray favorites = new JSONArray(prefs.getString(playersKey, def.toString()));
 			for(int i = 0; i < favorites.length(); i++) {
 				if(pk == favorites.getLong(i)) {
 					return true;

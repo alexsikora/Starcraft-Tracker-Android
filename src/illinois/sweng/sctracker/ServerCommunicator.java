@@ -170,6 +170,20 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendGetAllFavoritesRequest(String userpass) {
+		String urlString = buildGetAllFavoritesURL();
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending get all favorites request");
+		executeHttpRequest(request);
+	}
+	
+	
+
 	public void sendFavoritePlayerRequest(String userpass, String playerPK) {
 		String urlString = buildFavoritePlayerURL(playerPK);
 		HttpGet request = new HttpGet(urlString);
@@ -500,4 +514,13 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	private String buildGetAllFavoritesURL() {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverGetAllFavoritesURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(unfavoriteEventURL);
+		String urlString = sb.toString();
+		return urlString;
+	}
 }
