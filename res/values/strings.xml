@@ -27,6 +27,12 @@
 	<string name="serverGetAllPlayersURL">/players/allplayers/</string>
 	<string name="serverGetAllTeamsURL">/players/allteams/</string>
 	<string name="serverGetAllEventsURL">/events/allevents/</string>
+	<string name="serverFavoritePlayerURL">/users/addfavoriteplayer/?id=</string>
+	<string name="serverFavoriteTeamURL">/users/addfavoriteteam/?id=</string>
+	<string name="serverFavoriteEventURL">/users/addfavoriteevent/?id=</string>
+	<string name="serverUnfavoritePlayerURL">/users/removefavoriteplayer/?id=</string>
+	<string name="serverUnfavoriteTeamURL">/users/removefavoriteteam/?id=</string>
+	<string name="serverUnfavoriteEventURL">/users/removefavoriteevent/?id=</string>
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
 		communicating with the server
 	</string>
@@ -55,6 +61,20 @@
 
 	<string name="playerStatusActivity">Player Status</string>
 
+	<string name="playersActivity">Players</string>
+	<string name="teamsActivity">Teams</string>
+	<string name="eventsActivity">Events</string>
+	<string name="keyRowID">_id</string>
+	<string name="keyPK">pk</string>
+	<string name="keyPicture">picture</string>
+	<string name="keyHandle">handle</string>
+	<string name="keyName">name</string>
+	<string name="keyRace">race</string>
+	<string name="keyNationality">nationality</string>
+	<string name="keyELO">elo</string>
+	<string name="keyTeam">team</string>
+	<string name="playerStatusFavorite">Player Favorited</string>
+	<string name="playerStatusImageContentDescription">Portrait of the selected player</string>
 
 	
 	<string name="eventStatusActivity">EventStatusActivity</string>
