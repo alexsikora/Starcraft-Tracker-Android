@@ -1,9 +1,9 @@
 package illinois.sweng.sctracker;
 
-import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.json.JSONArray;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class RegisterActivity extends DelegateActivity {
+public class RegisterActivity extends Activity implements DelegateActivity {
 	
 	private static final String TAG = "RegisterActivity";
 	public static final int DIALOG_INVALID_EMAIL_ID = 1;
@@ -142,9 +142,13 @@ public class RegisterActivity extends DelegateActivity {
 	 * Handle a successful response from the server
 	 * @param values List of key-value pairs containing data from the server
 	 */
-	public void handleServerResponse(List<NameValuePair> values) {
+	public void handleServerResponseData(JSONArray values) {
 		// TODO determine what will be returned and what to do with it
 		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
+	}
+	
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
 	}
 	
 	/**
@@ -165,4 +169,5 @@ public class RegisterActivity extends DelegateActivity {
 			dialog.dismiss();
 		}
 	}
+	
 }

@@ -1,23 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, SC2TrackerActivity!</string>
-    <string name="app_name">SC2Tracker</string>
-    <string name="registerButton">Register</string>
+	<string name="app_name">SC2Tracker</string>
+
+	<string name="registerButton">Register</string>
 	<string name="unregisterButton">Unregister</string>
+	<string name="loginButton">Log in</string>
+
 	<string name="registerActivity">Register</string>
-	<string name="unregisterActivity">Unregister</string>
-	<string name="registerEmailLabel">Email Address:</string>
-	<string name="registerPasswordLabel">Password:</string>
-	<string name="registerPasswordConfirmLabel">Confirm Password:</string>
+	<string name="registerEmailLabel">Email Address</string>
+	<string name="registerPasswordLabel">Password</string>
+	<string name="registerPasswordConfirmLabel">Confirm Password</string>
 	<string name="registerCreateButton">Create Account!</string>
-	<string name="serverURL">startrack.alexsikora.com</string>
-	<string name="registerInvalidEmailMessage">The email address you have entered is invalid</string>
+	<string name="registerInvalidEmailMessage">The email address you have entered is invalid
+	</string>
 	<string name="registerNonmatchingPasswords">The passwords you entered do not match</string>
+	<string name="registerNewAccountSuccess">Account Created</string>
+
+	<string name="unregisterActivity">Unregister</string>
+	<string name="unregisterDeleteButton">Delete Account :(</string>
+
+	<string name="serverURL">startrack.alexsikora.com</string>
 	<string name="serverRegisterURL">/users/register/</string>
-	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when communicating with the server</string>
-	<string name="serverIOExceptionMessage">The server failed to send a valid HTTP response</string>
-	<string name="serverJSONError">There was an error with the JSON returned by the server</string>
-	<string name="registerNewAccountSuccess">Account Created!</string>
+	<string name="serverUnregisterURL">/users/remove/</string>
+	<string name="serverAuthenticateURL">/users/authenticate/</string>
+	<string name="serverGetAllPlayersURL">/players/allplayers/</string>
+	<string name="serverGetAllTeamsURL">/players/allteams/</string>
+	<string name="serverGetAllEventsURL">/events/allevents/</string>
+	<string name="serverFavoritePlayerURL">/users/addfavoriteplayer/?id=</string>
+	<string name="serverFavoriteTeamURL">/users/addfavoriteteam/?id=</string>
+	<string name="serverFavoriteEventURL">/users/addfavoriteevent/?id=</string>
+	<string name="serverUnfavoritePlayerURL">/users/removefavoriteplayer/?id=</string>
+	<string name="serverUnfavoriteTeamURL">/users/removefavoriteteam/?id=</string>
+	<string name="serverUnfavoriteEventURL">/users/removefavoriteevent/?id=</string>
+	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
+		communicating with the server
+	</string>
+	<string name="serverIOExceptionMessage">The server failed to send a valid HTTP response
+	</string>
+	<string name="serverJSONError">There was an error with the JSON returned by the
+		server
+	</string>
+
+	<string name="homeActivity">Home</string>
+	<string name="homeSearchButtonText">Search</string>
+	<string name="homeLogoutButtonText">Log out</string>
+	<string name="homeUnregisterButtonText">Deactivate Account</string>
+	<string name="search_hint">Search players, teams, events</string>
+
+	<string name="preferencesUserpass">userpass</string>
+	<string name="playerStatusHandle">Handle: </string>
+	<string name="playerStatusName">Name: </string>
+	<string name="playerStatusRace">Race: </string>
+	<string name="playerStatusTeam">Team: </string>
+	<string name="playerStatusNationality">Nationality: </string>
+	<string name="playerStatusElo">Elo: </string>
 	
+
+	<string name="hostTabsActivity">SC2Tracker</string>
+
+	<string name="playerStatusActivity">Player Status</string>
+
+	<string name="playersActivity">Players</string>
+	<string name="teamsActivity">Teams</string>
+	<string name="eventsActivity">Events</string>
+	<string name="keyRowID">_id</string>
+	<string name="keyPK">pk</string>
+	<string name="keyPicture">picture</string>
+	<string name="keyHandle">handle</string>
+	<string name="keyName">name</string>
+	<string name="keyRace">race</string>
+	<string name="keyNationality">nationality</string>
+	<string name="keyELO">elo</string>
+	<string name="keyTeam">team</string>
+	<string name="keyTag">tag</string>
+	<string name="playerStatusFavorite">Player Favorited</string>
+	<string name="playerStatusImageContentDescription">Portrait of the selected player</string>
+
+	
+	<string name="eventStatusActivity">EventStatusActivity</string>
+
+
+	<string name="playerListActivity">Players</string>
+	<string name="teamListActivity">Teams</string>
+	<string name="eventListActivity">Events</string>
+	<string name="favoriteSharedPrefs">favorites</string>
+	<string name="serverGetAllFavoritesURL">/users/getallfavs/</string>
+	<string name="favoriteEventKey">favorite_events</string>
+	<string name="favoritePlayerKey">favorite_players</string>
+	<string name="favoriteTeamKey">favorite_teams</string>
+
 </resources>

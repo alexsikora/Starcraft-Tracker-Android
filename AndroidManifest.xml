@@ -7,7 +7,7 @@
     <uses-sdk android:minSdkVersion="8" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
@@ -16,18 +16,47 @@
             android:name=".SC2TrackerActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:label="@string/registerActivity"
-            android:name="RegisterActivity">
+            android:name="RegisterActivity" >
         </activity>
         <activity
             android:label="@string/unregisterActivity"
-            android:name="UnregisterActivity">
+            android:name="UnregisterActivity" >
         </activity>
+        <activity
+            android:name="HomeActivity" 
+            android:label="@string/homeActivity" >
+        </activity>
+        <activity 
+            android:name="HostTabsActivity" 
+            android:label="@string/hostTabsActivity">
+        </activity>
+        <activity 
+            android:name="PlayerStatusActivity"
+            android:label="@string/playerStatusActivity">
+        </activity>
+        <activity
+            android:name="EventStatusActivity"
+            android:label="@string/eventStatusActivity">
+        </activity>
+        <activity 
+            android:name="PlayerListActivity"
+            android:label="@string/playerListActivity">
+        </activity>
+        <activity 
+            android:name="EventListActivity"
+            android:label="@string/eventListActivity">
+        </activity>
+        <activity 
+            android:name="TeamListActivity"
+            android:label="@string/teamListActivity">
+        </activity>
+        <activity android:name="TeamStatusActivity"></activity>
+        
     </application>
 
 </manifest>
