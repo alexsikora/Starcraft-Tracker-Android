@@ -13,11 +13,12 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-public class TeamStatusActivity extends ListActivity{
+public class TeamStatusActivity extends ListActivity {
 	static String TAG = "teamStatusActivity";
-	private DBAdapter mDBAdapter;
-	private Cursor players;
-	
+
+	DBAdapter mDBAdapter;
+	Cursor mPlayerCursor;
+//>>>>>>> e3328afa3e04efdd01896a07062054d285ef7468
 	String name = "";
 	String teamTag = "";
 	int rowID = -1;
@@ -31,21 +32,26 @@ public class TeamStatusActivity extends ListActivity{
 		
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
-		listView.setOnItemClickListener(new TeamStatusClickListener());
+//<<<<<<< HEAD
+//		listView.setOnItemClickListener(new TeamStatusClickListener());
+//=======
+		//TODO: Setup listener
+		listView.setOnItemClickListener(new PlayerListClickListener());
+//>>>>>>> e3328afa3e04efdd01896a07062054d285ef7468
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
 		
 		
 
-			Cursor players = mDBAdapter.getPlayersByTeam(rowID);
+			mPlayerCursor = mDBAdapter.getPlayersByTeam(rowID);
 			
 			TextView t = (TextView)findViewById(R.id.textView1);
 			t.append("Team Name: " + name);
 			t = (TextView)findViewById(R.id.textView2);
 			t.append("Tag: " + teamTag);
 			
-			startManagingCursor(players);
+			startManagingCursor(mPlayerCursor);
 			String fields[] = 	{
 					TrackerDatabaseAdapter.KEY_HANDLE,
 					TrackerDatabaseAdapter.KEY_RACE,
@@ -60,12 +66,11 @@ public class TeamStatusActivity extends ListActivity{
 			int textViews[] = {R.id.playerListName, R.id.playerListRace};
 			
 			CursorAdapter cursorAdapter = new SimpleCursorAdapter(this, 
-					R.layout.playerlistrow, players, fields, textViews);
+					R.layout.playerlistrow, mPlayerCursor, fields, textViews);
 			
 			setListAdapter(cursorAdapter);
-			
 					
-//		mDBAdapter.close();
+
 	}
 	
 	private void getDataFromIntent(){
@@ -83,11 +88,13 @@ public class TeamStatusActivity extends ListActivity{
 		
 	}
 	
-	private void showPlayerStatus(Intent i){
+
+	private void showPlayerStatus(Intent i) {
 		i.setClass(this, PlayerStatusActivity.class);
 		startActivity(i);
 	}
 	
+/*<<<<<<< HEAD
 	private class TeamStatusClickListener implements AdapterView.OnItemClickListener {
 		
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -138,26 +145,79 @@ public class TeamStatusActivity extends ListActivity{
 			
 			Log.d(TAG, "Exiting onclick, going into player status");
 			showPlayerStatus(i);
+		}*/
+		
+
+	private class PlayerListClickListener implements AdapterView.OnItemClickListener {
+
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			
+			Intent i = new Intent();
+			Resources res = getResources();
+			
+			String rowKey = res.getString(R.string.keyRowID);
+			putIntExtra(rowKey, i);
+			
+			String pkKey = res.getString(R.string.keyPK);
+			putLongExtra(pkKey, i);
+			
+			String pictureKey = res.getString(R.string.keyPicture);
+			putStringExtra(pictureKey, i);
+			
+			String handleKey = res.getString(R.string.keyHandle);
+			putStringExtra(handleKey, i);
+			
+			String nameKey = res.getString(R.string.keyName);
+			putStringExtra(nameKey, i);
+			
+			String raceKey = res.getString(R.string.keyRace);
+			putStringExtra(raceKey, i);
+			
+			String teamKey = res.getString(R.string.keyTeam);
+			int teamIndex = mPlayerCursor.getColumnIndexOrThrow(teamKey);
+			int team = mPlayerCursor.getInt(teamIndex);
+			
+			Cursor teamCursor = mDBAdapter.getTeamByPK(team);
+			teamCursor.moveToFirst();
+			int teamNameIndex = teamCursor.getColumnIndexOrThrow(DBAdapter.KEY_NAME);
+			Log.d(TAG, teamNameIndex + "");
+			String teamName = teamCursor.getString(teamNameIndex);
+			teamCursor.close();
+			
+			i.putExtra(teamKey, teamName);
+			
+			String nationalityKey = res.getString(R.string.keyNationality);
+			putStringExtra(nationalityKey, i);
+			
+			String eloKey = res.getString(R.string.keyELO);
+			putIntExtra(eloKey, i);
+			
+			showPlayerStatus(i);
 		}
 		
-		private void putIntExtra(String key, Intent i){
-			int index = players.getColumnIndexOrThrow(key);
-			int rowID = players.getInt(index);
+		private void putIntExtra(String key, Intent i) {
+			int index = mPlayerCursor.getColumnIndexOrThrow(key);
+			int rowID = mPlayerCursor.getInt(index);
 			i.putExtra(key, rowID);
 		}
 		
 		private void putStringExtra(String key, Intent i) {
-			int index = players.getColumnIndexOrThrow(key);
-			String name = players.getString(index);
-			Log.d("String Extra", name);
+			int index = mPlayerCursor.getColumnIndexOrThrow(key);
+			String name = mPlayerCursor.getString(index);
 			i.putExtra(key, name);
 		}
 		
 		private void putLongExtra(String key, Intent i) {
-			int index = players.getColumnIndexOrThrow(key);
-			long pk = players.getLong(index);
+			int index = mPlayerCursor.getColumnIndexOrThrow(key);
+			long pk = mPlayerCursor.getLong(index);
 			i.putExtra(key, pk);
 		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mDBAdapter.close();
 	}
 
 }

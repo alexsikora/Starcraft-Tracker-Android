@@ -37,13 +37,14 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 
-		this.deleteDatabase("TrackerDatabase");
+//		this.deleteDatabase("TrackerDatabase");
 		
 		mDBAdapter = new DBAdapter(this);
 		
 		//Update the database
-//		updatePlayers();
-//		updateTeams();
+		updatePlayers();
+		updateTeams();
+		updateEvents();
 	}
 
 	/**
@@ -88,9 +89,9 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	private class SearchButtonHandler implements View.OnClickListener {
 		public void onClick(View v) {
 			Log.d(TAG, "Search Button Clicked");
-			updatePlayers();
-			updateTeams();
-			updateEvents();
+//			updatePlayers();
+//			updateTeams();
+//			updateEvents();
 		}
 	}
 

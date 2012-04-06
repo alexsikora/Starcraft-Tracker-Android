@@ -69,9 +69,7 @@ public class TeamListActivity extends ListActivity {
 			String nameKey = res.getString(R.string.keyName);
 			putStringExtra(nameKey, i);
 			
-			showTeamStatus(i);
-			
-			
+			showTeamStatus(i);			
 		}
 		
 		private void putIntExtra(String key, Intent i){
@@ -94,5 +92,9 @@ public class TeamListActivity extends ListActivity {
 		}
 	}
 
-
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mDBAdapter.close();
+	}
 }
