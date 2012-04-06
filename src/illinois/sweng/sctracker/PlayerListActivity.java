@@ -65,8 +65,12 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 	 * Request the list of this user's favorites from the server
 	 */
 	private void getFavoritesList() {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");
+		
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
-		String userpass = "test@account.com:test";
 		comm.sendGetAllFavoritesRequest(userpass);
 	}
 
