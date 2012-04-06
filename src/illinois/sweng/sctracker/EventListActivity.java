@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -40,7 +41,7 @@ public class EventListActivity extends ListActivity{
 		int textViews[] = {R.id.eventListName, R.id.eventListStartDate, R.id.eventListEndDate};
 		
 		CursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
-				R.layout.playerlistrow, mEventCursor, fields, textViews);
+				R.layout.eventlistrow, mEventCursor, fields, textViews);
 		
 		setListAdapter(cursorAdapter);
 	}
@@ -70,6 +71,12 @@ public class EventListActivity extends ListActivity{
 			// 
 		}
 		
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mDBAdapter.close();
 	}
 
 }
