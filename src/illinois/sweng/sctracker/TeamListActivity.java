@@ -60,8 +60,8 @@ public class TeamListActivity extends ListActivity {
 			String rowKey = res.getString(R.string.keyRowID);
 			putIntExtra(rowKey, i);
 			
-			String pkKey = res.getString(R.string.keyPK);
-			putLongExtra(pkKey, i);
+//			String pkKey = res.getString(R.string.keyPK);
+//			putLongExtra(pkKey, i);
 			
 			String tagKey = res.getString(R.string.keyTag);
 			putStringExtra(tagKey, i);
