@@ -319,7 +319,7 @@ public class DBAdapter {
 	 */
 	public Cursor getAllEvents() {
 		return mDatabase.query(DATABASE_EVENT_TABLE, 
-				new String[] {KEY_ROWID, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
+				new String[] {KEY_PK, KEY_ROWID, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
 				null, null, null, null, KEY_NAME+" ASC");
 	}
 
@@ -376,9 +376,11 @@ public class DBAdapter {
 	 * @return True if the operation succeeded, false otherwise.
 	 */
 	public boolean updateEventTable(JSONArray events) {
+		Log.d("xxx", "update events");
 		int numEvents = events.length();
 		try{
 			for(int i = 0; i < numEvents; i++) {
+				Log.d("xxx", "update events" + i);
 				JSONObject event = (JSONObject) events.get(i);
 				int pk = event.getInt("pk");
 				if (hasEvent(pk)) {
