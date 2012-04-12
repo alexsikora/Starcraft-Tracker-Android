@@ -49,6 +49,7 @@
 	<string name="search_hint">Search players, teams, events</string>
 
 	<string name="preferencesUserpass">userpass</string>
+	<string name="preferencesFilename">sc2prefs</string>
 	<string name="playerStatusHandle">Handle: </string>
 	<string name="playerStatusName">Name: </string>
 	<string name="playerStatusRace">Race: </string>

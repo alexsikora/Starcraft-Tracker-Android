@@ -23,7 +23,6 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
     /** Called when the activity is first created. */
 	
 	static String TAG = "sc2trackerMainActivity";
-	static final String PREFS_FILE = "sc2prefs";
 	private Button mRegisterButton, mLoginButton, mUnregisterButton;
 	private EditText mEmail, mPassword;
 	private ServerCommunicator mServerCommunicator;
@@ -67,6 +66,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
      * Attempts to login the user.
      */
     private void loginUser() {
+    	String prefsFile = getResources().getString(R.string.preferencesFilename);
 		String username = mEmail.getText().toString();
 		String password = mPassword.getText().toString();
 		String userpass = username + ":" + password;
@@ -75,7 +75,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		
 		String key = getResources().getString(R.string.preferencesUserpass);
 		Log.d(TAG, userpass);
-		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_FILE, 0);
+		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
 		Editor editor = sharedPreferences.edit(); 
 		editor.putString(key, userpass);
 		editor.commit();

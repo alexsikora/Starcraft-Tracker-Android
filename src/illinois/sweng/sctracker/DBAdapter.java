@@ -31,8 +31,8 @@ public class DBAdapter {
 	
 	//DATABASE INFORMATION
 	private static final String DATABASE_NAME = "TrackerDatabase";
-	public static final String DATABASE_PLAYER_TABLE = "players";
-	public static final String DATABASE_TEAM_TABLE = "teams";
+	private static final String DATABASE_PLAYER_TABLE = "players";
+	private static final String DATABASE_TEAM_TABLE = "teams";
 	private static final String DATABASE_EVENT_TABLE = "events";
 	private static final int DATABASE_VERSION = 1;
 
@@ -376,11 +376,9 @@ public class DBAdapter {
 	 * @return True if the operation succeeded, false otherwise.
 	 */
 	public boolean updateEventTable(JSONArray events) {
-		Log.d("xxx", "update events");
 		int numEvents = events.length();
 		try{
 			for(int i = 0; i < numEvents; i++) {
-				Log.d("xxx", "update events" + i);
 				JSONObject event = (JSONObject) events.get(i);
 				int pk = event.getInt("pk");
 				if (hasEvent(pk)) {

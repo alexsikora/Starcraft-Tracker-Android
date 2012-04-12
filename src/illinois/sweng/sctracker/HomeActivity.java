@@ -19,7 +19,6 @@ import android.widget.Button;
 public class HomeActivity extends Activity implements DelegateActivity {
 	static String TAG = "homeActivity";
 	static final String PREFS_FILE = "sc2prefs";
-	private Button mSearchButton;
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
 	DBAdapter mDBAdapter;
@@ -29,16 +28,12 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
 
-		mSearchButton = (Button) findViewById(R.id.searchButton);
 		mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
 		mLogOutButton = (Button) findViewById(R.id.logoutButton);
 
-		mSearchButton.setOnClickListener(new SearchButtonHandler());
 		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 
-//		this.deleteDatabase("TrackerDatabase");
-		
 		mDBAdapter = new DBAdapter(this);
 		
 		//Update the database
@@ -82,18 +77,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 			launchUnregister();
 		}
 	};
-
-	/**
-	 * Dumb button to view first returned player
-	 */
-	private class SearchButtonHandler implements View.OnClickListener {
-		public void onClick(View v) {
-			Log.d(TAG, "Search Button Clicked");
-//			updatePlayers();
-//			updateTeams();
-//			updateEvents();
-		}
-	}
 
 	/**
 	 * Makes a request to the server communicator to get all the players. In the
@@ -156,8 +139,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		// Intent i = new Intent(this, PlayerStatusActivity.class);
-		// startActivity(i);
 	}
 
 	public void handleServerResponseMessage(String message) {
