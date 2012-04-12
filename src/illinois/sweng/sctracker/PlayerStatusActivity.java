@@ -125,8 +125,14 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 	}
 
 	public void sendFavoriteRequest(boolean isChecked) {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");		
+		
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
-		String userpass = "test@account.com:test";
+		
 		if (isChecked) {
 			com.sendFavoritePlayerRequest(userpass, pk + "");
 		} else {
