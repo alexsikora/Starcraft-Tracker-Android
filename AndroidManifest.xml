@@ -55,6 +55,7 @@
             android:name="TeamListActivity"
             android:label="@string/teamListActivity">
         </activity>
+        <activity android:name="TeamStatusActivity"></activity>
         
     </application>
 

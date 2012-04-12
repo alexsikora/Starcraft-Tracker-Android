@@ -31,8 +31,8 @@ public class DBAdapter {
 	
 	//DATABASE INFORMATION
 	private static final String DATABASE_NAME = "TrackerDatabase";
-	public static final String DATABASE_PLAYER_TABLE = "players";
-	public static final String DATABASE_TEAM_TABLE = "teams";
+	private static final String DATABASE_PLAYER_TABLE = "players";
+	private static final String DATABASE_TEAM_TABLE = "teams";
 	private static final String DATABASE_EVENT_TABLE = "events";
 	private static final int DATABASE_VERSION = 1;
 
@@ -229,6 +229,14 @@ public class DBAdapter {
 		}
 	}
 	
+	
+	public Cursor getPlayersByTeam(int teamname){
+		return mDatabase.query(DATABASE_PLAYER_TABLE,
+				new String[] {KEY_ROWID, KEY_PK, KEY_PICTURE, KEY_HANDLE, KEY_NAME,
+				KEY_RACE, KEY_TEAM, KEY_NATIONALITY, KEY_ELO}, 
+				KEY_TEAM + "=" + "1", null, null, null, null);
+	}
+	
 	public Cursor getTeam(int rowid) {
 		return mDatabase.query(DATABASE_TEAM_TABLE,
 				new String[] {KEY_ROWID, KEY_PK, KEY_NAME,
@@ -311,7 +319,7 @@ public class DBAdapter {
 	 */
 	public Cursor getAllEvents() {
 		return mDatabase.query(DATABASE_EVENT_TABLE, 
-				new String[] {KEY_ROWID, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
+				new String[] {KEY_PK, KEY_ROWID, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
 				null, null, null, null, KEY_NAME+" ASC");
 	}
 

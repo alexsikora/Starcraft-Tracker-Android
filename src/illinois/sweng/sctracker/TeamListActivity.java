@@ -1,8 +1,11 @@
 package illinois.sweng.sctracker;
 
 import android.app.ListActivity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -42,17 +45,56 @@ public class TeamListActivity extends ListActivity {
 		setListAdapter(cursorAdapter);
 	}
 	
+	private void showTeamStatus(Intent i){
+		i.setClass(this, TeamStatusActivity.class);
+		startActivity(i);
+	}
+	
 	private class TeamListClickListener implements AdapterView.OnItemClickListener {
 
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			// TODO move cursor to this position and send data to player status activity
-			// pack data into an intent to send
 			mTeamCursor.moveToPosition(position);
+			Intent i = new Intent();
+			Resources res = getResources();
 			
+			String rowKey = res.getString(R.string.keyRowID);
+			putIntExtra(rowKey, i);
 			
+			String pkKey = res.getString(R.string.keyPK);
+			putLongExtra(pkKey, i);
+			
+			String tagKey = res.getString(R.string.keyTag);
+			putStringExtra(tagKey, i);
+			
+			String nameKey = res.getString(R.string.keyName);
+			putStringExtra(nameKey, i);
+			
+			showTeamStatus(i);			
 		}
 		
+		private void putIntExtra(String key, Intent i){
+			int index = mTeamCursor.getColumnIndexOrThrow(key);
+			int rowID = mTeamCursor.getInt(index);
+			i.putExtra(key, rowID);
+		}
+		
+		private void putStringExtra(String key, Intent i) {
+			int index = mTeamCursor.getColumnIndexOrThrow(key);
+			String name = mTeamCursor.getString(index);
+			Log.d("String Extra", name);
+			i.putExtra(key, name);
+		}
+		
+		private void putLongExtra(String key, Intent i) {
+			int index = mTeamCursor.getColumnIndexOrThrow(key);
+			long pk = mTeamCursor.getLong(index);
+			i.putExtra(key, pk);
+		}
 	}
 
-
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mDBAdapter.close();
+	}
 }

@@ -14,17 +14,14 @@ public class HostTabsActivity extends TabActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.host);
 		
-		TabHost tabHost = getTabHost(); // the activity TabHost
-		TabHost.TabSpec spec; // Reusable TabSpec for each tab
-		Intent intent; // Reusable Intent for each Tab
+		TabHost tabHost = getTabHost();
+		TabHost.TabSpec spec;
+		Intent intent; 
 		
-		// Create an Intent to launch an Activity for the tab
 		intent = new Intent().setClass(this, HomeActivity.class);
-		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost.newTabSpec("home").setIndicator("Home").setContent(intent);
 		tabHost.addTab(spec);
 		
-		// Rinse and Repeat
 		intent = new Intent().setClass(this, PlayerListActivity.class);
 		spec = tabHost.newTabSpec("players").setIndicator("Players").setContent(intent);
 		tabHost.addTab(spec);
