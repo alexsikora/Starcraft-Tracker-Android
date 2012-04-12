@@ -159,8 +159,6 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiving favorites data");
 		
-		//String favoriteKey = getResources().getString(R.string.favoritePlayerKey);
-		
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
