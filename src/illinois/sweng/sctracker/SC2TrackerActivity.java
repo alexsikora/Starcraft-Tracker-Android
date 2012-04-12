@@ -26,10 +26,17 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	private Button mRegisterButton, mLoginButton, mUnregisterButton;
 	private EditText mEmail, mPassword;
 	private ServerCommunicator mServerCommunicator;
+	private String userpass;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        String prefsFile = getResources().getString(R.string.preferencesFilename);
+        String key = getResources().getString(R.string.preferencesUserpass);
+		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
+		String userpass = sharedPreferences.getString(key, ":");
+        
         setContentView(R.layout.main);
         
         mRegisterButton = (Button) findViewById(R.id.registerButton);
@@ -66,23 +73,12 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
      * Attempts to login the user.
      */
     private void loginUser() {
-    	String prefsFile = getResources().getString(R.string.preferencesFilename);
+    	
 		String username = mEmail.getText().toString();
 		String password = mPassword.getText().toString();
 		String userpass = username + ":" + password;
 		
-		mServerCommunicator.sendAuthenticationRequest(userpass);
-		
-		String key = getResources().getString(R.string.preferencesUserpass);
-		Log.d(TAG, userpass);
-		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
-		Editor editor = sharedPreferences.edit(); 
-		editor.putString(key, userpass);
-		editor.commit();
-		
-		Intent i = new Intent(this, HostTabsActivity.class);
-		startActivity(i);
-		
+		mServerCommunicator.sendAuthenticationRequest(userpass);	
     }
     
     /* Button click handlers */
@@ -114,8 +110,20 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 
 
 	public void handleServerResponseData(JSONArray values) {
-		mLoginButton.setText(R.string.registerNewAccountSuccess);
+		mLoginButton.setText(R.string.registerNewAccountSuccess);	
 		
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		
+		Log.d(TAG, userpass);
+		
+		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
+		Editor editor = sharedPreferences.edit(); 
+		editor.putString(key, userpass);
+		editor.commit();
+		
+		Intent i = new Intent(this, HostTabsActivity.class);
+		startActivity(i);
 	}
 	
 	public void handleServerResponseMessage(String message) {
