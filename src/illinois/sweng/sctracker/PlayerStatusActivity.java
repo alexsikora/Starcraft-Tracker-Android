@@ -72,8 +72,6 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 	private boolean isFavorite(long pk) {
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
-		
-		// String favoriteKey = getResources().getString(R.string.favoritePlayerKey);
 		JSONArray def = new JSONArray();
 		
 		try {

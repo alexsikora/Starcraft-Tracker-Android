@@ -65,8 +65,12 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 	 * Request the list of this user's favorites from the server
 	 */
 	private void getFavoritesList() {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");
+		
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
-		String userpass = "test@account.com:test";
 		comm.sendGetAllFavoritesRequest(userpass);
 	}
 
@@ -154,8 +158,6 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiving favorites data");
-		
-		//String favoriteKey = getResources().getString(R.string.favoritePlayerKey);
 		
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
