@@ -77,7 +77,11 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 			favorite.setOnCheckedChangeListener(new FavoriteCheckboxClickHandler());
 
 	}
-	
+	/**
+	 * Checks whether the current team is a favorite and returns true or false
+	 * @param pk - server's unique code for team
+	 * @return true if a favorite, false otherwise
+	 */
 	private boolean isFavorite(long pk) {
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
@@ -99,6 +103,10 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		return false;
 	}
 	
+	/**
+	 * Sends a request to server to get the favorites list and updates it in 
+	 * shared preferences
+	 */
 	private void getFavoritesList() {
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
@@ -109,6 +117,9 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		comm.sendGetAllFavoritesRequest(userpass);
 	}
 	
+	/**
+	 * Pulls data in from calling activity
+	 */
 	private void getDataFromIntent(){
 		Intent intent = getIntent();
 		Resources res = getResources();
@@ -127,7 +138,10 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		
 	}
 	
-
+	/**
+	 * Opens a player status activity
+	 * @param i is the Intent class
+	 */
 	private void showPlayerStatus(Intent i) {
 		i.setClass(this, PlayerStatusActivity.class);
 		startActivity(i);
@@ -181,18 +195,33 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 			showPlayerStatus(i);
 		}
 		
+		/**
+		 * packs a int
+		 * @param key
+		 * @param i
+		 */
 		private void putIntExtra(String key, Intent i) {
 			int index = mPlayerCursor.getColumnIndexOrThrow(key);
 			int rowID = mPlayerCursor.getInt(index);
 			i.putExtra(key, rowID);
 		}
 		
+		/**
+		 * packs a string
+		 * @param key
+		 * @param i
+		 */
 		private void putStringExtra(String key, Intent i) {
 			int index = mPlayerCursor.getColumnIndexOrThrow(key);
 			String name = mPlayerCursor.getString(index);
 			i.putExtra(key, name);
 		}
 		
+		/**
+		 * packs a long
+		 * @param key
+		 * @param i
+		 */
 		private void putLongExtra(String key, Intent i) {
 			int index = mPlayerCursor.getColumnIndexOrThrow(key);
 			long pk = mPlayerCursor.getLong(index);
@@ -212,9 +241,19 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		}
 	}
 	
+	/**
+	 * send favorite or unfavorite request to server based on whether the checkbox is
+	 * checked or unchecked
+	 * @param isChecked
+	 */
 	public void sendFavoriteRequest(boolean isChecked) {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		
+		String key = getResources().getString(R.string.preferencesUserpass);
+		
+		String userpass = prefs.getString(key, "");
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
-		String userpass = "test@account.com:test";
 		if (isChecked) {
 			com.sendFavoriteTeamRequest(userpass, pk + "");
 		} else {
@@ -228,6 +267,9 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		
 	}
 
+	/**
+	 * Receives favorites list from server, processes and updates shared prefs
+	 */
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiving favorites data");
 					
