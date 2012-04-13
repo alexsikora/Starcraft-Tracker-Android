@@ -84,29 +84,38 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	 */
 	// TODO
 	public void updatePlayers() {
-		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		String key = getResources().getString(R.string.preferencesUserpass);
-		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
-		String userpass = preferences.getString(key, "");
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		String userpass = getUserPass();
+		Log.d("VVVVV", userpass);
 		comm.sendGetAllPlayersRequest(userpass);
 	}
 
+
 	// TODO
 	public void updateTeams() {
-		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		String key = getResources().getString(R.string.preferencesUserpass);
-		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
-		String userpass = preferences.getString(key, "");
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		String userpass = getUserPass();
+		Log.d("WWWWW", userpass);
 		comm.sendGetAllTeamsRequest(userpass);
 	}
 
 	//TODO: updateEvents()
 	public void updateEvents() {
-		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		String userpass = getUserPass();
+		Log.d("QQQQQ", userpass);
+		comm.sendGetAllEventsRequest(userpass);
+	}
+
+	/**
+	 * Extracts the user's email address and password from shared preferences
+	 * @return User's userpass in the format email:password
+	 */
+	private String getUserPass() {
 		String key = getResources().getString(R.string.preferencesUserpass);
 		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
 		String userpass = preferences.getString(key, "");
-		comm.sendGetAllEventsRequest(userpass);
+		return userpass;
 	}
 	
 	public void handleServerError(String message) {
