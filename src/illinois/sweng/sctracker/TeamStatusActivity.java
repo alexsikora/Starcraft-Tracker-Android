@@ -81,8 +81,6 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	private boolean isFavorite(long pk) {
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
-		
-		// String favoriteKey = getResources().getString(R.string.favoritePlayerKey);
 		JSONArray def = new JSONArray();
 		
 		try {
@@ -102,8 +100,12 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	}
 	
 	private void getFavoritesList() {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");
+		
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
-		String userpass = "test@account.com:test";
 		comm.sendGetAllFavoritesRequest(userpass);
 	}
 	
@@ -214,9 +216,9 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
 		String userpass = "test@account.com:test";
 		if (isChecked) {
-			com.sendFavoritePlayerRequest(userpass, pk + "");
+			com.sendFavoriteTeamRequest(userpass, pk + "");
 		} else {
-			com.sendUnfavoritePlayerRequest(userpass, pk + "");
+			com.sendUnfavoriteTeamRequest(userpass, pk + "");
 		}
 		getFavoritesList();
 	}
@@ -228,9 +230,7 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiving favorites data");
-		
-		//String favoriteKey = getResources().getString(R.string.favoritePlayerKey);
-		
+					
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
