@@ -38,6 +38,8 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
 		String userpass = sharedPreferences.getString(key, ":");
 		
+		Log.d("PREFS", userpass);
+		
 		mServerCommunicator = new ServerCommunicator(this, TAG);
 		mServerCommunicator.sendAuthenticationRequest(userpass);
 		mManualLogin = true;
@@ -124,7 +126,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		String key = getResources().getString(R.string.preferencesUserpass);
 		
-		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
+		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit(); 
 		editor.putString(key, mUserpass);
 		editor.commit();
