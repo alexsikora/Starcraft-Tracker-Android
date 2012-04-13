@@ -6,6 +6,7 @@ import org.json.JSONArray;
 
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -44,6 +45,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         mPassword = (EditText) findViewById(R.id.mainPasswordTextEdit);
         
         mServerCommunicator = new ServerCommunicator(this, TAG);
+        registerWithServer();
     }
    
     /**
@@ -60,6 +62,15 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
     private void launchUnregister() {
     	Intent i = new Intent(this, UnregisterActivity.class);
 		startActivity(i);
+    }
+    
+    private void registerWithServer() {
+    	Log.d("Registration Info", "Attempting to register c2dm");
+    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
+    	this.startService(registrationIntent);
+    	Log.d("Registration Info", "Finished Sending registration intent");
     }
     
     /**
@@ -120,5 +131,6 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
+		Log.d("MAIN", message);
 	}
 }

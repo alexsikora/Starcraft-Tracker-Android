@@ -33,6 +33,7 @@
 	<string name="serverUnfavoritePlayerURL">/users/removefavoriteplayer/?id=</string>
 	<string name="serverUnfavoriteTeamURL">/users/removefavoriteteam/?id=</string>
 	<string name="serverUnfavoriteEventURL">/users/removefavoriteevent/?id=</string>
+	<string name="serverRegisterDeviceURL">/users/setdevice/</string>
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
 		communicating with the server
 	</string>
