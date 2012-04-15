@@ -17,11 +17,11 @@ import android.widget.Button;
  * user.
  */
 public class HomeActivity extends Activity implements DelegateActivity {
-	static String TAG = "homeActivity";
-	static final String PREFS_FILE = "sc2prefs";
+	private static String TAG = "homeActivity";
+	private static final String PREFS_FILE = "sc2prefs";
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
-	DBAdapter mDBAdapter;
+	private DBAdapter mDBAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

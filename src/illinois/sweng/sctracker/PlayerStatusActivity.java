@@ -160,10 +160,6 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		}
 	}
 
-	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiving favorites data");
@@ -195,6 +191,11 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		
 	}
 
+	public void handleServerError(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 		
