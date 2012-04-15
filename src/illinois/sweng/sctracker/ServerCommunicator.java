@@ -23,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
@@ -42,7 +41,7 @@ public class ServerCommunicator {
 	 */
 	public ServerCommunicator(DelegateActivity delegate, String delegateTag) {
 		mDelegate = delegate;
-		mResources = ((Activity) mDelegate).getResources();
+		mResources = mDelegate.getResources(); 
 		TAG = "sc2TrackerServerCommunicator-" + delegateTag;
 	}
 
@@ -253,6 +252,18 @@ public class ServerCommunicator {
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
 		Log.d(TAG, "Sending get all events request");
+		executeHttpRequest(request);
+	}
+	
+	public void sendDeviceRegistrationRequest(String userpass, String type, String regId) {
+		String urlString = buildDeviceRegistrationURL(type, regId);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending device registration request");
 		executeHttpRequest(request);
 	}
 
@@ -520,6 +531,17 @@ public class ServerCommunicator {
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
 		sb.append(unfavoriteEventURL);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildDeviceRegistrationURL(String type, String regId) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence registerDeviceURL = mResources.getText(R.string.serverRegisterDeviceURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(registerDeviceURL);
+		sb.append("?type=" + type + "&rid=" + regId);
 		String urlString = sb.toString();
 		return urlString;
 	}

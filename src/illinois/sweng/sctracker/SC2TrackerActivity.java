@@ -6,6 +6,7 @@ import org.json.JSONArray;
 
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -57,6 +58,8 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         mEmail = (EditText) findViewById(R.id.mainEmailEditText);
         mPassword = (EditText) findViewById(R.id.mainPasswordTextEdit);
         
+        mServerCommunicator = new ServerCommunicator(this, TAG);
+        registerWithServer();
     }
    
     /**
@@ -73,6 +76,15 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
     private void launchUnregister() {
     	Intent i = new Intent(this, UnregisterActivity.class);
 		startActivity(i);
+    }
+    
+    private void registerWithServer() {
+    	Log.d("Registration Info", "Attempting to register c2dm");
+    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
+    	this.startService(registrationIntent);
+    	Log.d("Registration Info", "Finished Sending registration intent");
     }
     
     /**
@@ -121,7 +133,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	}
 	
 	public void handleServerResponseMessage(String message) {
-		//mLoginButton.setText(R.string.registerNewAccountSuccess);	
+		mLoginButton.setText(R.string.registerNewAccountSuccess);	
 		
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		String key = getResources().getString(R.string.preferencesUserpass);
@@ -133,5 +145,6 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		
 		Intent i = new Intent(this, HostTabsActivity.class);
 		startActivity(i);
+		Log.d("MAIN", message);
 	}
 }

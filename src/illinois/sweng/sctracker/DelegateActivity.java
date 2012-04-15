@@ -3,6 +3,8 @@ package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
 
+import android.content.res.Resources;
+
 /**
  * Subclass of Activity that allows for delegate-style callbacks to the Activity
  * 
@@ -30,4 +32,9 @@ public interface DelegateActivity {
 	 * @param message String success message returned by the server
 	 */
 	public abstract void handleServerResponseMessage(String message);
+	
+	/**
+	 * 
+	 */
+	public abstract Resources getResources();
 }
