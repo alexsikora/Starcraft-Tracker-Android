@@ -1,11 +1,17 @@
 package illinois.sweng.sctracker;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,6 +23,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -500,4 +507,26 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	private String buildGetEventURL(String eventPK){
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getEventURL);
+		sb.append(eventPK);
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Given the proper url, this function gets the data for an event specified by its pk
+	 * and returns it as a string
+	 * 
+	 * @param uri
+	 * @return String containing the event data, encoded in JSON format
+	 * @throws Exception
+	 */
+	public static String getEventInfo(String url) {
+		return null;
+	}
 }

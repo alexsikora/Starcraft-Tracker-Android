@@ -18,6 +18,7 @@ public class PlayerListActivity extends ListActivity {
 	
 	private DBAdapter mDatabaseAdapter;
 	private Cursor mPlayerCursor;
+	private ServerCommunicator sc;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -27,6 +27,7 @@
 	<string name="serverGetAllPlayersURL">/players/allplayers/</string>
 	<string name="serverGetAllTeamsURL">/players/allteams/</string>
 	<string name="serverGetAllEventsURL">/events/allevents/</string>
+	<string name="serverGetEventURL">/events/get_event/?id=</string>
 	<string name="serverFavoritePlayerURL">/users/addfavoriteplayer/?id=</string>
 	<string name="serverFavoriteTeamURL">/users/addfavoriteteam/?id=</string>
 	<string name="serverFavoriteEventURL">/users/addfavoriteevent/?id=</string>
@@ -56,7 +57,12 @@
 	<string name="playerStatusNationality">Nationality: </string>
 	<string name="playerStatusElo">Elo: </string>
 	
-
+	<string name="eventStatusName">Name: </string>
+	<string name="eventStatusStartDate">Start Date: </string>
+	<string name="eventStatusEndDate">End Date: </string>
+	<string name="eventStatusRoundOf">Round Of 64</string>
+	<string name="eventStatusFinals">Finals</string>
+	
 	<string name="hostTabsActivity">SC2Tracker</string>
 
 	<string name="playerStatusActivity">Player Status</string>
@@ -64,6 +70,7 @@
 	<string name="playersActivity">Players</string>
 	<string name="teamsActivity">Teams</string>
 	<string name="eventsActivity">Events</string>
+	
 	<string name="keyRowID">_id</string>
 	<string name="keyPK">pk</string>
 	<string name="keyPicture">picture</string>
@@ -73,6 +80,9 @@
 	<string name="keyNationality">nationality</string>
 	<string name="keyELO">elo</string>
 	<string name="keyTeam">team</string>
+	
+	
+	
 	<string name="playerStatusFavorite">Player Favorited</string>
 	<string name="playerStatusImageContentDescription">Portrait of the selected player</string>
 
@@ -83,5 +93,7 @@
 	<string name="playerListActivity">Players</string>
 	<string name="teamListActivity">Teams</string>
 	<string name="eventListActivity">Events</string>
+	<string name="roundOfListActivity">RoundOf</string>
+	<string name="finalsListActivity">Finals</string>
 
 </resources>
