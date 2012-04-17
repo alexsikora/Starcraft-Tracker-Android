@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class EventStatusActivity extends Activity{
+public class EventStatusActivity extends Activity implements DelegateActivity{
 	static String TAG = "eventStatusActivity";
 	DBAdapter mDBAdapter;
 
@@ -108,6 +108,21 @@ public class EventStatusActivity extends Activity{
 		Intent i = new Intent(this, PlayerMatches.class);
 		i.putExtra("data", playerMatchesFinals.toString());
 		startActivity(i);
+	}
+
+	public void handleServerError(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handleServerResponseData(JSONArray values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

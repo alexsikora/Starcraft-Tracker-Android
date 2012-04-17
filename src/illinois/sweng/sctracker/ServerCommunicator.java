@@ -177,6 +177,16 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendGetEventRequest(String userpass, String eventPK){
+		String urlString = buildGetEventURL(eventPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic " + Base64.encodeToString(userpass.getBytes(), Base64.NO_WRAP));
+		Log.d(TAG, "Sending get event request");
+		executeHttpRequest(request);
+	}
+	
 	public void sendFavoritePlayerRequest(String userpass, String playerPK) {
 		String urlString = buildFavoritePlayerURL(playerPK);
 		HttpGet request = new HttpGet(urlString);

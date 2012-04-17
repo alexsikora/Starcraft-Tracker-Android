@@ -2,6 +2,7 @@ package illinois.sweng.sctracker;
 
 import java.net.URLEncoder;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
@@ -16,7 +17,7 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class EventListActivity extends ListActivity{
+public class EventListActivity extends ListActivity implements DelegateActivity{
 	private final String TAG = "EventListActivity";
 	private DBAdapter mDBAdapter;
 	private Cursor mEventCursor;
@@ -74,9 +75,6 @@ public class EventListActivity extends ListActivity{
 			int index = mEventCursor.getColumnIndex(pkKey);
 			String pk = mEventCursor.getString(index);
 			
-			// data should look like this:
-			// {"status_code": 200, "response": {"pk": 1, "rounds": [{"pk": 1, "player_matches": [{"pk": 1, "first_player": 1, "games": [], "second_player": 2}], "name": "Round of 64", "team_matches": []}, {"pk": 2, "player_matches": [{"pk": 2, "first_player": 1, "games": [], "second_player": 2}], "name": "Finals", "team_matches": []}], "name": "MLG", "end_date": "2012-03-31", "start_date": "2012-03-31"}}
-			
 			try{
 				data = ServerCommunicator.getEventInfo(url + URLEncoder.encode(String.valueOf(pk), "UTF-8"));
 				i.putExtra("data", data);
@@ -88,6 +86,21 @@ public class EventListActivity extends ListActivity{
 			showEventStatus(i);
 			
 		}
+		
+	}
+
+	public void handleServerError(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handleServerResponseData(JSONArray values) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
 		
 	}
 
