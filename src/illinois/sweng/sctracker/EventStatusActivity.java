@@ -1,8 +1,5 @@
 package illinois.sweng.sctracker;
 
-// startrack.alexsikora.com
-// admin, pw: st4rtrack
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -85,18 +81,7 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 		Intent i = new Intent(this, Rounds.class);
 		i.putExtra("data", rounds.toString());
 		startActivity(i);
-	}
-
-	private void getFavoritesList(){
-		String prefsFile = getResources().getString(R.string.preferencesFilename);
-		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
-		String key = getResources().getString(R.string.preferencesUserpass);
-		String userpass = prefs.getString(key,  "");
-		
-		ServerCommunicator comm = new ServerCommunicator(this, TAG);
-		comm.sendGetAllFavoritesRequest(userpass);
-	}
-	
+	}	
 	
 	public void handleServerError(String message) {
 		// TODO Auto-generated method stub
