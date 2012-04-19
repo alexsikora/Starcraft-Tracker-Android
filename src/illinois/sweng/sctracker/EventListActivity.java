@@ -117,4 +117,5 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 		
 	}
 
+
 }

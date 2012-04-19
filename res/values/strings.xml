@@ -34,6 +34,7 @@
 	<string name="serverUnfavoritePlayerURL">/users/removefavoriteplayer/?id=</string>
 	<string name="serverUnfavoriteTeamURL">/users/removefavoriteteam/?id=</string>
 	<string name="serverUnfavoriteEventURL">/users/removefavoriteevent/?id=</string>
+	<string name="serverRegisterDeviceURL">/users/setdevice/</string>
 	<string name="serverProtocolErrorMessage">There was an error in the HTTP protocol when
 		communicating with the server
 	</string>
@@ -49,8 +50,8 @@
 	<string name="homeUnregisterButtonText">Deactivate Account</string>
 	<string name="search_hint">Search players, teams, events</string>
 
-	<string name="preferencesFilename">sc2prefs</string>
 	<string name="preferencesUserpass">userpass</string>
+	<string name="preferencesFilename">sc2prefs</string>
 	<string name="playerStatusHandle">Handle: </string>
 	<string name="playerStatusName">Name: </string>
 	<string name="playerStatusRace">Race: </string>
@@ -80,9 +81,8 @@
 	<string name="keyNationality">nationality</string>
 	<string name="keyELO">elo</string>
 	<string name="keyTeam">team</string>
-	
-	
-	
+
+	<string name="keyTag">tag</string>
 	<string name="playerStatusFavorite">Player Favorited</string>
 	<string name="playerStatusImageContentDescription">Portrait of the selected player</string>
 
@@ -93,8 +93,14 @@
 	<string name="playerListActivity">Players</string>
 	<string name="teamListActivity">Teams</string>
 	<string name="eventListActivity">Events</string>
+
 	<string name="playerMatchesActivity">PlayerMatches</string>
 	<string name="gamesActivity">Games</string>
 	<string name="roundsActivity">Rounds</string>
+	<string name="favoriteSharedPrefs">favorites</string>
+	<string name="serverGetAllFavoritesURL">/users/getallfavs/</string>
+	<string name="favoriteEventKey">favorite_events</string>
+	<string name="favoritePlayerKey">favorite_players</string>
+	<string name="favoriteTeamKey">favorite_teams</string>
 
 </resources>

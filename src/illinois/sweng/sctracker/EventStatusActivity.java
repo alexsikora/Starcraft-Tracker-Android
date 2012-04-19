@@ -21,7 +21,7 @@ import android.widget.TextView;
 public class EventStatusActivity extends Activity implements DelegateActivity{
 	static String TAG = "eventStatusActivity";
 
-	long eventPK;
+	long eventPK = -1;
 	String name = "";
 	String startdate = "";
 	String enddate = "";
@@ -87,6 +87,17 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 		startActivity(i);
 	}
 
+	private void getFavoritesList(){
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key,  "");
+		
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		comm.sendGetAllFavoritesRequest(userpass);
+	}
+	
+	
 	public void handleServerError(String message) {
 		// TODO Auto-generated method stub
 		

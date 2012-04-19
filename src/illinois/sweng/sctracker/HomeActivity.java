@@ -17,28 +17,23 @@ import android.widget.Button;
  * user.
  */
 public class HomeActivity extends Activity implements DelegateActivity {
-	static String TAG = "homeActivity";
-	static final String PREFS_FILE = "sc2prefs";
-	private Button mSearchButton;
+	private static String TAG = "homeActivity";
+	private static final String PREFS_FILE = "sc2prefs";
 	private Button mUnregisterButton;
 	private Button mLogOutButton;
-	DBAdapter mDBAdapter;
+	private DBAdapter mDBAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
 
-		mSearchButton = (Button) findViewById(R.id.searchButton);
 		mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
 		mLogOutButton = (Button) findViewById(R.id.logoutButton);
 
-		mSearchButton.setOnClickListener(new SearchButtonHandler());
 		mUnregisterButton.setOnClickListener(new UnregisterButtonHandler());
 		mLogOutButton.setOnClickListener(new LogOutButtonHandler());
 
-//		this.deleteDatabase("TrackerDatabase");
-		
 		mDBAdapter = new DBAdapter(this);
 		
 		//Update the database
@@ -84,46 +79,43 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	};
 
 	/**
-	 * Dumb button to view first returned player
-	 */
-	private class SearchButtonHandler implements View.OnClickListener {
-		public void onClick(View v) {
-			Log.d(TAG, "Search Button Clicked");
-//			updatePlayers();
-//			updateTeams();
-//			updateEvents();
-		}
-	}
-
-	/**
 	 * Makes a request to the server communicator to get all the players. In the
 	 * handleServerResponse, the database will be updated with the result.
 	 */
 	// TODO
 	public void updatePlayers() {
-		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		String key = getResources().getString(R.string.preferencesUserpass);
-		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
-		String userpass = preferences.getString(key, "");
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		String userpass = getUserPass();
+		Log.d("VVVVV", userpass);
 		comm.sendGetAllPlayersRequest(userpass);
 	}
 
+
 	// TODO
 	public void updateTeams() {
-		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
-		String key = getResources().getString(R.string.preferencesUserpass);
-		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
-		String userpass = preferences.getString(key, "");
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		String userpass = getUserPass();
+		Log.d("WWWWW", userpass);
 		comm.sendGetAllTeamsRequest(userpass);
 	}
 
 	//TODO: updateEvents()
 	public void updateEvents() {
-		ServerCommunicator comm = new ServerCommunicator(this, "HOME");
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		String userpass = getUserPass();
+		Log.d("QQQQQ", userpass);
+		comm.sendGetAllEventsRequest(userpass);
+	}
+
+	/**
+	 * Extracts the user's email address and password from shared preferences
+	 * @return User's userpass in the format email:password
+	 */
+	private String getUserPass() {
 		String key = getResources().getString(R.string.preferencesUserpass);
 		SharedPreferences preferences = getSharedPreferences(PREFS_FILE, 0);
 		String userpass = preferences.getString(key, "");
-		comm.sendGetAllEventsRequest(userpass);
+		return userpass;
 	}
 	
 	public void handleServerError(String message) {
@@ -156,8 +148,6 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		// Intent i = new Intent(this, PlayerStatusActivity.class);
-		// startActivity(i);
 	}
 
 	public void handleServerResponseMessage(String message) {
