@@ -23,6 +23,7 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 	
 	private DBAdapter mDatabaseAdapter;
 	private Cursor mPlayerCursor;
+	private ServerCommunicator sc;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

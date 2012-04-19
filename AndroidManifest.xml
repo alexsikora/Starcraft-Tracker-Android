@@ -73,6 +73,21 @@
         </activity>
         <activity android:name="TeamStatusActivity"></activity>
         
+        <activity 
+            android:name="PlayerMatches"
+            android:label="@string/playerMatchesActivity">
+        </activity>
+        
+        <activity 
+            android:name="Games"
+            android:label="@string/gamesActivity">
+        </activity>
+        
+        <activity 
+            android:name="Rounds"
+            android:label="@string/roundsActivity">
+        </activity>
+        
     </application>
 
 </manifest>
