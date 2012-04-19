@@ -124,7 +124,7 @@ public class ServerCommunicator {
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
 
-		Log.d(TAG, "Sending authentication request");
+		Log.d(TAG, "Sending authentication request" + userpass);
 		executeHttpRequest(request);
 	}
 	
@@ -141,7 +141,7 @@ public class ServerCommunicator {
 				"Basic "
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all players request");
+		Log.d(TAG, "Sending get all players request:" + userpass);
 		executeHttpRequest(request);
 	}
 	
@@ -187,7 +187,7 @@ public class ServerCommunicator {
 				"Basic "
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all favorites request");
+		Log.d(TAG, "Sending get all favorites request"  + userpass);
 		executeHttpRequest(request);
 	}
 	
@@ -332,7 +332,7 @@ public class ServerCommunicator {
 			}			
 		} else {
 			String response = "" + statusCode;
-			Log.d("ZZ", response);
+			Log.d(TAG, response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
 		}
