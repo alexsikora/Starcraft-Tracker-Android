@@ -9,14 +9,9 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 public class Rounds extends ListActivity {

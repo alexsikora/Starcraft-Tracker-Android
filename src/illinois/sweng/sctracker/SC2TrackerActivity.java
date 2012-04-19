@@ -95,6 +95,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		String username = mEmail.getText().toString();
 		String password = mPassword.getText().toString();
 		String userpass = username + ":" + password;
+		mUserpass = userpass;
 		
 		mServerCommunicator.sendAuthenticationRequest(userpass);	
     }
