@@ -177,7 +177,7 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
-	public void sendGetEventRequest(String userpass, String eventPK){
+	public void sendGetEventRequest(String userpass, long eventPK){
 		String urlString = buildGetEventURL(eventPK);
 		HttpGet request = new HttpGet(urlString);
 		request.setHeader(
@@ -441,6 +441,17 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	private String buildGetEventURL(long eventPK){
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getEventURL);
+		sb.append(eventPK);
+		
+		return sb.toString();
+	}
+	
 	private String buildGetAllEventsURL() {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence getEventsURL = mResources.getText(R.string.serverGetAllEventsURL);
@@ -517,26 +528,6 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
-	private String buildGetEventURL(String eventPK){
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(getEventURL);
-		sb.append(eventPK);
-		
-		return sb.toString();
-	}
 	
-	/**
-	 * Given the proper url, this function gets the data for an event specified by its pk
-	 * and returns it as a string
-	 * 
-	 * @param uri
-	 * @return String containing the event data, encoded in JSON format
-	 * @throws Exception
-	 */
-	public static String getEventInfo(String url) {
-		return null;
-	}
+
 }

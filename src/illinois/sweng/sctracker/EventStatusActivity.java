@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,19 +20,17 @@ import android.widget.TextView;
 
 public class EventStatusActivity extends Activity implements DelegateActivity{
 	static String TAG = "eventStatusActivity";
-	DBAdapter mDBAdapter;
 
+	long eventPK;
 	String name = "";
 	String startdate = "";
 	String enddate = "";
 	
-	private Button mRoundOfButton;
-	private Button mFinalsButton;
-
+	private Button mRoundsButton;
+	
 	JSONObject eventJSON;
 	JSONArray rounds;
-	JSONArray playerMatchesRoundOf;
-	JSONArray playerMatchesFinals;
+	JSONArray finals;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -42,25 +41,17 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 			getDataFromIntent();
 			
 			TextView t = (TextView) findViewById(R.id.eventStatusNameTextView);
-			t.append(name);
+			t.append(" " + name);
 			t = (TextView) findViewById(R.id.eventStatusStartDateTextView);
-			t.append(startdate);
+			t.append(" " + startdate);
 			t = (TextView) findViewById(R.id.eventStatusEndDateTextView);
-			t.append(enddate);
+			t.append(" " + enddate);
 			
-			mRoundOfButton = (Button) findViewById(R.id.eventStatusRoundOfButton);
-			mRoundOfButton.setOnClickListener(new View.OnClickListener() {
+			mRoundsButton = (Button) findViewById(R.id.eventStatusRoundsButton);
+			mRoundsButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v){
-					Log.d(TAG, "RoundOf Button Clicked.");
-					LaunchRoundOf();
-				}
-			});
-			
-			mFinalsButton = (Button) findViewById(R.id.eventStatusFinalsButton);
-			mFinalsButton.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v){
-					Log.d(TAG, "Finals Button Clicked.");
-					LaunchFinals();
+					Log.d(TAG, "Rounds Button Clicked.");
+					LaunchRounds();
 				}
 			});
 		
@@ -74,39 +65,25 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 		Intent intent = getIntent();
 		Resources res = getResources();
 		
-		String data = intent.getStringExtra("data");
-		Log.d(TAG, data);
-		eventJSON = new JSONObject("JSON: " + data);
-		eventJSON = eventJSON.getJSONObject("response");
+		String pkKey = res.getString(R.string.keyPK); 
+		eventPK = intent.getLongExtra(pkKey, -1);
 		
-		name = eventJSON.getString("name");
-		startdate = eventJSON.getString("start_date");
-		enddate = eventJSON.getString("end_date");
-		
-		rounds = eventJSON.getJSONArray("rounds");
-		for(int i=0; i < rounds.length(); i++){
-			JSONObject round = rounds.getJSONObject(i);
-			if(round.getString("name") == "Round Of 64"){
-				playerMatchesRoundOf = round.getJSONArray("player_matches");
-				Log.d(TAG, "Round of 64 Assigned.");
-			}
-			
-			else if(round.getString("name") == "Finals"){
-				playerMatchesFinals = round.getJSONArray("player_matches");
-				Log.d(TAG, "Finals Assigned.");
-			}
-		}
-	}
-
-	private void LaunchRoundOf(){
-		Intent i = new Intent(this, PlayerMatches.class);
-		i.putExtra("data", playerMatchesRoundOf.toString());
-		startActivity(i);
+		getEventInfo(eventPK);
 	}
 	
-	private void LaunchFinals(){
-		Intent i = new Intent(this, PlayerMatches.class);
-		i.putExtra("data", playerMatchesFinals.toString());
+	private void getEventInfo(long eventPK){
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key,  "");
+		
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		comm.sendGetEventRequest(userpass, eventPK);
+	}
+
+	private void LaunchRounds(){
+		Intent i = new Intent(this, Rounds.class);
+		i.putExtra("data", rounds.toString());
 		startActivity(i);
 	}
 
@@ -122,7 +99,21 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
+		try{
+			Log.d(TAG, "Server Response message received: " + message);
+			eventJSON = new JSONObject(message);
+			
+			name = eventJSON.getString("name");
+			startdate = eventJSON.getString("start_date");
+			enddate = eventJSON.getString("end_date");
+
+			rounds = eventJSON.getJSONArray("rounds");
+		}
 		
+		catch(JSONException e){
+			Log.e(TAG, "Error retrieving JSON string returned from server.");
+			e.printStackTrace();
+		}
 	}
 }
 

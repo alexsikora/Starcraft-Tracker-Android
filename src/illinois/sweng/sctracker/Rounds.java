@@ -19,34 +19,52 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 
-public class Games extends ListActivity {
-	private final String TAG = "Games";
-	private List<JSONObject> games;
+public class Rounds extends ListActivity {
+	private final String TAG = "Rounds";
+	List<JSONObject> rounds;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.games);
+		setContentView(R.layout.rounds);
 		
 		try{
-			games = new ArrayList<JSONObject>();
-			games = getDataFromIntent(); 	
+			rounds = new ArrayList<JSONObject>();
+			rounds = getDataFromIntent();
 			
-			GamesAdapter adapter = new GamesAdapter(this, games);
+			RoundsAdapter adapter = new RoundsAdapter(this, rounds);
 			setListAdapter(adapter);
 		}
 		
-		catch (Exception e){
+		catch(Exception e){
 			Log.e(TAG, "Error: " + e.toString());
 			e.printStackTrace();
 		}
 	}
 	
-	public List<JSONObject> getDataFromIntent() throws JSONException{
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id){
+		super.onListItemClick(l, v, position, id);
+		
+		try {
+			Intent i = new Intent();
+			i.setClass(this, PlayerMatches.class);
+			String playerMatches = rounds.get(position).getJSONArray("player_matches").toString();
+			i.putExtra("data", playerMatches);
+			startActivity(i);
+		} 
+		
+		catch (JSONException e) {
+			Log.e(TAG, "Error: " + e.toString());
+			e.printStackTrace();
+		}
+	}
+	
+	private List<JSONObject> getDataFromIntent() throws JSONException{
 		Intent intent = getIntent();
-		String games = intent.getStringExtra("data");
-		Log.d(TAG, "String received: " + games);
-		JSONArray arr = new JSONArray(games);
+		
+		String data = intent.getStringExtra("data");
+		JSONArray arr = new JSONArray(data);
 		
 		List<JSONObject> list = new ArrayList<JSONObject>();
 		for(int i=0; i < arr.length(); i++){

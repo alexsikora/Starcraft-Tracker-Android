@@ -4,13 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
     
+    <TextView
+        android:id="@+id/gameNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingTop="3dip" />
     
     <TextView 
         android:id="@+id/winner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingTop="10dip" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
      
      <TextView 
         android:id="@+id/description"
@@ -22,6 +27,7 @@
         android:id="@+id/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingBottom="3dip"/>
 
 </LinearLayout>

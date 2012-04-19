@@ -1,6 +1,5 @@
 package illinois.sweng.sctracker;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +23,11 @@ import android.widget.ListView;
 public class PlayerMatches extends ListActivity{
 	private final String TAG = "PlayerMatches";
 	private List<JSONObject> matches;
-	private DBAdapter mDatabaseAdapter;
-	private Cursor mPlayerCursor;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.playermatches);
-		
-		mDatabaseAdapter = new DBAdapter(this);
-		mDatabaseAdapter.open();
 		
 		try{
 			matches = new ArrayList<JSONObject>();
@@ -45,6 +39,7 @@ public class PlayerMatches extends ListActivity{
 		
 		catch (Exception e){
 			Log.e(TAG, "Error: " + e.toString());
+			e.printStackTrace();
 		}
 	}
 	
@@ -55,12 +50,14 @@ public class PlayerMatches extends ListActivity{
 		try {
 			Intent i = new Intent();
 			i.setClass(this, Games.class);
+			String games = matches.get(position).getJSONArray("games").toString();
+			i.putExtra("data", games);
 			startActivity(i);
-			i.putExtra("data", matches.get(position).getJSONArray("games").toString());
 		} 
 		
 		catch (JSONException e) {
 			Log.e(TAG, "Error: " + e.toString());
+			e.printStackTrace();
 		}
 		
 	}
@@ -74,22 +71,6 @@ public class PlayerMatches extends ListActivity{
 		List<JSONObject> list = new ArrayList<JSONObject>();
 		for(int i=0; i < arr.length(); i++){
 			list.add(arr.getJSONObject(i));
-			
-			int pk1 = arr.getJSONObject(i).getInt("first_player");
-			mPlayerCursor = mDatabaseAdapter.getPlayerByPK(pk1);
-			mPlayerCursor.moveToFirst();
-			int index = mPlayerCursor.getColumnIndex("handle");
-			String handle = mPlayerCursor.getString(index);
-			
-			list.get(i).put("player1", handle);
-			
-			int pk2 = arr.getJSONObject(i).getInt("second_player");
-			mPlayerCursor = mDatabaseAdapter.getPlayerByPK(pk2);
-			mPlayerCursor.moveToFirst();
-			index = mPlayerCursor.getColumnIndex("handle");
-			handle = mPlayerCursor.getString(index);
-			
-			list.get(i).put("player2", handle);
 		}
 		
 		return list;

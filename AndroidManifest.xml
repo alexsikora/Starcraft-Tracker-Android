@@ -57,13 +57,18 @@
         </activity>
         
         <activity 
-            android:name=".PlayerMatches"
-            android:label="@string/roundOfListActivity">
+            android:name="PlayerMatches"
+            android:label="@string/playerMatchesActivity">
         </activity>
         
         <activity 
-            android:name=".Finals"
-            android:label="@string/finalsListActivity">
+            android:name="Games"
+            android:label="@string/gamesActivity">
+        </activity>
+        
+        <activity 
+            android:name="Rounds"
+            android:label="@string/roundsActivity">
         </activity>
         
     </application>

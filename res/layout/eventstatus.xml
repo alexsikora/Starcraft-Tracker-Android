@@ -26,15 +26,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 	<Button
-	    android:id="@+id/eventStatusRoundOfButton"
+	    android:id="@+id/eventStatusRoundsButton"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:text="@string/eventStatusRoundOf" />
+	    android:text="@string/eventStatusRounds" />
 
-	<Button
-	    android:id="@+id/eventStatusFinalsButton"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/eventStatusFinals" />
 	
 </LinearLayout>

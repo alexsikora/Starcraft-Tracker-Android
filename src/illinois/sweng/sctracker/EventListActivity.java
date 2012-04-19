@@ -3,10 +3,12 @@ package illinois.sweng.sctracker;
 import java.net.URLEncoder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,24 +21,27 @@ import android.widget.SimpleCursorAdapter;
 
 public class EventListActivity extends ListActivity implements DelegateActivity{
 	private final String TAG = "EventListActivity";
+	
 	private DBAdapter mDBAdapter;
 	private Cursor mEventCursor;
-	private String url = "http://startrack.alexsikora.com/events/get_event/?id=";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		Log.d(TAG, "EventListActivity was created");
+		
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new EventListClickListener());
+		
+		//getFavoritesList();
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
 		
 		mEventCursor = mDBAdapter.getAllEvents();
 		startManagingCursor(mEventCursor);
-		
 		
 		String fields[] = 	{
 								DBAdapter.KEY_NAME,
@@ -58,6 +63,18 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 		setListAdapter(cursorAdapter);
 	}
 	
+	/*
+	public void getFavoritesList(){
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");
+		
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		comm.sendGetAllEventsRequest(userpass);
+	}
+	*/
+	
 	private void showEventStatus(Intent i){
 		i.setClass(this, EventStatusActivity.class);
 		startActivity(i);
@@ -69,24 +86,21 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 			mEventCursor.moveToPosition(position);
 			Intent i = new Intent();
 			Resources res = getResources();
-			String data;
 			
 			String pkKey = res.getString(R.string.keyPK);
 			int index = mEventCursor.getColumnIndex(pkKey);
-			String pk = mEventCursor.getString(index);
+			long pk = mEventCursor.getLong(index);
 			
-			try{
-				data = ServerCommunicator.getEventInfo(url + URLEncoder.encode(String.valueOf(pk), "UTF-8"));
-				i.putExtra("data", data);
-				Log.d(TAG, "JSON: " + data);
-			} catch(Exception e){
-				Log.e(TAG, "Exception thrown while retrieving event information: " + e.toString());
-			}
-	
+			i.putExtra(pkKey, pk);
 			showEventStatus(i);
-			
 		}
 		
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		mDBAdapter.close();
 	}
 
 	public void handleServerError(String message) {
@@ -96,7 +110,6 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 
 	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void handleServerResponseMessage(String message) {
