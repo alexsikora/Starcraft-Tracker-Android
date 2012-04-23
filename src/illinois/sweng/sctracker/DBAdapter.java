@@ -146,21 +146,20 @@ public class DBAdapter {
 	 */
 	public boolean updatePlayer(int pk, JSONObject playerData) {
 		ContentValues data = new ContentValues();
-		try{
-			data.put(KEY_PICTURE, playerData.getString("picture").toString());
-			data.put(KEY_HANDLE, playerData.getString("handle").toString());
-			data.put(KEY_NAME, playerData.getString("name").toString());
-			data.put(KEY_RACE, playerData.getString("race").toString());
-			data.put(KEY_TEAM, playerData.getString("team").toString());
-			data.put(KEY_NATIONALITY, playerData.getString("nationality").toString());
-			data.put(KEY_ELO, playerData.getString("elo").toString());
+		
+		//TODO: opstring can return an empty string; may end up with empty entries in database.
+		//fix by checking for empty string before putting in the contentvalues
+		data.put(KEY_PICTURE, playerData.optString("picture").toString());
+		data.put(KEY_HANDLE, playerData.optString("handle").toString());
+		data.put(KEY_NAME, playerData.optString("name").toString());
+		data.put(KEY_RACE, playerData.optString("race").toString());
+		data.put(KEY_TEAM, playerData.optString("team").toString());
+		data.put(KEY_NATIONALITY, playerData.optString("nationality").toString());
+		data.put(KEY_ELO, playerData.optString("elo").toString());
 			
-	        return mDatabase.update(DATABASE_PLAYER_TABLE, data, 
-                    KEY_PK + "=" + pk, null) > 0;
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return false;
-		}
+	    return mDatabase.update(DATABASE_PLAYER_TABLE, data, 
+                   KEY_PK + "=" + pk, null) > 0;
+		
 	}
 
 	/**
@@ -230,11 +229,11 @@ public class DBAdapter {
 	}
 	
 	
-	public Cursor getPlayersByTeam(int teamname){
+	public Cursor getPlayersByTeam(int teamID){
 		return mDatabase.query(DATABASE_PLAYER_TABLE,
 				new String[] {KEY_ROWID, KEY_PK, KEY_PICTURE, KEY_HANDLE, KEY_NAME,
 				KEY_RACE, KEY_TEAM, KEY_NATIONALITY, KEY_ELO}, 
-				KEY_TEAM + "=" + "1", null, null, null, null);
+				KEY_TEAM + "=" + teamID, null, null, null, null);
 	}
 	
 	public Cursor getTeam(int rowid) {
@@ -335,12 +334,12 @@ public class DBAdapter {
 	}
 
 	/**
-	 * getEventByEK finds an event based upon their (as guaranteed by the server)
-	 * unique EK.
+	 * getEventByPK finds an event based upon their (as guaranteed by the server)
+	 * unique PK.
 	 * @param pk The integer PK that uniquely identifies events (As used in serverside database).
 	 * @return A cursor over the event found.
 	 */
-	public Cursor getEventByEK(int pk) {
+	public Cursor getEventByPK(int pk) {
 		return mDatabase.query(DATABASE_EVENT_TABLE,
 				new String[] {KEY_ROWID, KEY_PICTURE, KEY_NAME, KEY_STARTDATE, KEY_ENDDATE},
 				KEY_PK + "=" + pk, null, null, null, null);

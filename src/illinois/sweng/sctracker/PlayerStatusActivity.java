@@ -4,6 +4,7 @@ import java.net.URL;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -124,13 +125,33 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 	}
 
 	public void sendFavoriteRequest(boolean isChecked) {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");		
+		
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
-		String userpass = "test@account.com:test";
+		
 		if (isChecked) {
 			com.sendFavoritePlayerRequest(userpass, pk + "");
 		} else {
 			com.sendUnfavoritePlayerRequest(userpass, pk + "");
 		}
+		getFavoritesList();
+	}
+	
+	/**
+	 * Request the list of this user's favorites from the server
+	 */
+	private void getFavoritesList() {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");
+		
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		comm.sendGetAllFavoritesRequest(userpass);
 	}
 	
 	private class FavoriteCheckboxClickHandler implements CompoundButton.OnCheckedChangeListener {
@@ -139,16 +160,42 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		}
 	}
 
+
+	public void handleServerResponseData(JSONArray values) {
+		Log.d(TAG, "Receiving favorites data");
+		
+		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
+		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		
+		try {
+			JSONObject firstEntry = (JSONObject) (values.get(0));
+			
+			String eventKey = getResources().getString(R.string.favoriteEventKey);
+			JSONArray events = firstEntry.getJSONArray(eventKey);
+			editor.putString(eventKey, events.toString());
+			
+			String teamKey = getResources().getString(R.string.favoriteTeamKey);
+			JSONArray teams = firstEntry.getJSONArray(teamKey);
+			editor.putString(teamKey, teams.toString());
+			
+			String playerKey = getResources().getString(R.string.favoritePlayerKey);
+			JSONArray players = firstEntry.getJSONArray(playerKey);
+			editor.putString(playerKey, players.toString());
+			
+			editor.commit();
+		} catch (JSONException e) {
+			Log.d(TAG, "There was an error reading the JSON returned from the server");
+			e.printStackTrace();
+		}
+		
+	}
+
 	public void handleServerError(String message) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public void handleServerResponseData(JSONArray values) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	public void handleServerResponseMessage(String message) {
 		// TODO Auto-generated method stub
 		

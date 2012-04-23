@@ -6,6 +6,7 @@ import org.json.JSONArray;
 
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -26,10 +27,24 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	private Button mRegisterButton, mLoginButton, mUnregisterButton;
 	private EditText mEmail, mPassword;
 	private ServerCommunicator mServerCommunicator;
+	private String mUserpass;
+	private boolean mManualLogin = false;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        String prefsFile = getResources().getString(R.string.preferencesFilename);
+        String key = getResources().getString(R.string.preferencesUserpass);
+		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
+		String userpass = sharedPreferences.getString(key, ":");
+		
+		Log.d("PREFS", userpass);
+		
+		mServerCommunicator = new ServerCommunicator(this, TAG);
+		mServerCommunicator.sendAuthenticationRequest(userpass);
+		mManualLogin = true;
+		
         setContentView(R.layout.main);
         
         mRegisterButton = (Button) findViewById(R.id.registerButton);
@@ -44,6 +59,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         mPassword = (EditText) findViewById(R.id.mainPasswordTextEdit);
         
         mServerCommunicator = new ServerCommunicator(this, TAG);
+        registerWithServer();
     }
    
     /**
@@ -62,27 +78,26 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		startActivity(i);
     }
     
+    private void registerWithServer() {
+    	Log.d("Registration Info", "Attempting to register c2dm");
+    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
+    	this.startService(registrationIntent);
+    	Log.d("Registration Info", "Finished Sending registration intent");
+    }
+    
     /**
      * Attempts to login the user.
      */
     private void loginUser() {
-    	String prefsFile = getResources().getString(R.string.preferencesFilename);
+    	
 		String username = mEmail.getText().toString();
 		String password = mPassword.getText().toString();
 		String userpass = username + ":" + password;
+		mUserpass = userpass;
 		
-		mServerCommunicator.sendAuthenticationRequest(userpass);
-		
-		String key = getResources().getString(R.string.preferencesUserpass);
-		Log.d(TAG, userpass);
-		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
-		Editor editor = sharedPreferences.edit(); 
-		editor.putString(key, userpass);
-		editor.commit();
-		
-		Intent i = new Intent(this, HostTabsActivity.class);
-		startActivity(i);
-		
+		mServerCommunicator.sendAuthenticationRequest(userpass);	
     }
     
     /* Button click handlers */
@@ -108,17 +123,29 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	}
 
 	public void handleServerError(String message) {
-		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-		errorToast.show();
+		if(mManualLogin) {
+			Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+			errorToast.show();
+		}
 	}
 
 
 	public void handleServerResponseData(JSONArray values) {
-		mLoginButton.setText(R.string.registerNewAccountSuccess);
-		
 	}
 	
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
+		mLoginButton.setText(R.string.registerNewAccountSuccess);	
+		
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		
+		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit(); 
+		editor.putString(key, mUserpass);
+		editor.commit();
+		
+		Intent i = new Intent(this, HostTabsActivity.class);
+		startActivity(i);
+		Log.d("MAIN", message);
 	}
 }

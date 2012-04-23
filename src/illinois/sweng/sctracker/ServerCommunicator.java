@@ -23,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
@@ -42,7 +41,7 @@ public class ServerCommunicator {
 	 */
 	public ServerCommunicator(DelegateActivity delegate, String delegateTag) {
 		mDelegate = delegate;
-		mResources = ((Activity) mDelegate).getResources();
+		mResources = mDelegate.getResources(); 
 		TAG = "sc2TrackerServerCommunicator-" + delegateTag;
 	}
 
@@ -125,7 +124,7 @@ public class ServerCommunicator {
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
 
-		Log.d(TAG, "Sending authentication request");
+		Log.d(TAG, "Sending authentication request" + userpass);
 		executeHttpRequest(request);
 	}
 	
@@ -142,7 +141,7 @@ public class ServerCommunicator {
 				"Basic "
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all players request");
+		Log.d(TAG, "Sending get all players request:" + userpass);
 		executeHttpRequest(request);
 	}
 	
@@ -170,6 +169,16 @@ public class ServerCommunicator {
 		executeHttpRequest(request);
 	}
 	
+	public void sendGetEventRequest(String userpass, long eventPK){
+		String urlString = buildGetEventURL(eventPK);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic " + Base64.encodeToString(userpass.getBytes(), Base64.NO_WRAP));
+		Log.d(TAG, "Sending get event request");
+		executeHttpRequest(request);
+	}
+	
 	public void sendGetAllFavoritesRequest(String userpass) {
 		String urlString = buildGetAllFavoritesURL();
 		HttpGet request = new HttpGet(urlString);
@@ -178,12 +187,10 @@ public class ServerCommunicator {
 				"Basic "
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all favorites request");
+		Log.d(TAG, "Sending get all favorites request"  + userpass);
 		executeHttpRequest(request);
 	}
 	
-	
-
 	public void sendFavoritePlayerRequest(String userpass, String playerPK) {
 		String urlString = buildFavoritePlayerURL(playerPK);
 		HttpGet request = new HttpGet(urlString);
@@ -255,6 +262,18 @@ public class ServerCommunicator {
 		Log.d(TAG, "Sending get all events request");
 		executeHttpRequest(request);
 	}
+	
+	public void sendDeviceRegistrationRequest(String userpass, String type, String regId) {
+		String urlString = buildDeviceRegistrationURL(type, regId);
+		HttpGet request = new HttpGet(urlString);
+		request.setHeader(
+				"Authorization",
+				"Basic "
+						+ Base64.encodeToString(userpass.getBytes(),
+								Base64.NO_WRAP));
+		Log.d(TAG, "Sending device registration request");
+		executeHttpRequest(request);
+	}
 
 	/**
 	 * Sends an Http request and handles the response from the server 
@@ -313,7 +332,7 @@ public class ServerCommunicator {
 			}			
 		} else {
 			String response = "" + statusCode;
-			Log.d("ZZ", response);
+			Log.d(TAG, response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
 		}
@@ -438,6 +457,17 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	private String buildGetEventURL(long eventPK){
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(getEventURL);
+		sb.append(eventPK);
+		
+		return sb.toString();
+	}
+	
 	private String buildGetAllEventsURL() {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence getEventsURL = mResources.getText(R.string.serverGetAllEventsURL);
@@ -520,6 +550,17 @@ public class ServerCommunicator {
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
 		sb.append(unfavoriteEventURL);
+		String urlString = sb.toString();
+		return urlString;
+	}
+	
+	private String buildDeviceRegistrationURL(String type, String regId) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);
+		CharSequence registerDeviceURL = mResources.getText(R.string.serverRegisterDeviceURL);
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(baseURL);
+		sb.append(registerDeviceURL);
+		sb.append("?type=" + type + "&rid=" + regId);
 		String urlString = sb.toString();
 		return urlString;
 	}

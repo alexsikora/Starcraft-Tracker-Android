@@ -1,5 +1,7 @@
 package illinois.sweng.sctracker;
 
+import org.json.JSONArray;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -12,7 +14,9 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class EventListActivity extends ListActivity{
+public class EventListActivity extends ListActivity implements DelegateActivity{
+	private final String TAG = "EventListActivity";
+	
 	private DBAdapter mDBAdapter;
 	private Cursor mEventCursor;
 	
@@ -20,9 +24,13 @@ public class EventListActivity extends ListActivity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		Log.d(TAG, "EventListActivity was created");
+		
 		ListView listView = getListView();
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new EventListClickListener());
+		
+		//getFavoritesList();
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
@@ -38,7 +46,11 @@ public class EventListActivity extends ListActivity{
 								DBAdapter.KEY_ROWID
 							};
 		
-		int textViews[] = {R.id.eventListName, R.id.eventListStartDate, R.id.eventListEndDate};
+		int textViews[] = 	{
+								R.id.eventListName, 
+								R.id.eventListStartDate, 
+								R.id.eventListEndDate
+							};
 		
 		CursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
 				R.layout.eventlistrow, mEventCursor, fields, textViews);
@@ -46,37 +58,59 @@ public class EventListActivity extends ListActivity{
 		setListAdapter(cursorAdapter);
 	}
 	
+	/*
+	public void getFavoritesList(){
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
+		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
+		String key = getResources().getString(R.string.preferencesUserpass);
+		String userpass = prefs.getString(key, "");
+		
+		ServerCommunicator comm = new ServerCommunicator(this, TAG);
+		comm.sendGetAllEventsRequest(userpass);
+	}
+	*/
+	
+	private void showEventStatus(Intent i){
+		i.setClass(this, EventStatusActivity.class);
+		startActivity(i);
+	}
+	
 	private class EventListClickListener implements AdapterView.OnItemClickListener {
 
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			// TODO move cursor to this position and send data to player status activity
-			// pack data into an intent to send
 			mEventCursor.moveToPosition(position);
 			Intent i = new Intent();
 			Resources res = getResources();
-			/*
-			String rowKey = res.getString(R.string.keyRowID);
-			putIntExtra(rowKey, i);
 			
-			String nameKey = res.getString(R.string.keyName);
-			putStringExtra(keyName, i);
+			String pkKey = res.getString(R.string.keyPK);
+			int index = mEventCursor.getColumnIndex(pkKey);
+			long pk = mEventCursor.getLong(index);
 			
-			String startDateKey = res.getString(R.string.keyStartDate);
-			putStringExtra(keyStartDate, i);
-			
-			String endDateKey = res.getString(R.string.keyEndDate);
-			putStringExtra(keyEndDate, i);
-			*/
-			// use Cursor get methods?
-			// 
+			i.putExtra(pkKey, pk);
+			showEventStatus(i);
 		}
 		
 	}
 	
 	@Override
-	public void onDestroy() {
+	public void onDestroy(){
 		super.onDestroy();
 		mDBAdapter.close();
 	}
+
+	public void handleServerError(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void handleServerResponseData(JSONArray values) {
+		// TODO Auto-generated method stub
+	}
+
+	public void handleServerResponseMessage(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

@@ -4,5 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+	<TextView
+        android:id="@+id/eventStatusNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/eventStatusName"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+	<TextView
+        android:id="@+id/eventStatusStartDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/eventStatusStartDate"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	<TextView
+        android:id="@+id/eventStatusEndDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/eventStatusEndDate"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
+	<Button
+	    android:id="@+id/eventStatusRoundsButton"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/eventStatusRounds" />
+
+	
 </LinearLayout>

@@ -7,10 +7,26 @@
     <uses-sdk android:minSdkVersion="8" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <permission android:name="illinois.sweng.sctracker.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="illinois.sweng.sctracker.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
+        <receiver android:name=".Receiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+                <intent-filter>
+                    <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                    <category android:name="illinois.sweng.sctracker"/>
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                    <category android:name="illinois.sweng.sctracker"/>
+                </intent-filter>
+        </receiver>
+        
         <activity
             android:label="@string/app_name"
             android:name=".SC2TrackerActivity" >
@@ -56,6 +72,21 @@
             android:label="@string/teamListActivity">
         </activity>
         <activity android:name="TeamStatusActivity"></activity>
+        
+        <activity 
+            android:name="PlayerMatches"
+            android:label="@string/playerMatchesActivity">
+        </activity>
+        
+        <activity 
+            android:name="Games"
+            android:label="@string/gamesActivity">
+        </activity>
+        
+        <activity 
+            android:name="Rounds"
+            android:label="@string/roundsActivity">
+        </activity>
         
     </application>
 
