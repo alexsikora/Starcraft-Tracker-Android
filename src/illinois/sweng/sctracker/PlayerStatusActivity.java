@@ -134,9 +134,9 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
 		
 		if (isChecked) {
-			com.sendFavoritePlayerRequest(userpass, pk + "");
+			com.sendFavoritePlayerRequest(userpass, pk);
 		} else {
-			com.sendUnfavoritePlayerRequest(userpass, pk + "");
+			com.sendUnfavoritePlayerRequest(userpass, pk);
 		}
 		getFavoritesList();
 	}

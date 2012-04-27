@@ -255,9 +255,9 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		String userpass = prefs.getString(key, "");
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
 		if (isChecked) {
-			com.sendFavoriteTeamRequest(userpass, pk + "");
+			com.sendFavoriteTeamRequest(userpass, pk);
 		} else {
-			com.sendUnfavoriteTeamRequest(userpass, pk + "");
+			com.sendUnfavoriteTeamRequest(userpass, pk);
 		}
 		getFavoritesList();
 	}

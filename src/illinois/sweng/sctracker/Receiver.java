@@ -94,8 +94,8 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 
 		Notification notification = new Notification(icon, tickerText, when);
 
-		CharSequence contentTitle = "My notification";
-		CharSequence contentText = "Hello World!";
+		CharSequence contentTitle = message;
+		CharSequence contentText = message;
 		Intent notificationIntent = new Intent(context, PlayerStatusActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
@@ -103,8 +103,6 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 		
 		manager.notify(HELLO_ID, notification);
 		
-		/*Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-		toast.show();*/
 		Log.d("Receiver", "Handled message");
 	}
 

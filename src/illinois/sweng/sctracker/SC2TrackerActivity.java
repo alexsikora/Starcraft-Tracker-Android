@@ -42,7 +42,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		Log.d("PREFS", userpass);
 		
 		mServerCommunicator = new ServerCommunicator(this, TAG);
-		mServerCommunicator.sendAuthenticationRequest(userpass);
+		//mServerCommunicator.sendAuthenticationRequest(userpass);
 		mManualLogin = true;
 		
         setContentView(R.layout.main);
@@ -58,8 +58,9 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         mEmail = (EditText) findViewById(R.id.mainEmailEditText);
         mPassword = (EditText) findViewById(R.id.mainPasswordTextEdit);
         
-        mServerCommunicator = new ServerCommunicator(this, TAG);
-        registerWithServer();
+        if(!userpass.equals(":")){
+        	registerWithServer();
+        }
     }
    
     /**
