@@ -130,21 +130,17 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		Log.d("TAG", "UPDATING DATABASE");
 		try {
 			JSONObject firstEntry = (JSONObject) (values.get(0));
+			mDBAdapter.open();
 			if (firstEntry.getString("model").equals("players.player")) {
-				mDBAdapter.open();
 				mDBAdapter.updatePlayerTable(values);
-				mDBAdapter.close();
 			}
 			if (firstEntry.getString("model").equals("players.team")) {
-				mDBAdapter.open();
 				mDBAdapter.updateTeamTable(values);
-				mDBAdapter.close();
 			}
 			if (firstEntry.getString("model").equals("events.event")) {
-				mDBAdapter.open();
 				mDBAdapter.updateEventTable(values);
-				mDBAdapter.close();
 			}
+			mDBAdapter.close();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -2,9 +2,9 @@ package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
 
-//import android.app.Notification;
-//import android.app.NotificationManager;
-//import android.app.PendingIntent;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +14,11 @@ import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
-//import com.rain.skullcandy.R;
-//import com.rain.skullcandy.activities.FavoriteLocations;
-//import com.rain.skullcandy.model.SkullCandyModel;
 
 public class Receiver extends BroadcastReceiver implements DelegateActivity {
 	private static String KEY = "c2dmPref";
 	private static String REGISTRATION_KEY = "registrationKey";
+	private static final int HELLO_ID = 1;
 	static final String PREFS_FILE = "sc2prefs";
 	private ServerCommunicator mServerCommunicator;
 
@@ -86,11 +84,28 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 
 	private void handleMessage(Context context, Intent intent)
 	{
-		//Do whatever you want with the message
+		String ns = Context.NOTIFICATION_SERVICE;
+		NotificationManager manager = (NotificationManager) context.getSystemService(ns); 
 		String message = intent.getExtras().getString("message");
-		Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-		toast.show();
-		Log.d("Receiver", "Handled messag");
+		
+		int icon = R.drawable.ic_launcher;
+		CharSequence tickerText = "Hello";
+		long when = System.currentTimeMillis();
+
+		Notification notification = new Notification(icon, tickerText, when);
+
+		CharSequence contentTitle = "My notification";
+		CharSequence contentText = "Hello World!";
+		Intent notificationIntent = new Intent(context, PlayerStatusActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		
+		manager.notify(HELLO_ID, notification);
+		
+		/*Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		toast.show();*/
+		Log.d("Receiver", "Handled message");
 	}
 
 	public void handleServerError(String message) {
