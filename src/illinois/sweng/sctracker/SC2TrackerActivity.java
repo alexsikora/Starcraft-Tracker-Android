@@ -42,7 +42,9 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		Log.d("PREFS", userpass);
 		
 		mServerCommunicator = new ServerCommunicator(this, TAG);
-		//mServerCommunicator.sendAuthenticationRequest(userpass);
+		if(!userpass.equals(":")){
+			mServerCommunicator.sendAuthenticationRequest(userpass);
+		}
 		mManualLogin = true;
 		
         setContentView(R.layout.main);
@@ -134,9 +136,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	public void handleServerResponseData(JSONArray values) {
 	}
 	
-	public void handleServerResponseMessage(String message) {
-		mLoginButton.setText(R.string.registerNewAccountSuccess);	
-		
+	public void handleServerResponseMessage(String message) {		
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		String key = getResources().getString(R.string.preferencesUserpass);
 		
