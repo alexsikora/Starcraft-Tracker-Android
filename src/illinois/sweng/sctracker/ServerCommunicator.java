@@ -113,8 +113,7 @@ public class ServerCommunicator {
 	 * Sends a GET request for authentication to the server with String userpass
 	 * as username:password
 	 * 
-	 * @param userpass
-	 *            String of the form username:password
+	 * @param userpass String of the form username:password
 	 */
 	public void sendAuthenticationRequest(String userpass) {
 		Log.i(TAG, "Sending authentication request" + userpass);
@@ -125,8 +124,7 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to retrieve all player data from the server
-	 * @param userpass
-	 *            String of the form username:password
+	 * @param userpass String of the form username:password
 	 */
 	public void sendGetAllPlayersRequest(String userpass) {
 		Log.i(TAG, "Sending get all players request:" + userpass);
@@ -137,7 +135,7 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to retrieve all team data from the server
-	 * @param userpass
+	 * @param userpass String of the form username:password
 	 */
 	public void sendGetAllTeamsRequest(String userpass) {
 		Log.i(TAG, "Sending get all teams request");
@@ -148,8 +146,7 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to retrieve a list of all Events from the server 
-	 * @param userpass
-	 *            String of the form username:password
+	 * @param userpass String of the form username:password
 	 */
 	public void sendGetAllEventsRequest(String userpass) {
 		Log.i(TAG, "Sending get all events request");
@@ -160,10 +157,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to the server to retrieve all data about a single event
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param eventPK
-	 *            long representing the event's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param eventPK long representing the event's primary key ID
 	 */
 	public void sendGetEventRequest(String userpass, long eventPK){
 		Log.i(TAG, "Sending get event request");
@@ -174,8 +169,7 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to the server to retrieve all of a user's favorites
-	 * @param userpass
-	 *            String of the form username:password
+	 * @param userpass String of the form username:password
 	 */
 	public void sendGetAllFavoritesRequest(String userpass) {
 		Log.i(TAG, "Sending get all favorites request"  + userpass);
@@ -186,10 +180,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to add a player to a user's list of Favorites
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param playerPK
-	 *            long representing the player's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param playerPK long representing the player's primary key ID
 	 */
 	public void sendFavoritePlayerRequest(String userpass, long playerPK) {
 		Log.i(TAG, "Sending favorite player " + String.valueOf(playerPK) + " request");
@@ -200,10 +192,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to add a team to a user's list of Favorites
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param teamPK
-	 *            long representing the team's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param teamPK long representing the team's primary key ID
 	 */
 	public void sendFavoriteTeamRequest(String userpass, long teamPK) {
 		Log.i(TAG, "Sending favorite team" + String.valueOf(teamPK) + " request");
@@ -214,10 +204,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to add an event to a user's list of Favorites
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param eventPK
-	 *            long representing the event's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param eventPK long representing the event's primary key ID
 	 */
 	public void sendFavoriteEventRequest(String userpass, long eventPK) {
 		Log.i(TAG, "Sending favorite event" + String.valueOf(eventPK) + " request");
@@ -228,10 +216,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to remove a player from a user's list of Favorites
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param playerPK
-	 *            long representing the player's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param playerPK long representing the player's primary key ID
 	 */
 	public void sendUnfavoritePlayerRequest(String userpass, long playerPK) {
 		Log.i(TAG, "Sending unfavorite player " + String.valueOf(playerPK) + " request");
@@ -242,10 +228,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to remove a team from a user's list of Favorites
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param teamPK
-	 *            long representing the team's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param teamPK long representing the team's primary key ID
 	 */
 	public void sendUnfavoriteTeamRequest(String userpass, long teamPK) {
 		Log.i(TAG, "Sending unfavorite team " + String.valueOf(teamPK) + " request");
@@ -256,10 +240,8 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to remove an event from a user's list of Favorites
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param eventPK
-	 *            long representing the event's primary key ID
+	 * @param userpass String of the form username:password
+	 * @param eventPK long representing the event's primary key ID
 	 */
 	public void sendUnfavoriteEventRequest(String userpass, long eventPK) {
 		Log.i(TAG, "Sending unvaforite event " + String.valueOf(eventPK) + " request");
@@ -270,12 +252,9 @@ public class ServerCommunicator {
 	
 	/**
 	 * Sends a GET request to register a device with the server for push notifications
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param type
-	 *            String containing the device type
-	 * @param regId
-	 *            String containing the device ID
+	 * @param userpass String of the form username:password
+	 * @param type String containing the device type
+	 * @param regId String containing the device ID
 	 */
 	public void sendDeviceRegistrationRequest(String userpass, String type, String regId) {
 		Log.i(TAG, "Sending device registration request");
@@ -287,10 +266,8 @@ public class ServerCommunicator {
 
 	/**
 	 * Sends a GET request to a given URL using given credentials
-	 * @param userpass
-	 *            String of the form username:password
-	 * @param urlString
-	 *            String containing the URL to send a request to
+	 * @param userpass String of the form username:password
+	 * @param urlString String containing the URL to send a request to
 	 */
 	private void sendBasicAuthGet(String userpass, String urlString) {
 		HttpGet request = new HttpGet(urlString);
@@ -312,7 +289,6 @@ public class ServerCommunicator {
 		try {
 			HttpResponse response = httpClient.execute(request);
 			readHttpResponse(response);
-
 		} catch (IOException e) {
 			String message = mResources.getString(R.string.serverIOExceptionMessage);
 			mDelegate.handleServerError(message);
@@ -330,8 +306,7 @@ public class ServerCommunicator {
 	 * Read the httpResponse and display the appropriate success/failure
 	 * notification
 	 * 
-	 * @param httpResponse
-	 *            InputStream returned from the web server
+	 * @param httpResponse InputStream returned from the web server
 	 * @throws IOException
 	 * @throws JSONException
 	 */
