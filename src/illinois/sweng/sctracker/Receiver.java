@@ -96,7 +96,7 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 
 		CharSequence contentTitle = message;
 		CharSequence contentText = message;
-		Intent notificationIntent = new Intent(context, PlayerStatusActivity.class);
+		Intent notificationIntent = new Intent(context, PushDisplayActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
