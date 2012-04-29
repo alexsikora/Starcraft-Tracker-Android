@@ -10,6 +10,7 @@ public class PushDisplayActivity extends Activity implements DelegateActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.eventstatus);
 	}
 
 	public void handleServerError(String message) {
