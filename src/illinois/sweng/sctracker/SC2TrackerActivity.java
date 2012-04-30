@@ -5,7 +5,6 @@ package illinois.sweng.sctracker;
 import org.json.JSONArray;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -27,28 +26,44 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	private EditText mEmail, mPassword;
 	private ServerCommunicator mServerCommunicator;
 	private String mUserpass;
-	private boolean mManualLogin = false;
+	private boolean mManualLogin = true;
 	
+	/**
+	 * Attempts to automatically log in the user if their credentials are stored
+	 * on the device, otherwise displays a main page to allow the user to enter
+	 * their information. 
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mServerCommunicator = new ServerCommunicator(this, TAG);
         
-        String prefsFile = getResources().getString(R.string.preferencesFilename);
+        tryAutoLogin();		
+        setContentView(R.layout.main);        
+        initializeWidgets();
+    }
+
+    /**
+     * Attempts to retrieve the userpass from shared preferences to log the user
+     * in automatically if they have previously logged in on this device.
+     */
+	private void tryAutoLogin() {
+		String prefsFile = getResources().getString(R.string.preferencesFilename);
         String key = getResources().getString(R.string.preferencesUserpass);
 		SharedPreferences sharedPreferences = getSharedPreferences(prefsFile, 0);
 		String userpass = sharedPreferences.getString(key, ":");
 		
-		Log.d("PREFS", userpass);
-		
-		mServerCommunicator = new ServerCommunicator(this, TAG);
 		if(!userpass.equals(":")){
 			mServerCommunicator.sendAuthenticationRequest(userpass);
+			mManualLogin = false;
 		}
-		mManualLogin = true;
-		
-        setContentView(R.layout.main);
-        
-        mRegisterButton = (Button) findViewById(R.id.registerButton);
+	}
+
+    /**
+     * Finds all buttons and text fields on the view and sets their listeners
+     */
+	private void initializeWidgets() {
+		mRegisterButton = (Button) findViewById(R.id.registerButton);
         mUnregisterButton = (Button) findViewById(R.id.unregisterButton);
         mLoginButton = (Button) findViewById(R.id.LoginButton);
         
@@ -58,11 +73,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         
         mEmail = (EditText) findViewById(R.id.mainEmailEditText);
         mPassword = (EditText) findViewById(R.id.mainPasswordTextEdit);
-        
-        if(!userpass.equals(":")){
-        	registerWithServer();
-        }
-    }
+	}
    
     /**
      * Launches the registration activity.
@@ -78,16 +89,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
     private void launchUnregister() {
     	Intent i = new Intent(this, UnregisterActivity.class);
 		startActivity(i);
-    }
-    
-    private void registerWithServer() {
-    	Log.d("Registration Info", "Attempting to register c2dm");
-    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
-    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
-    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
-    	this.startService(registrationIntent);
-    	Log.d("Registration Info", "Finished Sending registration intent");
-    }
+    }    
     
     /**
      * Attempts to login the user.
@@ -124,6 +126,10 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		}
 	}
 
+	/**
+	 * Handles an error message returned from the server if there was no 
+	 * automatic login.
+	 */
 	public void handleServerError(String message) {
 		if(mManualLogin) {
 			Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
@@ -133,6 +139,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 
 
 	public void handleServerResponseData(JSONArray values) {
+		Log.d(TAG, "Got data from server");
 	}
 	
 	public void handleServerResponseMessage(String message) {		

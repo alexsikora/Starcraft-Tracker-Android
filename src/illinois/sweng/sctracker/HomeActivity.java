@@ -5,12 +5,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * Home activity for the application. Gives access to multiple functions for
@@ -36,11 +38,22 @@ public class HomeActivity extends Activity implements DelegateActivity {
 
 		mDBAdapter = new DBAdapter(this);
 		
+		registerWithServer();
+		
 		//Update the database
 		updatePlayers();
 		updateTeams();
 		updateEvents();
 	}
+	
+	private void registerWithServer() {
+    	Log.i("Registration Info", "Attempting to register c2dm");
+    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
+    	this.startService(registrationIntent);
+    	Log.i("Registration Info", "Finished Sending registration intent");
+    }
 
 	/**
 	 * Log the user out; launches the main activity.
@@ -79,31 +92,33 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	};
 
 	/**
-	 * Makes a request to the server communicator to get all the players. In the
-	 * handleServerResponse, the database will be updated with the result.
+	 * Makes a request to the server communicator to get all the players.
 	 */
-	// TODO
-	public void updatePlayers() {
+	private void updatePlayers() {
+		Log.i(TAG, "Updating players");
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
 		String userpass = getUserPass();
-		Log.d("VVVVV", userpass);
 		comm.sendGetAllPlayersRequest(userpass);
 	}
 
 
-	// TODO
-	public void updateTeams() {
+	/**
+	 * Makes a request to the server communicator to get all the teams.
+	 */
+	private void updateTeams() {
+		Log.i(TAG, "Updating teams");
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
 		String userpass = getUserPass();
-		Log.d("WWWWW", userpass);
 		comm.sendGetAllTeamsRequest(userpass);
 	}
 
-	//TODO: updateEvents()
-	public void updateEvents() {
+	/**
+	 * Makes a request to the server communicator to get alist of all events.
+	 */
+	private void updateEvents() {
+		Log.i(TAG, "Updating events");
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
 		String userpass = getUserPass();
-		Log.d("QQQQQ", userpass);
 		comm.sendGetAllEventsRequest(userpass);
 	}
 
@@ -119,8 +134,9 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	}
 	
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 
 	/**
@@ -146,8 +162,11 @@ public class HomeActivity extends Activity implements DelegateActivity {
 		}
 	}
 
+	/**
+	 * Receives and logs a non-data message from the server. This should not
+	 * occurr under normal operation for this activity.
+	 */
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
-
+		Log.d(TAG, "Got message from server");
 	}
 }

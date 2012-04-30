@@ -18,14 +18,15 @@ import android.widget.Toast;
 public class UnregisterActivity extends Activity implements DelegateActivity {
 	
 	private static final String TAG = "UnregisterActivity";
-	//TODO establish proper ids when handling possible errors; can't validate the information on own
-	// so have to wait for server
 	private static final int DIALOG_INVALID_EMAIL_ID = 1;
 	
 	private Button mDeleteAccountButton;
 	private EditText mEmail, mPassword, mPasswordConfirm;
 	private ServerCommunicator mServerCommunicator;
 	
+	/**
+	 * Finds widgets and sets onclick listeners
+	 */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,7 +151,6 @@ public class UnregisterActivity extends Activity implements DelegateActivity {
 	 * 			a valid email address
 	 */
 	private boolean validateEmailAddress(String email) {
-		// This is (obviously) not strong validation, but we aren't too focused on it at the moment
 		return  email.matches(".+@.+");
 	}
 	

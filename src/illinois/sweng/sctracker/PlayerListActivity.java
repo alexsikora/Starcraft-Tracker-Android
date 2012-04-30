@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class PlayerListActivity extends ListActivity implements DelegateActivity {
 
@@ -43,15 +44,15 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 		startManagingCursor(mPlayerCursor);
 		
 		String fields[] = 	{
-				TrackerDatabaseAdapter.KEY_HANDLE,
-				TrackerDatabaseAdapter.KEY_RACE,
-				TrackerDatabaseAdapter.KEY_ROWID,
-				TrackerDatabaseAdapter.KEY_PK,
-				TrackerDatabaseAdapter.KEY_PICTURE,
-				TrackerDatabaseAdapter.KEY_NAME,
-				TrackerDatabaseAdapter.KEY_TEAM,
-				TrackerDatabaseAdapter.KEY_NATIONALITY,
-				TrackerDatabaseAdapter.KEY_ELO
+				DBAdapter.KEY_HANDLE,
+				DBAdapter.KEY_RACE,
+				DBAdapter.KEY_ROWID,
+				DBAdapter.KEY_PK,
+				DBAdapter.KEY_PICTURE,
+				DBAdapter.KEY_NAME,
+				DBAdapter.KEY_TEAM,
+				DBAdapter.KEY_NATIONALITY,
+				DBAdapter.KEY_ELO
 							};
 		int textViews[] = {R.id.playerListName, R.id.playerListRace};
 		
@@ -151,13 +152,21 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 		mDatabaseAdapter.close();
 	}
 
+	/**
+	 * Handles an error message returned from the server
+	 */
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-		
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 
+	/**
+	 * Takes a JSONArray of favorites data from the server and modifies the 
+	 * local favorites data
+	 */
 	public void handleServerResponseData(JSONArray values) {
-		Log.d(TAG, "Receiving favorites data");
+		Log.i(TAG, "Receiving favorites data");
 		
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
@@ -185,8 +194,11 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 		}
 	}
 
+	/**
+	 * Receives and logs a non-data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
-		
+		Log.d(TAG, "Got message from server");
 	}
 }
