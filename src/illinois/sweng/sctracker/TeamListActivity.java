@@ -12,13 +12,19 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-
+/**
+ * Class to load a list of teams available in the system
+ * @author Volk
+ */
 public class TeamListActivity extends ListActivity {
 	static String TAG = "teamsActivity";
 
 	private DBAdapter mDBAdapter;
 	private Cursor mTeamCursor;
 	
+	/**
+	 * Overrides the main onCreate to handle our specific activity
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,11 +53,19 @@ public class TeamListActivity extends ListActivity {
 		setListAdapter(cursorAdapter);
 	}
 	
+	/**
+	 * what happens when a team is clicked.  Calls the new activity
+	 * @param i - the intent with information about the team that was clicked
+	 */
 	private void showTeamStatus(Intent i){
 		i.setClass(this, TeamStatusActivity.class);
 		startActivity(i);
 	}
 	
+	/**
+	 * Class that handles when a team is selected
+	 * @author Volk
+	 */
 	private class TeamListClickListener implements AdapterView.OnItemClickListener {
 
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -74,12 +88,22 @@ public class TeamListActivity extends ListActivity {
 			showTeamStatus(i);			
 		}
 		
+		/**
+		 * packs an int into intent
+		 * @param key 
+		 * @param i
+		 */
 		private void putIntExtra(String key, Intent i){
 			int index = mTeamCursor.getColumnIndexOrThrow(key);
 			int rowID = mTeamCursor.getInt(index);
 			i.putExtra(key, rowID);
 		}
 		
+		/**
+		 * packs a string into intent
+		 * @param key
+		 * @param i
+		 */
 		private void putStringExtra(String key, Intent i) {
 			int index = mTeamCursor.getColumnIndexOrThrow(key);
 			String name = mTeamCursor.getString(index);
@@ -87,13 +111,20 @@ public class TeamListActivity extends ListActivity {
 			i.putExtra(key, name);
 		}
 		
+		/**
+		 * packs a long into intent
+		 * @param key
+		 * @param i
+		 */
 		private void putLongExtra(String key, Intent i) {
 			int index = mTeamCursor.getColumnIndexOrThrow(key);
 			long pk = mTeamCursor.getLong(index);
 			i.putExtra(key, pk);
 		}
 	}
-
+	/**
+	 * override for onDestroy to also close the database adapter
+	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

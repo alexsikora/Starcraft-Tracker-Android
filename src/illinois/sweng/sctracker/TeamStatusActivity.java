@@ -19,7 +19,10 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
+/**
+ * Class made to display data for a team's status
+ * @author Volk
+ */
 public class TeamStatusActivity extends ListActivity implements DelegateActivity{
 	static String TAG = "teamStatusActivity";
 
@@ -30,6 +33,9 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	long pk = -1;
 	int rowID = -1;
 	
+	/**
+	 * Overrides the onCreate method to create the activity
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -147,9 +153,16 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		startActivity(i);
 	}
 		
-
+	/**
+	 * Class that takes data from the listener on players in the list.
+	 * @author Volk
+	 */
 	private class PlayerListClickListener implements AdapterView.OnItemClickListener {
-
+		
+		/**
+		 * Saves data about the clicked player to the intent and calls the new
+		 * activity.
+		 */
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			
 			Intent i = new Intent();
@@ -229,12 +242,20 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		}
 	}
 	
+	/**
+	 * called on destroy.  Same as normal teardown, but also closed the database
+	 * adapter
+	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		mDBAdapter.close();
 	}
 
+	/**
+	 * Class that handles what happens when the favorites button is clicked.
+	 * @author Volk
+	 */
 	private class FavoriteCheckboxClickHandler implements CompoundButton.OnCheckedChangeListener {
 		public void onCheckedChanged(CompoundButton buttonView,	boolean isChecked) {
 			sendFavoriteRequest(isChecked);
@@ -263,7 +284,6 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	}
 
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -301,7 +321,6 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	}
 
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
 		
 	}
 	
