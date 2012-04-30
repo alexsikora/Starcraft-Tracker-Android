@@ -447,6 +447,10 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds URL for getting all team data
+	 * @return String representing the URL to get all team data
+	 */
 	private String buildGetAllTeamsURL() {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence getTeamsURL = mResources.getText(R.string.serverGetAllTeamsURL);
@@ -457,6 +461,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds URL for getting a specific event's data
+	 * @param eventPK the pk for the event
+	 * @return String representing the URL to get the specific event's data
+	 */
 	private String buildGetEventURL(long eventPK){
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
@@ -468,6 +477,10 @@ public class ServerCommunicator {
 		return sb.toString();
 	}
 	
+	/**
+	 * Builds URL for getting all event data
+	 * @return String representing the URL to get all event data
+	 */
 	private String buildGetAllEventsURL() {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence getEventsURL = mResources.getText(R.string.serverGetAllEventsURL);
@@ -478,6 +491,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds URL for getting specific favorite player data
+	 * @param playerPK pk for specific player
+	 * @return String representing the URL to get the specific favorite player's URL
+	 */
 	private String buildFavoritePlayerURL(String playerPK) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence favoritePlayerURL = mResources.getText(R.string.serverFavoritePlayerURL);
@@ -489,6 +507,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL for getting specific favorite team data
+	 * @param teamPK pk for specific team
+	 * @return String representing the URL to get the specific favorite team
+	 */
 	private String buildFavoriteTeamURL(String teamPK) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence favoriteTeamURL = mResources.getText(R.string.serverFavoriteTeamURL);
@@ -500,6 +523,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL for getting specific event data
+	 * @param eventPK pk for specific event
+	 * @return String representing the URL to get the specific favorite event
+	 */
 	private String buildFavoriteEventURL(String eventPK) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence favoriteEventURL = mResources.getText(R.string.serverFavoriteEventURL);
@@ -511,6 +539,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL to unfavorite a specific player
+	 * @param playerPK pk for specific player
+	 * @return String representing the URL to unfavorite the specific player
+	 */
 	private String buildUnfavoritePlayerURL(String playerPK) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence unfavoritePlayerURL = mResources.getText(R.string.serverUnfavoritePlayerURL);
@@ -522,6 +555,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL to unfavorite a specific team
+	 * @param teamPK pk for specific team
+	 * @return String representing the URL to unfavorite the specific team
+	 */
 	private String buildUnfavoriteTeamURL(String teamPK) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence unfavoriteTeamURL = mResources.getText(R.string.serverUnfavoriteTeamURL);
@@ -533,6 +571,11 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL to unfavorite a specific event
+	 * @param eventPK pk for specific event
+	 * @return String representing the URL to unfavorite the specific event
+	 */
 	private String buildUnfavoriteEventURL(String eventPK) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverUnfavoriteEventURL);
@@ -544,6 +587,10 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL to get all the favorites data
+	 * @return String representing the URL to get all the favorite data
+	 */
 	private String buildGetAllFavoritesURL() {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverGetAllFavoritesURL);
@@ -554,6 +601,12 @@ public class ServerCommunicator {
 		return urlString;
 	}
 	
+	/**
+	 * Builds the URL to indicate whether device is android or iOS
+	 * @param type Device type -> android / iOS
+	 * @param regId
+	 * @return String representing the URL to indicate whether device is android or iOS
+	 */
 	private String buildDeviceRegistrationURL(String type, String regId) {
 		CharSequence baseURL = mResources.getText(R.string.serverURL);
 		CharSequence registerDeviceURL = mResources.getText(R.string.serverRegisterDeviceURL);

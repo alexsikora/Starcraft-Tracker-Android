@@ -1,9 +1,12 @@
 package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -30,7 +33,7 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 		listView.setTextFilterEnabled(true);
 		listView.setOnItemClickListener(new EventListClickListener());
 		
-		//getFavoritesList();
+		getFavoritesList();
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
@@ -58,7 +61,9 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 		setListAdapter(cursorAdapter);
 	}
 	
-	/*
+	/**
+	 * Request the list of this user's favorites from the server
+	 */
 	public void getFavoritesList(){
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
@@ -68,8 +73,11 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
 		comm.sendGetAllEventsRequest(userpass);
 	}
-	*/
 	
+	/**
+	 * Launches the event status activity
+	 * @param i
+	 */
 	private void showEventStatus(Intent i){
 		i.setClass(this, EventStatusActivity.class);
 		startActivity(i);
@@ -105,6 +113,32 @@ public class EventListActivity extends ListActivity implements DelegateActivity{
 
 	public void handleServerResponseData(JSONArray values) {
 		// TODO Auto-generated method stub
+		Log.d(TAG, "Receiving favorites data");
+		
+		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
+		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		
+		try {
+			JSONObject firstEntry = (JSONObject) (values.get(0));
+			
+			String eventKey = getResources().getString(R.string.favoriteEventKey);
+			JSONArray events = firstEntry.getJSONArray(eventKey);
+			editor.putString(eventKey, events.toString());
+			
+			String teamKey = getResources().getString(R.string.favoriteTeamKey);
+			JSONArray teams = firstEntry.getJSONArray(teamKey);
+			editor.putString(teamKey, teams.toString());
+			
+			String playerKey = getResources().getString(R.string.favoritePlayerKey);
+			JSONArray players = firstEntry.getJSONArray(playerKey);
+			editor.putString(playerKey, players.toString());
+			
+			editor.commit();
+		} catch (JSONException e) {
+			Log.d(TAG, "There was an error reading the JSON returned from the server");
+			e.printStackTrace();
+		}
 	}
 
 	public void handleServerResponseMessage(String message) {

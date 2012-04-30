@@ -4,7 +4,6 @@ package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
 
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -134,7 +133,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 	}
 	
 	public void handleServerResponseMessage(String message) {
-		mLoginButton.setText(R.string.registerNewAccountSuccess);	
+		//mLoginButton.setText(R.string.registerNewAccountSuccess);	
 		
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		String key = getResources().getString(R.string.preferencesUserpass);

@@ -63,6 +63,7 @@
 	<string name="eventStatusStartDate">Start Date: </string>
 	<string name="eventStatusEndDate">End Date: </string>
 	<string name="eventStatusRounds">Rounds</string>
+	<string name="eventStatusFavorite">Event Favorited</string>
 	
 	<string name="hostTabsActivity">SC2Tracker</string>
 
