@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class PlayerListActivity extends ListActivity implements DelegateActivity {
 
@@ -152,8 +153,9 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 	}
 
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-		
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 
 	public void handleServerResponseData(JSONArray values) {
@@ -186,7 +188,6 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 	}
 
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
-		
+		Log.d(TAG, "Got message from server");
 	}
 }

@@ -16,13 +16,14 @@ import android.widget.Toast;
 
 
 public class Receiver extends BroadcastReceiver implements DelegateActivity {
+	private static final String TAG = "Receiver";
+	private static final int HELLO_ID = 1;
+	private static final String PREFS_FILE = "sc2prefs";
 	private static String KEY = "c2dmPref";
 	private static String REGISTRATION_KEY = "registrationKey";
-	private static final int HELLO_ID = 1;
-	static final String PREFS_FILE = "sc2prefs";
 	private ServerCommunicator mServerCommunicator;
-
 	private Context context;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	    this.context = context;
@@ -84,24 +85,21 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 		NotificationManager manager = (NotificationManager) context.getSystemService(ns); 
 		String message = intent.getExtras().getString("message");
 		String matchID = intent.getExtras().getString("match_id");
-		for(String key : intent.getExtras().keySet()) {
-				Log.d("key", key);
-				Log.d("value", intent.getExtras().getString(key));
-		}
 		
 		int icon = R.drawable.ic_launcher;
-		CharSequence tickerText = "Hello";
 		long when = System.currentTimeMillis();
-
-		Notification notification = new Notification(icon, tickerText, when);
-
+		CharSequence tickerText = message;
 		CharSequence contentTitle = message;
 		CharSequence contentText = message;
-		Intent notificationIntent = new Intent(context, PushDisplayActivity.class);
-		notificationIntent.putExtra("match_id", Long.parseLong(matchID));
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+		Intent notificationIntent = new Intent(context, PushDisplayActivity.class);
+		notificationIntent.putExtra("match_id", matchID);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		Notification notification = new Notification(icon, tickerText, when);
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		
 		manager.notify(HELLO_ID, notification);
 		
@@ -114,8 +112,7 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 	}
 
 	public void handleServerResponseData(JSONArray values) {
-		// TODO Auto-generated method stub
-		
+		Log.d(TAG, "Receiver got data from server");
 	}
 
 	public void handleServerResponseMessage(String message) {

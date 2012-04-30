@@ -269,10 +269,11 @@ public class ServerCommunicator {
 	 * @param userpass String of the form username:password
 	 * @param matchPK long representing the match primary key ID
 	 */
-	public void sendGetMatchRequest(String userpass, long matchPK) {
+	public void sendGetMatchRequest(String userpass, String matchPK) {
 		Log.i(TAG, "Sending get match" + String.valueOf(matchPK) + "request");
 		CharSequence getMatchURL = mResources.getText(R.string.serverGetMatchURL);
-		String urlString = buildURL(getMatchURL);
+		String params = "?id=" + matchPK;
+		String urlString = buildURL(getMatchURL, params);
 		sendBasicAuthGet(userpass, urlString);
 	}
 
@@ -406,5 +407,4 @@ public class ServerCommunicator {
 		sb.append(extras);		
 		return sb.toString();
 	}
-
 }

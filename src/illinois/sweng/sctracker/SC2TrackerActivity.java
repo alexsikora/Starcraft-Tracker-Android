@@ -121,6 +121,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 
 
 	public void handleServerResponseData(JSONArray values) {
+		Log.d(TAG, "Got data from server");
 	}
 	
 	public void handleServerResponseMessage(String message) {		

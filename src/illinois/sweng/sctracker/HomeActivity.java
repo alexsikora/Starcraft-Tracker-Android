@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * Home activity for the application. Gives access to multiple functions for
@@ -131,8 +132,9 @@ public class HomeActivity extends Activity implements DelegateActivity {
 	}
 	
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 
 	/**

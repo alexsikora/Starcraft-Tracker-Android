@@ -34,7 +34,7 @@ public interface DelegateActivity {
 	public abstract void handleServerResponseMessage(String message);
 	
 	/**
-	 * 
+	 * Getter method to retrieve the Resources for this Delegate
 	 */
 	public abstract Resources getResources();
 }
