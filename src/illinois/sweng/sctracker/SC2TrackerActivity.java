@@ -4,7 +4,6 @@ package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
 
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;

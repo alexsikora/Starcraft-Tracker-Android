@@ -54,11 +54,15 @@ public class GamesAdapter extends ArrayAdapter<JSONObject>{
 			winner.setText("Winner: " + handle);
 			description.setText("Description: " + desc);
 			map.setText("Map: " + map_name);
+			
+			mDatabaseAdapter.close();
 		} 
 		
 		catch (JSONException e) {
 			Log.e(TAG, "Error: " + e.toString());
 			e.printStackTrace();
+			
+			mDatabaseAdapter.close();
 		}
 		
 		return rowView;

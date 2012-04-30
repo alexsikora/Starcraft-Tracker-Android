@@ -24,6 +24,12 @@
         android:layout_height="wrap_content"
         android:text="@string/eventStatusEndDate"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	<CheckBox
+        android:id="@+id/eventStatusFavoriteCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/eventStatusFavorite" />
 
 	<Button
 	    android:id="@+id/eventStatusRoundsButton"
