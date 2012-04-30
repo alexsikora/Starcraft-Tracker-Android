@@ -49,38 +49,30 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
-		
-		
 
-			mPlayerCursor = mDBAdapter.getPlayersByTeam(rowID);
-			
-			TextView t = (TextView)findViewById(R.id.textView1);
-			t.append("Team Name: " + name);
-			t = (TextView)findViewById(R.id.textView2);
-			t.append("Tag: " + teamTag);
-			
-			startManagingCursor(mPlayerCursor);
-			String fields[] = 	{
-					TrackerDatabaseAdapter.KEY_HANDLE,
-					TrackerDatabaseAdapter.KEY_RACE,
-					TrackerDatabaseAdapter.KEY_ROWID,
-//					TrackerDatabaseAdapter.KEY_PK,
-					TrackerDatabaseAdapter.KEY_PICTURE,
-					TrackerDatabaseAdapter.KEY_NAME,
-					TrackerDatabaseAdapter.KEY_TEAM,
-					TrackerDatabaseAdapter.KEY_NATIONALITY,
-					TrackerDatabaseAdapter.KEY_ELO
-								};
-			int textViews[] = {R.id.playerListName, R.id.playerListRace};
-			
-			CursorAdapter cursorAdapter = new SimpleCursorAdapter(this, 
-					R.layout.playerlistrow, mPlayerCursor, fields, textViews);
-			
-			setListAdapter(cursorAdapter);
-			
-			CheckBox favorite = (CheckBox) findViewById(R.id.checkBox1);
-			favorite.setChecked(isFavorite(pk));
-			favorite.setOnCheckedChangeListener(new FavoriteCheckboxClickHandler());
+		mPlayerCursor = mDBAdapter.getPlayersByTeam(rowID);
+
+		TextView t = (TextView) findViewById(R.id.textView1);
+		t.append("Team Name: " + name);
+		t = (TextView) findViewById(R.id.textView2);
+		t.append("Tag: " + teamTag);
+
+		startManagingCursor(mPlayerCursor);
+		String fields[] = { DBAdapter.KEY_HANDLE, DBAdapter.KEY_RACE,
+				DBAdapter.KEY_ROWID,
+				// DBAdapter.KEY_PK,
+				DBAdapter.KEY_PICTURE, DBAdapter.KEY_NAME, DBAdapter.KEY_TEAM,
+				DBAdapter.KEY_NATIONALITY, DBAdapter.KEY_ELO };
+		int textViews[] = { R.id.playerListName, R.id.playerListRace };
+
+		CursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
+				R.layout.playerlistrow, mPlayerCursor, fields, textViews);
+
+		setListAdapter(cursorAdapter);
+
+		CheckBox favorite = (CheckBox) findViewById(R.id.checkBox1);
+		favorite.setChecked(isFavorite(pk));
+		favorite.setOnCheckedChangeListener(new FavoriteCheckboxClickHandler());
 
 	}
 	/**

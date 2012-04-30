@@ -44,15 +44,15 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 		startManagingCursor(mPlayerCursor);
 		
 		String fields[] = 	{
-				TrackerDatabaseAdapter.KEY_HANDLE,
-				TrackerDatabaseAdapter.KEY_RACE,
-				TrackerDatabaseAdapter.KEY_ROWID,
-				TrackerDatabaseAdapter.KEY_PK,
-				TrackerDatabaseAdapter.KEY_PICTURE,
-				TrackerDatabaseAdapter.KEY_NAME,
-				TrackerDatabaseAdapter.KEY_TEAM,
-				TrackerDatabaseAdapter.KEY_NATIONALITY,
-				TrackerDatabaseAdapter.KEY_ELO
+				DBAdapter.KEY_HANDLE,
+				DBAdapter.KEY_RACE,
+				DBAdapter.KEY_ROWID,
+				DBAdapter.KEY_PK,
+				DBAdapter.KEY_PICTURE,
+				DBAdapter.KEY_NAME,
+				DBAdapter.KEY_TEAM,
+				DBAdapter.KEY_NATIONALITY,
+				DBAdapter.KEY_ELO
 							};
 		int textViews[] = {R.id.playerListName, R.id.playerListRace};
 		
