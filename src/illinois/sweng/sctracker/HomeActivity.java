@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,11 +37,22 @@ public class HomeActivity extends Activity implements DelegateActivity {
 
 		mDBAdapter = new DBAdapter(this);
 		
+		registerWithServer();
+		
 		//Update the database
 		updatePlayers();
 		updateTeams();
 		updateEvents();
 	}
+	
+	private void registerWithServer() {
+    	Log.d("Registration Info", "Attempting to register c2dm");
+    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
+    	this.startService(registrationIntent);
+    	Log.d("Registration Info", "Finished Sending registration intent");
+    }
 
 	/**
 	 * Log the user out; launches the main activity.

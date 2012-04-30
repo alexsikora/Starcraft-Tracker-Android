@@ -75,10 +75,6 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
                 context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
             editor.putString(REGISTRATION_KEY, registration);
     		editor.commit();
-    		
-	       // Send the registration ID to the 3rd party site that is sending the messages.
-	       // This should be done in a separate thread.
-	       // When done, remember that all registration is done.
 	    }
 	}
 
@@ -87,6 +83,11 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager manager = (NotificationManager) context.getSystemService(ns); 
 		String message = intent.getExtras().getString("message");
+		String matchID = intent.getExtras().getString("match_id");
+		for(String key : intent.getExtras().keySet()) {
+				Log.d("key", key);
+				Log.d("value", intent.getExtras().getString(key));
+		}
 		
 		int icon = R.drawable.ic_launcher;
 		CharSequence tickerText = "Hello";
@@ -97,6 +98,7 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 		CharSequence contentTitle = message;
 		CharSequence contentText = message;
 		Intent notificationIntent = new Intent(context, PushDisplayActivity.class);
+		notificationIntent.putExtra("match_id", Long.parseLong(matchID));
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);

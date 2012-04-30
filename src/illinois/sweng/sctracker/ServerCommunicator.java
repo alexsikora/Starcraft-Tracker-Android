@@ -263,6 +263,18 @@ public class ServerCommunicator {
 		String urlString = buildURL(registerDeviceURL, params);
 		sendBasicAuthGet(userpass, urlString);
 	}
+	
+	/**
+	 * Send a GET request to retrieve data about a specific match
+	 * @param userpass String of the form username:password
+	 * @param matchPK long representing the match primary key ID
+	 */
+	public void sendGetMatchRequest(String userpass, long matchPK) {
+		Log.i(TAG, "Sending get match" + String.valueOf(matchPK) + "request");
+		CharSequence getMatchURL = mResources.getText(R.string.serverGetMatchURL);
+		String urlString = buildURL(getMatchURL);
+		sendBasicAuthGet(userpass, urlString);
+	}
 
 	/**
 	 * Sends a GET request to a given URL using given credentials

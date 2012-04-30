@@ -4,9 +4,7 @@ package illinois.sweng.sctracker;
 
 import org.json.JSONArray;
 
-
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -59,10 +57,6 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
         
         mEmail = (EditText) findViewById(R.id.mainEmailEditText);
         mPassword = (EditText) findViewById(R.id.mainPasswordTextEdit);
-        
-        if(!userpass.equals(":")){
-        	registerWithServer();
-        }
     }
    
     /**
@@ -81,14 +75,7 @@ public class SC2TrackerActivity extends Activity implements DelegateActivity {
 		startActivity(i);
     }
     
-    private void registerWithServer() {
-    	Log.d("Registration Info", "Attempting to register c2dm");
-    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
-    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
-    	registrationIntent.putExtra("sender", "star2tracker@gmail.com");
-    	this.startService(registrationIntent);
-    	Log.d("Registration Info", "Finished Sending registration intent");
-    }
+    
     
     /**
      * Attempts to login the user.
