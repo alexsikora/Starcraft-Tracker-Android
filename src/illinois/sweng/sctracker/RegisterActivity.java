@@ -116,7 +116,6 @@ public class RegisterActivity extends Activity implements DelegateActivity {
 	 * 			a valid email address
 	 */
 	private boolean validateEmailAddress(String email) {
-		// This is (obviously) not strong validation, but we aren't too focused on it at the moment
 		return  email.matches(".+@.+");
 	}
 	
@@ -143,12 +142,15 @@ public class RegisterActivity extends Activity implements DelegateActivity {
 	 * @param values List of key-value pairs containing data from the server
 	 */
 	public void handleServerResponseData(JSONArray values) {
-		// TODO determine what will be returned and what to do with it
 		mCreateAccountButton.setText(R.string.registerNewAccountSuccess);
 	}
 	
+	/**
+	 * Receives and logs a non-data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
+		Log.d(TAG, "Got message from server");
 	}
 	
 	/**
@@ -168,6 +170,5 @@ public class RegisterActivity extends Activity implements DelegateActivity {
 		public void onClick(DialogInterface dialog, int which) {
 			dialog.dismiss();
 		}
-	}
-	
+	}	
 }

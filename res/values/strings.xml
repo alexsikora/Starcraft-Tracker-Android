@@ -103,5 +103,6 @@
 	<string name="favoriteEventKey">favorite_events</string>
 	<string name="favoritePlayerKey">favorite_players</string>
 	<string name="favoriteTeamKey">favorite_teams</string>
+	<string name="serverGetMatchURL">/events/getmatch/</string>
 
 </resources>

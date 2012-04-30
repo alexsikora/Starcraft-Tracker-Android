@@ -16,13 +16,14 @@ import android.widget.Toast;
 
 
 public class Receiver extends BroadcastReceiver implements DelegateActivity {
+	private static final String TAG = "Receiver";
+	private static final int HELLO_ID = 1;
+	private static final String PREFS_FILE = "sc2prefs";
 	private static String KEY = "c2dmPref";
 	private static String REGISTRATION_KEY = "registrationKey";
-	private static final int HELLO_ID = 1;
-	static final String PREFS_FILE = "sc2prefs";
 	private ServerCommunicator mServerCommunicator;
-
 	private Context context;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	    this.context = context;
@@ -42,6 +43,9 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 	    }
 	 }
 	
+	/**
+	 * Getter method to retrieve this receiver's context's resources
+	 */
 	public Resources getResources() {
 		return this.context.getResources();
 	}
@@ -75,10 +79,6 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
                 context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
             editor.putString(REGISTRATION_KEY, registration);
     		editor.commit();
-    		
-	       // Send the registration ID to the 3rd party site that is sending the messages.
-	       // This should be done in a separate thread.
-	       // When done, remember that all registration is done.
 	    }
 	}
 
@@ -87,36 +87,51 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager manager = (NotificationManager) context.getSystemService(ns); 
 		String message = intent.getExtras().getString("message");
+		String matchID = intent.getExtras().getString("match_id");
 		
 		int icon = R.drawable.ic_launcher;
-		CharSequence tickerText = "Hello";
 		long when = System.currentTimeMillis();
-
-		Notification notification = new Notification(icon, tickerText, when);
-
+		CharSequence tickerText = message;
 		CharSequence contentTitle = message;
 		CharSequence contentText = message;
-		Intent notificationIntent = new Intent(context, PushDisplayActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+		Intent notificationIntent = new Intent(context, PushDisplayActivity.class);
+		notificationIntent.putExtra("match_id", matchID);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		Notification notification = new Notification(icon, tickerText, when);
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		
 		manager.notify(HELLO_ID, notification);
 		
 		Log.d("Receiver", "Handled message");
 	}
 
+	/**
+	 * Handles an error message returned from the server
+	 */
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-		
+		Toast errorToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 
+	/**
+	 * Receives and logs a data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseData(JSONArray values) {
-		// TODO Auto-generated method stub
-		
+		Log.d(TAG, "Receiver got data from server");
 	}
 
+	/**
+	 * Receives and logs a non-data message from the server, and notifies the
+	 * user that the connection was made
+	 */
 	public void handleServerResponseMessage(String message) {
+		Log.i(TAG, message);
 		String success = "success";
 		Toast toast = Toast.makeText(context, success, Toast.LENGTH_LONG);
 		toast.show();

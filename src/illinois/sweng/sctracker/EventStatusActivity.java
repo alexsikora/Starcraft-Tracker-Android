@@ -203,7 +203,6 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 	}
 
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
 		Log.d(TAG, "Server Response message received: " + message);
 
 		try{
