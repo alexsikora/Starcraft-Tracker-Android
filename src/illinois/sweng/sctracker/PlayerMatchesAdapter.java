@@ -53,11 +53,18 @@ public class PlayerMatchesAdapter extends ArrayAdapter<JSONObject>{
 			
 			player1.setText(first_player + " vs. ");
 			player2.setText(second_player);
+			
+			mDatabaseAdapter.close();
 		} 
 		
 		catch (JSONException e) {
 			Log.e(TAG, "Error: " + e.toString());
+			e.printStackTrace();
+			
+			mDatabaseAdapter.close();
 		}
+		
+	
 		
 		return rowView;
 	}
