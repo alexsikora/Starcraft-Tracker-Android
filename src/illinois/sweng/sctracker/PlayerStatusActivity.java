@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlayerStatusActivity extends Activity implements DelegateActivity {
 	private static String TAG = "playerStatusActivity";
@@ -30,6 +31,10 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 	private String elo;
 	private long pk;
 
+	/**
+	 * Retrieves textviews from the layout to display player information and 
+	 * unpacks data from the intent to display.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -124,7 +129,7 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		pk = intent.getLongExtra(pkKey, -1);
 	}
 
-	public void sendFavoriteRequest(boolean isChecked) {
+	private void sendFavoriteRequest(boolean isChecked) {
 		String prefsFile = getResources().getString(R.string.preferencesFilename);
 		SharedPreferences prefs = getSharedPreferences(prefsFile, 0);
 		
@@ -134,9 +139,9 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
 		
 		if (isChecked) {
-			com.sendFavoritePlayerRequest(userpass, pk + "");
+			com.sendFavoritePlayerRequest(userpass, pk);
 		} else {
-			com.sendUnfavoritePlayerRequest(userpass, pk + "");
+			com.sendUnfavoritePlayerRequest(userpass, pk);
 		}
 		getFavoritesList();
 	}
@@ -160,7 +165,10 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		}
 	}
 
-
+	/**
+	 * Takes a JSONArray of favorites data from the server and modifies the 
+	 * local favorites data
+	 */
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiving favorites data");
 		
@@ -191,14 +199,21 @@ public class PlayerStatusActivity extends Activity implements DelegateActivity {
 		
 	}
 
+	/**
+	 * Handles an error message returned from the server
+	 */
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-		
+		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 	
+	/**
+	 * Receives and logs a non-data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
-		
+		Log.d(TAG, "Got message from server");
 	}
 
 }

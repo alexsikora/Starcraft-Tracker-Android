@@ -131,9 +131,9 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
 
 		if (isChecked) {
-			com.sendFavoriteEventRequest(userpass, eventPK + "");
+			com.sendFavoriteEventRequest(userpass, eventPK);
 		} else {
-			com.sendUnfavoriteEventRequest(userpass, eventPK + "");
+			com.sendUnfavoriteEventRequest(userpass, eventPK);
 		}
 		getFavoritesList();
 	}
@@ -203,7 +203,6 @@ public class EventStatusActivity extends Activity implements DelegateActivity{
 	}
 
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
 		Log.d(TAG, "Server Response message received: " + message);
 
 		try{

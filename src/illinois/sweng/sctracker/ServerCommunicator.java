@@ -31,6 +31,7 @@ public class ServerCommunicator {
 	private final String TAG;
 	private DelegateActivity mDelegate;
 	private Resources mResources;
+	
 	/**
 	 * Creates a new ServerCommunicator with the given context
 	 * 
@@ -56,7 +57,8 @@ public class ServerCommunicator {
 	 * 
 	 */
 	public void sendAccountCreationRequest(String username, String password) {
-		String urlString = buildAccountCreationURL(username, password);
+		CharSequence registerURL = mResources.getText(R.string.serverRegisterURL);
+		String urlString = buildURL(registerURL);
 		HttpPost httpPost = new HttpPost(urlString);
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
 		pairs.add(new BasicNameValuePair("username", username));
@@ -76,8 +78,6 @@ public class ServerCommunicator {
 		executeHttpRequest(httpPost);
 	}
 
-
-
 	/**
 	 * Sends a request to the server to delete a user account with the given
 	 * username and password
@@ -88,7 +88,8 @@ public class ServerCommunicator {
 	 *            Password for the user account
 	 */
 	public void sendAccountDeletionRequest(String username, String password) {
-		String urlString = buildAccountDeletionURL(username, password);
+		CharSequence unregisterURL = mResources.getText(R.string.serverUnregisterURL);
+		String urlString = buildURL(unregisterURL);
 		HttpPost httpPost = new HttpPost(urlString);
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(2);
 		pairs.add(new BasicNameValuePair("username", username));
@@ -104,7 +105,7 @@ public class ServerCommunicator {
 			e.printStackTrace();
 		} 
 
-		Log.d(TAG, "Sending account deletion request");
+		Log.i(TAG, "Sending account deletion request");
 		executeHttpRequest(httpPost);
 	}
 	
@@ -112,166 +113,182 @@ public class ServerCommunicator {
 	 * Sends a GET request for authentication to the server with String userpass
 	 * as username:password
 	 * 
-	 * @param userpass
-	 *            String of the form username:password
+	 * @param userpass String of the form username:password
 	 */
 	public void sendAuthenticationRequest(String userpass) {
-		String urlString = buildAuthenticateURL();
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-
-		Log.d(TAG, "Sending authentication request" + userpass);
-		executeHttpRequest(request);
+		Log.i(TAG, "Sending authentication request" + userpass);
+		CharSequence authURL = mResources.getText(R.string.serverAuthenticateURL);
+		String urlString = buildURL(authURL);
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
 	/**
 	 * Sends a GET request to retrieve all player data from the server
-	 * @param userpass
-	 *            String of the form username:password
+	 * @param userpass String of the form username:password
 	 */
 	public void sendGetAllPlayersRequest(String userpass) {
-		String urlString = buildGetAllPlayersURL();
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all players request:" + userpass);
-		executeHttpRequest(request);
+		Log.i(TAG, "Sending get all players request:" + userpass);
+		CharSequence getPlayersURL = mResources.getText(R.string.serverGetAllPlayersURL);
+		String urlString = buildURL(getPlayersURL);
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
+	/**
+	 * Sends a GET request to retrieve all team data from the server
+	 * @param userpass String of the form username:password
+	 */
 	public void sendGetAllTeamsRequest(String userpass) {
-		String urlString = buildGetAllTeamsURL();
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all teams request");
-		executeHttpRequest(request);
+		Log.i(TAG, "Sending get all teams request");
+		CharSequence getTeamsURL = mResources.getText(R.string.serverGetAllTeamsURL);
+		String urlString = buildURL(getTeamsURL);
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
+	/**
+	 * Sends a GET request to retrieve a list of all Events from the server 
+	 * @param userpass String of the form username:password
+	 */
 	public void sendGetAllEventsRequest(String userpass) {
-		String urlString = buildGetAllEventsURL();
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+		Log.i(TAG, "Sending get all events request");
+		CharSequence getEventsURL = mResources.getText(R.string.serverGetAllEventsURL);
+		String urlString = buildURL(getEventsURL);
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
+	/**
+	 * Sends a GET request to the server to retrieve all data about a single event
+	 * @param userpass String of the form username:password
+	 * @param eventPK long representing the event's primary key ID
+	 */
 	public void sendGetEventRequest(String userpass, long eventPK){
-		String urlString = buildGetEventURL(eventPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic " + Base64.encodeToString(userpass.getBytes(), Base64.NO_WRAP));
-		Log.d(TAG, "Sending get event request");
-		executeHttpRequest(request);
+		Log.i(TAG, "Sending get event request");
+		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
+		String urlString = buildURL(getEventURL, String.valueOf(eventPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
+	/**
+	 * Sends a GET request to the server to retrieve all of a user's favorites
+	 * @param userpass String of the form username:password
+	 */
 	public void sendGetAllFavoritesRequest(String userpass) {
-		String urlString = buildGetAllFavoritesURL();
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all favorites request"  + userpass);
-		executeHttpRequest(request);
+		Log.i(TAG, "Sending get all favorites request"  + userpass);
+		CharSequence allFavoritesURL = mResources.getText(R.string.serverGetAllFavoritesURL);
+		String urlString = buildURL(allFavoritesURL);
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
-	public void sendFavoritePlayerRequest(String userpass, String playerPK) {
-		String urlString = buildFavoritePlayerURL(playerPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+	/**
+	 * Sends a GET request to add a player to a user's list of Favorites
+	 * @param userpass String of the form username:password
+	 * @param playerPK long representing the player's primary key ID
+	 */
+	public void sendFavoritePlayerRequest(String userpass, long playerPK) {
+		Log.i(TAG, "Sending favorite player " + String.valueOf(playerPK) + " request");
+		CharSequence favoritePlayerURL = mResources.getText(R.string.serverFavoritePlayerURL);
+		String urlString = buildURL(favoritePlayerURL, String.valueOf(playerPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
-	public void sendFavoriteTeamRequest(String userpass, String teamPK) {
-		String urlString = buildFavoriteTeamURL(teamPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+	/**
+	 * Sends a GET request to add a team to a user's list of Favorites
+	 * @param userpass String of the form username:password
+	 * @param teamPK long representing the team's primary key ID
+	 */
+	public void sendFavoriteTeamRequest(String userpass, long teamPK) {
+		Log.i(TAG, "Sending favorite team" + String.valueOf(teamPK) + " request");
+		CharSequence favoriteTeamURL = mResources.getText(R.string.serverFavoriteTeamURL);
+		String urlString = buildURL(favoriteTeamURL, String.valueOf(teamPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
-	public void sendFavoriteEventRequest(String userpass, String eventPK) {
-		String urlString = buildFavoriteEventURL(eventPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+	/**
+	 * Sends a GET request to add an event to a user's list of Favorites
+	 * @param userpass String of the form username:password
+	 * @param eventPK long representing the event's primary key ID
+	 */
+	public void sendFavoriteEventRequest(String userpass, long eventPK) {
+		Log.i(TAG, "Sending favorite event" + String.valueOf(eventPK) + " request");
+		CharSequence favoriteEventURL = mResources.getText(R.string.serverFavoriteEventURL);
+		String urlString = buildURL(favoriteEventURL, String.valueOf(eventPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
-	public void sendUnfavoritePlayerRequest(String userpass, String playerPK) {
-		String urlString = buildUnfavoritePlayerURL(playerPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+	/**
+	 * Sends a GET request to remove a player from a user's list of Favorites
+	 * @param userpass String of the form username:password
+	 * @param playerPK long representing the player's primary key ID
+	 */
+	public void sendUnfavoritePlayerRequest(String userpass, long playerPK) {
+		Log.i(TAG, "Sending unfavorite player " + String.valueOf(playerPK) + " request");
+		CharSequence unfavoritePlayerURL = mResources.getText(R.string.serverUnfavoritePlayerURL);
+		String urlString = buildURL(unfavoritePlayerURL, String.valueOf(playerPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
-	public void sendUnfavoriteTeamRequest(String userpass, String teamPK) {
-		String urlString = buildUnfavoriteTeamURL(teamPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+	/**
+	 * Sends a GET request to remove a team from a user's list of Favorites
+	 * @param userpass String of the form username:password
+	 * @param teamPK long representing the team's primary key ID
+	 */
+	public void sendUnfavoriteTeamRequest(String userpass, long teamPK) {
+		Log.i(TAG, "Sending unfavorite team " + String.valueOf(teamPK) + " request");
+		CharSequence unfavoriteTeamURL = mResources.getText(R.string.serverUnfavoriteTeamURL);
+		String urlString = buildURL(unfavoriteTeamURL, String.valueOf(teamPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
-	public void sendUnfavoriteEventRequest(String userpass, String eventPK) {
-		String urlString = buildUnfavoriteEventURL(eventPK);
-		HttpGet request = new HttpGet(urlString);
-		request.setHeader(
-				"Authorization",
-				"Basic "
-						+ Base64.encodeToString(userpass.getBytes(),
-								Base64.NO_WRAP));
-		Log.d(TAG, "Sending get all events request");
-		executeHttpRequest(request);
+	/**
+	 * Sends a GET request to remove an event from a user's list of Favorites
+	 * @param userpass String of the form username:password
+	 * @param eventPK long representing the event's primary key ID
+	 */
+	public void sendUnfavoriteEventRequest(String userpass, long eventPK) {
+		Log.i(TAG, "Sending unvaforite event " + String.valueOf(eventPK) + " request");
+		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverUnfavoriteEventURL);
+		String urlString = buildURL(unfavoriteEventURL, String.valueOf(eventPK));
+		sendBasicAuthGet(userpass, urlString);
 	}
 	
+	/**
+	 * Sends a GET request to register a device with the server for push notifications
+	 * @param userpass String of the form username:password
+	 * @param type String containing the device type
+	 * @param regId String containing the device ID
+	 */
 	public void sendDeviceRegistrationRequest(String userpass, String type, String regId) {
-		String urlString = buildDeviceRegistrationURL(type, regId);
+		Log.i(TAG, "Sending device registration request");
+		CharSequence registerDeviceURL = mResources.getText(R.string.serverRegisterDeviceURL);
+		String params = "?type=" + type + "&rid=" + regId;
+		String urlString = buildURL(registerDeviceURL, params);
+		sendBasicAuthGet(userpass, urlString);
+	}
+	
+	/**
+	 * Send a GET request to retrieve data about a specific match
+	 * @param userpass String of the form username:password
+	 * @param matchPK long representing the match primary key ID
+	 */
+	public void sendGetMatchRequest(String userpass, String matchPK) {
+		Log.i(TAG, "Sending get match" + String.valueOf(matchPK) + "request");
+		CharSequence getMatchURL = mResources.getText(R.string.serverGetMatchURL);
+		String params = "?id=" + matchPK;
+		String urlString = buildURL(getMatchURL, params);
+		sendBasicAuthGet(userpass, urlString);
+	}
+
+	/**
+	 * Sends a GET request to a given URL using given credentials
+	 * @param userpass String of the form username:password
+	 * @param urlString String containing the URL to send a request to
+	 */
+	private void sendBasicAuthGet(String userpass, String urlString) {
 		HttpGet request = new HttpGet(urlString);
 		request.setHeader(
 				"Authorization",
 				"Basic "
 						+ Base64.encodeToString(userpass.getBytes(),
 								Base64.NO_WRAP));
-		Log.d(TAG, "Sending device registration request");
 		executeHttpRequest(request);
 	}
 
@@ -285,7 +302,6 @@ public class ServerCommunicator {
 		try {
 			HttpResponse response = httpClient.execute(request);
 			readHttpResponse(response);
-
 		} catch (IOException e) {
 			String message = mResources.getString(R.string.serverIOExceptionMessage);
 			mDelegate.handleServerError(message);
@@ -303,8 +319,7 @@ public class ServerCommunicator {
 	 * Read the httpResponse and display the appropriate success/failure
 	 * notification
 	 * 
-	 * @param httpResponse
-	 *            InputStream returned from the web server
+	 * @param httpResponse InputStream returned from the web server
 	 * @throws IOException
 	 * @throws JSONException
 	 */
@@ -319,11 +334,11 @@ public class ServerCommunicator {
 			InputStream in = httpEntity.getContent();			
 			String responseString = readStream(in);
 			
-			Log.d("YY", responseString);
+			Log.d(TAG, "HTTP response string:" + responseString);
 			JSONObject json = new JSONObject(responseString);
 			
 			int responseCode = json.getInt("status_code");
-			Log.d("Status code" + TAG, "" + responseCode);
+			Log.d(TAG, "HTTP response Status code:" + String.valueOf(responseCode));
 			if(responseCode == mResources.getInteger(R.integer.server_OK)) {
 				sendSuccessCallback(json);
 			} else {
@@ -331,7 +346,7 @@ public class ServerCommunicator {
 				mDelegate.handleServerError(errorMessage);
 			}			
 		} else {
-			String response = "" + statusCode;
+			String response = String.valueOf(statusCode);
 			Log.d(TAG, response);
 			String message = "An error occurred on the server";
 			mDelegate.handleServerError(message);
@@ -365,256 +380,31 @@ public class ServerCommunicator {
 		String line;
 		while ((line = r.readLine()) != null) {
 			total.append(line);
-		}
-		
+		}		
 		return total.toString();
 	}
-
+	
 	/**
-	 * Given a username and a password, builds the appropriate url to send a GET
-	 * to in order to create a new account
-	 * 
-	 * @param username
-	 *            User's new account email address/username
-	 * @param password
-	 *            User's password
-	 * @return String representing the URL to generate a new user account
+	 * Builds a URL to make calls to the server with no extras
+	 * @param commandURL String specifying what remote API call to make
+	 * @return String of the complete URL necessary for server calls
 	 */
-	private String buildAccountCreationURL(String username, String password) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence registerURL = mResources.getText(R.string.serverRegisterURL);
-		
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(registerURL);
-		String urlString = sb.toString();
-		
-		return urlString;
-	}
-
-	/**
-	 * Given a username and a password, builds the appropriate url to send a GET
-	 * to in order to delete an account
-	 * 
-	 * @param username
-	 *            User's new account email address/username
-	 * @param password
-	 *            User's password
-	 * @return String representing the URL to generate a new user account
-	 */
-	private String buildAccountDeletionURL(String username, String password) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence unregisterURL = mResources.getText(R.string.serverUnregisterURL);
-
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(unregisterURL);
-		String urlString = sb.toString();
-
-		return urlString;
-	}
-
-	/**
-	 * Builds URL for authentication
-	 * 
-	 * @return String representing the URL to generate a new user account
-	 */
-	private String buildAuthenticateURL() {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence authURL = mResources.getText(R.string.serverAuthenticateURL);
-
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(authURL);
-		String urlString = sb.toString();
-
-		return urlString;
+	private String buildURL(CharSequence commandURL) {
+		return buildURL(commandURL, "");
 	}
 	
 	/**
-	 * Builds URL for getting all player data
-	 * @return String representing the URL to get all player data
+	 * Builds a URL to make calls to the server
+	 * @param commandURL String specifying what remote API call to make
+	 * @param extras String containing any extras to append on the URL
+	 * @return String of the complete URL necessary for server calls
 	 */
-	private String buildGetAllPlayersURL() {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence getPlayersURL = mResources.getText(R.string.serverGetAllPlayersURL);
-
+	private String buildURL(CharSequence commandURL, String extras) {
+		CharSequence baseURL = mResources.getText(R.string.serverURL);		
 		StringBuilder sb = new StringBuilder("http://");
 		sb.append(baseURL);
-		sb.append(getPlayersURL);
-		String urlString = sb.toString();
-
-		return urlString;
-	}
-	
-	/**
-	 * Builds URL for getting all team data
-	 * @return String representing the URL to get all team data
-	 */
-	private String buildGetAllTeamsURL() {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence getTeamsURL = mResources.getText(R.string.serverGetAllTeamsURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(getTeamsURL);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds URL for getting a specific event's data
-	 * @param eventPK the pk for the event
-	 * @return String representing the URL to get the specific event's data
-	 */
-	private String buildGetEventURL(long eventPK){
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence getEventURL = mResources.getText(R.string.serverGetEventURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(getEventURL);
-		sb.append(eventPK);
-		
+		sb.append(commandURL);
+		sb.append(extras);		
 		return sb.toString();
-	}
-	
-	/**
-	 * Builds URL for getting all event data
-	 * @return String representing the URL to get all event data
-	 */
-	private String buildGetAllEventsURL() {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence getEventsURL = mResources.getText(R.string.serverGetAllEventsURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(getEventsURL);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds URL for getting specific favorite player data
-	 * @param playerPK pk for specific player
-	 * @return String representing the URL to get the specific favorite player's URL
-	 */
-	private String buildFavoritePlayerURL(String playerPK) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence favoritePlayerURL = mResources.getText(R.string.serverFavoritePlayerURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(favoritePlayerURL);
-		sb.append(playerPK);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL for getting specific favorite team data
-	 * @param teamPK pk for specific team
-	 * @return String representing the URL to get the specific favorite team
-	 */
-	private String buildFavoriteTeamURL(String teamPK) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence favoriteTeamURL = mResources.getText(R.string.serverFavoriteTeamURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(favoriteTeamURL);
-		sb.append(teamPK);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL for getting specific event data
-	 * @param eventPK pk for specific event
-	 * @return String representing the URL to get the specific favorite event
-	 */
-	private String buildFavoriteEventURL(String eventPK) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence favoriteEventURL = mResources.getText(R.string.serverFavoriteEventURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(favoriteEventURL);
-		sb.append(eventPK);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL to unfavorite a specific player
-	 * @param playerPK pk for specific player
-	 * @return String representing the URL to unfavorite the specific player
-	 */
-	private String buildUnfavoritePlayerURL(String playerPK) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence unfavoritePlayerURL = mResources.getText(R.string.serverUnfavoritePlayerURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(unfavoritePlayerURL);
-		sb.append(playerPK);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL to unfavorite a specific team
-	 * @param teamPK pk for specific team
-	 * @return String representing the URL to unfavorite the specific team
-	 */
-	private String buildUnfavoriteTeamURL(String teamPK) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence unfavoriteTeamURL = mResources.getText(R.string.serverUnfavoriteTeamURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(unfavoriteTeamURL);
-		sb.append(teamPK);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL to unfavorite a specific event
-	 * @param eventPK pk for specific event
-	 * @return String representing the URL to unfavorite the specific event
-	 */
-	private String buildUnfavoriteEventURL(String eventPK) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverUnfavoriteEventURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(unfavoriteEventURL);
-		sb.append(eventPK);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL to get all the favorites data
-	 * @return String representing the URL to get all the favorite data
-	 */
-	private String buildGetAllFavoritesURL() {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence unfavoriteEventURL = mResources.getText(R.string.serverGetAllFavoritesURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(unfavoriteEventURL);
-		String urlString = sb.toString();
-		return urlString;
-	}
-	
-	/**
-	 * Builds the URL to indicate whether device is android or iOS
-	 * @param type Device type -> android / iOS
-	 * @param regId
-	 * @return String representing the URL to indicate whether device is android or iOS
-	 */
-	private String buildDeviceRegistrationURL(String type, String regId) {
-		CharSequence baseURL = mResources.getText(R.string.serverURL);
-		CharSequence registerDeviceURL = mResources.getText(R.string.serverRegisterDeviceURL);
-		StringBuilder sb = new StringBuilder("http://");
-		sb.append(baseURL);
-		sb.append(registerDeviceURL);
-		sb.append("?type=" + type + "&rid=" + regId);
-		String urlString = sb.toString();
-		return urlString;
 	}
 }

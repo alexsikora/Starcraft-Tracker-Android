@@ -19,7 +19,10 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
+/**
+ * Class made to display data for a team's status
+ * @author Volk
+ */
 public class TeamStatusActivity extends ListActivity implements DelegateActivity{
 	static String TAG = "teamStatusActivity";
 
@@ -30,6 +33,9 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	long pk = -1;
 	int rowID = -1;
 	
+	/**
+	 * Overrides the onCreate method to create the activity
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -43,38 +49,30 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		
 		mDBAdapter = new DBAdapter(this);
 		mDBAdapter.open();
-		
-		
 
-			mPlayerCursor = mDBAdapter.getPlayersByTeam(rowID);
-			
-			TextView t = (TextView)findViewById(R.id.textView1);
-			t.append("Team Name: " + name);
-			t = (TextView)findViewById(R.id.textView2);
-			t.append("Tag: " + teamTag);
-			
-			startManagingCursor(mPlayerCursor);
-			String fields[] = 	{
-					TrackerDatabaseAdapter.KEY_HANDLE,
-					TrackerDatabaseAdapter.KEY_RACE,
-					TrackerDatabaseAdapter.KEY_ROWID,
-//					TrackerDatabaseAdapter.KEY_PK,
-					TrackerDatabaseAdapter.KEY_PICTURE,
-					TrackerDatabaseAdapter.KEY_NAME,
-					TrackerDatabaseAdapter.KEY_TEAM,
-					TrackerDatabaseAdapter.KEY_NATIONALITY,
-					TrackerDatabaseAdapter.KEY_ELO
-								};
-			int textViews[] = {R.id.playerListName, R.id.playerListRace};
-			
-			CursorAdapter cursorAdapter = new SimpleCursorAdapter(this, 
-					R.layout.playerlistrow, mPlayerCursor, fields, textViews);
-			
-			setListAdapter(cursorAdapter);
-			
-			CheckBox favorite = (CheckBox) findViewById(R.id.checkBox1);
-			favorite.setChecked(isFavorite(pk));
-			favorite.setOnCheckedChangeListener(new FavoriteCheckboxClickHandler());
+		mPlayerCursor = mDBAdapter.getPlayersByTeam(rowID);
+
+		TextView t = (TextView) findViewById(R.id.textView1);
+		t.append("Team Name: " + name);
+		t = (TextView) findViewById(R.id.textView2);
+		t.append("Tag: " + teamTag);
+
+		startManagingCursor(mPlayerCursor);
+		String fields[] = { DBAdapter.KEY_HANDLE, DBAdapter.KEY_RACE,
+				DBAdapter.KEY_ROWID,
+				// DBAdapter.KEY_PK,
+				DBAdapter.KEY_PICTURE, DBAdapter.KEY_NAME, DBAdapter.KEY_TEAM,
+				DBAdapter.KEY_NATIONALITY, DBAdapter.KEY_ELO };
+		int textViews[] = { R.id.playerListName, R.id.playerListRace };
+
+		CursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
+				R.layout.playerlistrow, mPlayerCursor, fields, textViews);
+
+		setListAdapter(cursorAdapter);
+
+		CheckBox favorite = (CheckBox) findViewById(R.id.checkBox1);
+		favorite.setChecked(isFavorite(pk));
+		favorite.setOnCheckedChangeListener(new FavoriteCheckboxClickHandler());
 
 	}
 	/**
@@ -147,9 +145,16 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		startActivity(i);
 	}
 		
-
+	/**
+	 * Class that takes data from the listener on players in the list.
+	 * @author Volk
+	 */
 	private class PlayerListClickListener implements AdapterView.OnItemClickListener {
-
+		
+		/**
+		 * Saves data about the clicked player to the intent and calls the new
+		 * activity.
+		 */
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			
 			Intent i = new Intent();
@@ -229,12 +234,20 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		}
 	}
 	
+	/**
+	 * called on destroy.  Same as normal teardown, but also closed the database
+	 * adapter
+	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		mDBAdapter.close();
 	}
 
+	/**
+	 * Class that handles what happens when the favorites button is clicked.
+	 * @author Volk
+	 */
 	private class FavoriteCheckboxClickHandler implements CompoundButton.OnCheckedChangeListener {
 		public void onCheckedChanged(CompoundButton buttonView,	boolean isChecked) {
 			sendFavoriteRequest(isChecked);
@@ -255,15 +268,14 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 		String userpass = prefs.getString(key, "");
 		ServerCommunicator com = new ServerCommunicator(this, TAG);
 		if (isChecked) {
-			com.sendFavoriteTeamRequest(userpass, pk + "");
+			com.sendFavoriteTeamRequest(userpass, pk);
 		} else {
-			com.sendUnfavoriteTeamRequest(userpass, pk + "");
+			com.sendUnfavoriteTeamRequest(userpass, pk);
 		}
 		getFavoritesList();
 	}
 
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -301,7 +313,6 @@ public class TeamStatusActivity extends ListActivity implements DelegateActivity
 	}
 
 	public void handleServerResponseMessage(String message) {
-		// TODO Auto-generated method stub
 		
 	}
 	

@@ -87,6 +87,12 @@
             android:name="Rounds"
             android:label="@string/roundsActivity">
         </activity>
+        <activity 
+            android:name="PushDisplayActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+        </activity>
         
     </application>
 
