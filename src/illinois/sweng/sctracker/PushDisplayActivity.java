@@ -17,6 +17,10 @@ public class PushDisplayActivity extends ListActivity implements DelegateActivit
 	private static final String TAG = "PushDisplay";
 	private static final String PREFS_FILE = "sc2prefs";
 	
+	/**
+	 * Gets the match ID from the intent, and sends a request to the server
+	 * to get information to display for that match. 
+	 */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,25 +31,23 @@ public class PushDisplayActivity extends ListActivity implements DelegateActivit
 		String userpass = preferences.getString(key, "");
 		
 		String matchID = getIntent().getExtras().getString("match_id");
-		if(matchID == null) {
-			Log.d("WHY", "WHY");
-		} else {
-			Log.d("match id", matchID);
-		}
-		for(String name : getIntent().getExtras().keySet()) {
-			Log.d("check check", name);
-			Log.d("check check", name + " " + getIntent().getExtras().getString(name));
-		}
 		ServerCommunicator comm = new ServerCommunicator(this, TAG);
 		comm.sendGetMatchRequest(userpass, matchID);
 	}
 
+	/**
+	 * Handles an error message returned from the server
+	 */
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
 		Log.e(TAG, message);
 	}
 
+	/**
+	 * Receives an array of game data from the server, puts it in a list,
+	 * and sets the list adapter for this activity to handle this list.
+	 */
 	public void handleServerResponseData(JSONArray values) {
 		try {
 			JSONObject match = values.getJSONObject(0);
@@ -62,6 +64,10 @@ public class PushDisplayActivity extends ListActivity implements DelegateActivit
 		}
 	}
 
+	/**
+	 * Receives and logs a non-data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseMessage(String message) {
 		Log.d(TAG, "Got message from server");
 	}

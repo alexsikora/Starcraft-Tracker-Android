@@ -43,6 +43,9 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 	    }
 	 }
 	
+	/**
+	 * Getter method to retrieve this receiver's context's resources
+	 */
 	public Resources getResources() {
 		return this.context.getResources();
 	}
@@ -106,16 +109,29 @@ public class Receiver extends BroadcastReceiver implements DelegateActivity {
 		Log.d("Receiver", "Handled message");
 	}
 
+	/**
+	 * Handles an error message returned from the server
+	 */
 	public void handleServerError(String message) {
-		// TODO Auto-generated method stub
-		
+		Toast errorToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		errorToast.show();
+		Log.e(TAG, message);
 	}
 
+	/**
+	 * Receives and logs a data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseData(JSONArray values) {
 		Log.d(TAG, "Receiver got data from server");
 	}
 
+	/**
+	 * Receives and logs a non-data message from the server, and notifies the
+	 * user that the connection was made
+	 */
 	public void handleServerResponseMessage(String message) {
+		Log.i(TAG, message);
 		String success = "success";
 		Toast toast = Toast.makeText(context, success, Toast.LENGTH_LONG);
 		toast.show();

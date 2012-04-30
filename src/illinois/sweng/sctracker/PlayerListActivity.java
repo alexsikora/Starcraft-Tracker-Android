@@ -152,14 +152,21 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 		mDatabaseAdapter.close();
 	}
 
+	/**
+	 * Handles an error message returned from the server
+	 */
 	public void handleServerError(String message) {
 		Toast errorToast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		errorToast.show();
 		Log.e(TAG, message);
 	}
 
+	/**
+	 * Takes a JSONArray of favorites data from the server and modifies the 
+	 * local favorites data
+	 */
 	public void handleServerResponseData(JSONArray values) {
-		Log.d(TAG, "Receiving favorites data");
+		Log.i(TAG, "Receiving favorites data");
 		
 		String prefsName = getResources().getString(R.string.favoriteSharedPrefs);
 		SharedPreferences prefs = getSharedPreferences(prefsName, MODE_PRIVATE);
@@ -187,6 +194,10 @@ public class PlayerListActivity extends ListActivity implements DelegateActivity
 		}
 	}
 
+	/**
+	 * Receives and logs a non-data message from the server. This should not
+	 * occur under normal operation for this activity.
+	 */
 	public void handleServerResponseMessage(String message) {
 		Log.d(TAG, "Got message from server");
 	}
